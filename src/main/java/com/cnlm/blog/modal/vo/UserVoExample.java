@@ -5,6 +5,7 @@ import java.util.List;
 
 /**
  *
+ * @author LONG
  */
 public class UserVoExample {
     protected String orderByClause;

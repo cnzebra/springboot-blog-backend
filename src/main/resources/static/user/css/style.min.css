@@ -678,6 +678,14 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 
 .post-list-item {
     float: left;
+    width: 33.333%;
+    height: auto;
+    padding: 5px;
+    align-items: center;
+}
+
+.post-list-item-archive {
+    float: left;
     width: 100%;
     height: auto;
     padding: 3px 3px 3px 50px;

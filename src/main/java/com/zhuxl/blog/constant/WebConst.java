@@ -1,8 +1,13 @@
 package com.zhuxl.blog.constant;
 
+import com.zhuxl.blog.modal.vo.OptionVo;
+import com.zhuxl.blog.service.IOptionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,4 +52,13 @@ public class WebConst {
      * 成功返回
      */
     public static String SUCCESS_RESULT = "SUCCESS";
+
+    @Autowired
+    private IOptionService optionService;
+
+    @PostConstruct
+    public void initConfig() {
+        List<OptionVo> optionVoList = optionService.getOptions();
+        optionVoList.forEach(optionVo -> initConfig.put(optionVo.getName(),optionVo.getValue()));
+    }
 }

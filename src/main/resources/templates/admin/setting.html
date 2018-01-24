@@ -22,8 +22,8 @@
                                     <div class="form-group">
                                         <label class="col-md-3 control-label">站点名称</label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" name="siteTitle" placeholder="站点名称"
-                                                   th:value="${options.siteTitle}" required="required"
+                                            <input type="text" class="form-control" name="site_title" placeholder="站点名称"
+                                                   th:value="${options.site_title}" required="required"
                                                    aria-required="true"/>
                                         </div>
                                     </div>
@@ -216,8 +216,8 @@
      */
     function backup(type) {
         var param = {
-            bk_type: type,
-            bk_path: $('#backup_dir').val()
+            bkType: type,
+            bkPath: $('#backup_dir').val()
         };
         tale.post({
             url: '/admin/setting/backup',

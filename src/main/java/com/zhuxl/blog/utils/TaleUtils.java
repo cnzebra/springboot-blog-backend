@@ -109,7 +109,7 @@ public class TaleUtils {
         Properties properties = new Properties();
         try {
 //            默认是classPath路径
-            InputStream resourceAsStream = new FileInputStream(fileName);
+            InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
             properties.load(resourceAsStream);
         } catch (TipException | IOException e) {
             LOGGER.error("get properties file fail={}", e.getMessage());
@@ -160,9 +160,7 @@ public class TaleUtils {
                     DriverManagerDataSource managerDataSource = new DriverManagerDataSource();
                     managerDataSource.setDriverClassName("com.mysql.jdbc.Driver");
                     managerDataSource.setPassword(properties.getProperty("spring.datasource.password"));
-                    String str = "jdbc:mysql://" + properties.getProperty("spring.datasource.url") + "/" + properties
-                            .getProperty("spring.datasource.dbname") +
-                            "?useUnicode=true&characterEncoding=utf-8&useSSL=false";
+                    String str = properties.getProperty("spring.datasource.url");
                     managerDataSource.setUrl(str);
                     managerDataSource.setUsername(properties.getProperty("spring.datasource.username"));
                     newDataSource = managerDataSource;

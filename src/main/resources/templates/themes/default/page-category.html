@@ -9,12 +9,12 @@
             :
             <th:block th:text="${keyword}"/>
         </div>
-        <th:block th:if="${commons.is_empty(articles)}">
+        <th:block th:if="${commons.isEmpty(articles)}">
             <div>
                 <p>抱歉，还没有相关文章.</p>
             </div>
         </th:block>
-        <th:block th:unless="${commons.is_empty(articles)}">
+        <th:block th:unless="${commons.isEmpty(articles)}">
             <div class="post-lists">
                 <div class="post-lists-body">
                     <th:block th:each="article : ${articles.list}">

@@ -13,7 +13,7 @@
     <link rel="shortcut icon" th:href="@{/user/img/favicon.png}"/>
     <link rel="apple-touch-icon" th:href="@{/user/img/apple-touch-icon.png}"/>
     <title>
-        <th:block th:text="${title ?: '首页'}+' - '+${commons.siteOption('siteTitle','My Blog')}"></th:block>
+        <th:block th:text="${title ?: '首页'}+' - '+${commons.siteOption('siteTitle','zhuxl的博客')}"></th:block>
     </title>
     <link th:href="@{//cdn.bootcss.com/highlight.js/9.9.0/styles/xcode.min.css}" rel="stylesheet"/>
     <link th:href="@{/user/css/style.min.css}" rel="stylesheet"/>
@@ -33,7 +33,7 @@
 <header id="header" class="header bg-white">
     <div class="navbar-container">
         <a th:href="${commons.siteUrl()}" class="navbar-logo">
-            <img th:src="@{/user/img/logo.png}" alt="首页"/>
+            <img th:src="@{/user/img/logo.png}" alt="朱晓龙的博客首页"/>
         </a>
         <div class="navbar-menu">
             <a th:href="${commons.siteUrl('/archives')}">归档</a>
@@ -54,8 +54,8 @@
             <span class="icon-menu cross"><span class="middle"></span></span>
             <ul>
                 <li><a th:href="${commons.siteUrl('/archives')}">归档</a></li>
-                <li><a th:href="${commons.siteUrl('/links')}">友链</a></li>
-                <li><a th:href="${commons.siteUrl('/about')}">关于</a></li>
+                <li><a th:href="${commons.siteUrl('/links')}">友情链接</a></li>
+                <li><a th:href="${commons.siteUrl('/about')}">关于作者</a></li>
             </ul>
         </div>
     </div>

@@ -36,10 +36,10 @@
             <img th:src="@{/user/img/logo.png}" alt="首页"/>
         </a>
         <div class="navbar-menu">
-            <a th:href="${commons.siteUrl('/admin/login')}">登录</a>
             <a th:href="${commons.siteUrl('/archives')}">归档</a>
-            <a th:href="${commons.siteUrl('/links')}">友链</a>
-            <a th:href="${commons.siteUrl('/about')}">关于</a>
+            <a th:href="${commons.siteUrl('/links')}">友情链接</a>
+            <a th:href="${commons.siteUrl('/about')}">关于作者</a>
+            <!--<a th:href="${commons.siteUrl('/login')}" th:target="_blank">登录</a>-->
         </div>
         <div class="navbar-search" onclick="">
             <span class="icon-search"></span>

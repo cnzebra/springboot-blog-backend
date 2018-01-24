@@ -6,7 +6,7 @@ import com.cnlm.blog.modal.vo.CommentVoExample;
 import com.github.pagehelper.PageInfo;
 
 /**
- * @author BlueT
+ * @author xiyuxuan
  * @date 2017/3/16
  */
 public interface ICommentService {

@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 /**
  * 接口测试方法
- * Created by BlueT on 2017/3/22.
+ * Created by xiyuxuan on 2017/3/22.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest

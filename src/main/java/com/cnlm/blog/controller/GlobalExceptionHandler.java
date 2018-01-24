@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 /**
- * @author BlueT
+ * @author xiyuxuan
  * @date 2017/3/4
  */
 @ControllerAdvice

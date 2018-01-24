@@ -5,7 +5,7 @@ import com.cnlm.blog.modal.vo.RelationshipVoKey;
 import java.util.List;
 
 /**
- * @author BlueT
+ * @author xiyuxuan
  * @date 2017/3/18
  */
 public interface IRelationshipService {

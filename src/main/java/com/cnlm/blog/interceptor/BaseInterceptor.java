@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 自定义拦截器
  *
- * @author BlueT
+ * @author xiyuxuan
  * @date 2017/3/9
  */
 @Component

@@ -3,7 +3,7 @@ package com.cnlm.blog.dto;
 /**
  * 日志表的action字段
  *
- * @author BlueT
+ * @author xiyuxuan
  * @date 2017/3/4
  */
 public enum LogActions {

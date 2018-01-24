@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 /**
  * 向mvc中添加自定义组件
  *
- * @author BlueT
+ * @author xiyuxuan
  * @date 2017/3/9
  */
 @Component

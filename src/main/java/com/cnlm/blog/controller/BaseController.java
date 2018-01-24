@@ -26,6 +26,16 @@ public abstract class BaseController {
         return THEME + "/" + viewName;
     }
 
+    /**
+     *
+     *
+     * @param viewName
+     * @return
+     */
+    public String globalRender(String viewName) {
+        return viewName;
+    }
+
     public BaseController title(HttpServletRequest request, String title) {
         request.setAttribute("title", title);
         return this;

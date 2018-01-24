@@ -3,7 +3,7 @@ package com.cnlm.blog.service;
 import com.cnlm.blog.modal.vo.UserVo;
 
 /**
- * @author BlueT
+ * @author xiyuxuan
  * @date 2017/3/3
  */
 public interface IUserService {

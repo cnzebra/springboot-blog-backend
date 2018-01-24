@@ -15,7 +15,7 @@ import java.util.Random;
 /**
  * 工具类
  *
- * @author BlueT
+ * @author xiyuxuan
  * @date 2017/3/9
  */
 public class Tools {

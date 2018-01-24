@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * options的接口
  *
- * @author BlueT
+ * @author xiyuxuan
  * @date 2017/3/7
  */
 public interface IOptionService {

@@ -26,7 +26,7 @@ import java.io.IOException;
 /**
  * 用户后台登录/登出
  *
- * @author BlueT
+ * @author xiyuxuan
  * @date 2017/3/11
  */
 @Controller

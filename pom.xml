@@ -3,13 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.cnlm.blog</groupId>
-    <artifactId>cnlm-blog</artifactId>
+    <groupId>com.zhuxl.blog</groupId>
+    <artifactId>zhuxl-blog</artifactId>
     <version>1.0.0.0</version>
     <packaging>jar</packaging>
 
-    <name>cnlm-blog</name>
-    <description>cnlm-blog</description>
+    <name>zhuxl-blog</name>
+    <description>zhuxl-blog</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

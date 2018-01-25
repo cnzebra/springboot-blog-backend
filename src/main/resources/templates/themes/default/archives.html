@@ -3,7 +3,7 @@
 <div th:replace="themes/default/header::header(title='文章归档',keywords=null)"></div>
 <body>
 <div class="row">
-    <div class="main-content archive-page clearfix col-md-7">
+    <div class="main-content archive-page clearfix col-md-8">
         <div class="categorys-item">
             <th:block th:each="archive : ${archives}">
                 <div class="categorys-title" th:text="${archive.date}"></div>

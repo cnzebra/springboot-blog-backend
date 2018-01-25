@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:fragment="rightbar">
+<style type="text/css">
+.rightbar-container{
+    max-width: 400px;
+    width: 350px;
+    height:auto;
+    min-height: 800px;
+    margin-top: 100px;
+}
+</style>
+<body>
+<div class="rightbar-container">
+    <div class="social-list">
+        <th:block th:each="index:${commons.social()}">
+            <th:block th:if="${index.value}!=null and ${index.value}!=''">
+                <th:block th:switch="${index.key}">
+                    <th:block th:case="'weibo'">
+                        <a class="social weibo" target="blank"
+                           th:href="@{${index.value}}">微博</a>
+                    </th:block>
+                    <th:block th:case="'zhihu'">
+                        <a class="social zhihu" target="blank"
+                           th:href="@{${index.value}}">知乎</a>
+                    </th:block>
+                    <th:block th:case="'github'">
+                        <a class="social github" target="blank"
+                           th:href="@{${index.value}}">Github</a>
+                    </th:block>
+                    <th:block th:case="'twitter'">
+                        <a class="social twitter" target="blank"
+                           th:href="@{${index.value}}">Twitter</a>
+                    </th:block>
+                </th:block>
+            </th:block>
+        </th:block>
+    </div>
+</div>
+</body>
+<script th:src="@{//cdn.bootcss.com/headroom/0.9.1/headroom.min.js}"></script>
+<script th:src="@{//cdn.bootcss.com/highlight.js/9.9.0/highlight.min.js}"></script>
+<script th:src="@{//cdn.bootcss.com/instantclick/3.0.1/instantclick.min.js}"></script>
+</html>

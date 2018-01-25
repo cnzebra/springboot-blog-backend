@@ -655,8 +655,8 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 }
 
 .main-content {
-    max-width: 940px;
-    margin: 0 auto;
+    max-width: 850px;
+    margin: 0 100px;
     -webkit-animation: fade-in .5s;
     animation: fade-in;
     animation-duration: .5s
@@ -1048,7 +1048,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 }
 
 .archive-page {
-    padding: 120px 20px 40px
+    padding: 120px 0 0 20px;
 }
 
 .archive-page .categorys-title {

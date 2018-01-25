@@ -2,34 +2,40 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <div th:replace="themes/default/header::header(title='文章归档',keywords=null)"></div>
 <body>
-<div class="main-content archive-page clearfix">
-    <div class="categorys-item">
-        <th:block th:each="archive : ${archives}">
-            <div class="categorys-title" th:text="${archive.date}"></div>
-            <div class="post-lists">
-                <div class="post-lists-body">
-                    <th:block th:each="article : ${archive.articles}">
-                        <div class="post-list-item-archive">
-                            <!--<div class="post-list-item-container">-->
+<div class="row">
+    <div class="main-content archive-page clearfix col-md-7">
+        <div class="categorys-item">
+            <th:block th:each="archive : ${archives}">
+                <div class="categorys-title" th:text="${archive.date}"></div>
+                <div class="post-lists">
+                    <div class="post-lists-body">
+                        <th:block th:each="article : ${archive.articles}">
+                            <div class="post-list-item-archive">
+                                <!--<div class="post-list-item-container">-->
                                 <!--<div class="item-label">-->
-                                    <!--<div class="item-title">-->
-                                        <th:block th:text="${commons.fmtdate(article.created,'MM-dd HH:mm')}"/>
-                                        <a th:href="${commons.permalink(article.cid, article.slug)}"
-                                           th:text="${article.title}" style="color: #629bff;margin-left: 50px;"></a>
-                                    <!--</div>-->
-                                    <!--<div class="item-meta clearfix">-->
-                                        <!--<div class="item-meta-date">发布于-->
-                                        <!--</div>-->
-                                    <!--</div>-->
+                                <!--<div class="item-title">-->
+                                <th:block th:text="${commons.fmtdate(article.created,'MM-dd HH:mm')}"/>
+                                <a th:href="${commons.permalink(article.cid, article.slug)}"
+                                   th:text="${article.title}" style="color: #629bff;margin-left: 50px;"></a>
                                 <!--</div>-->
-                            <!--</div>-->
-                        </div>
-                    </th:block>
+                                <!--<div class="item-meta clearfix">-->
+                                <!--<div class="item-meta-date">发布于-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                            </div>
+                        </th:block>
+                    </div>
                 </div>
-            </div>
-        </th:block>
+            </th:block>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div th:replace="themes/default/rightbar::rightbar"></div>
     </div>
 </div>
+
 </body>
 <div th:replace="themes/default/footer::footer"></div>
 </html>

@@ -1,13 +1,15 @@
 package com.zhuxl.blog.utils;
 
 
+import com.github.pagehelper.PageInfo;
+import com.vdurmont.emoji.EmojiParser;
 import com.zhuxl.blog.constant.WebConst;
 import com.zhuxl.blog.dto.MetaDto;
 import com.zhuxl.blog.dto.Types;
+import com.zhuxl.blog.modal.bo.ArchiveBo;
 import com.zhuxl.blog.modal.vo.ContentVo;
-import com.github.pagehelper.PageInfo;
-import com.vdurmont.emoji.EmojiParser;
 import com.zhuxl.blog.service.IMetaService;
+import com.zhuxl.blog.service.ISiteService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,6 +39,8 @@ public final class Commons {
 
     @Autowired
     private IMetaService metasService;
+    @Autowired
+    private ISiteService siteService;
 
 
     /**
@@ -354,13 +358,18 @@ public final class Commons {
         return map;
     }
 
-    public  List<MetaDto> categories(){
+    public List<MetaDto> categories() {
         List<MetaDto> categories = metasService.getMetaList(Types.CATEGORY.getType(), null, WebConst.MAX_POSTS);
         return categories;
     }
 
-    public  List<MetaDto> tags(){
+    public List<MetaDto> tags() {
         List<MetaDto> tags = metasService.getMetaList(Types.TAG.getType(), null, WebConst.MAX_POSTS);
         return tags;
+    }
+
+    public List<ArchiveBo> archives() {
+        List<ArchiveBo> archives = siteService.getArchives();
+        return archives;
     }
 }

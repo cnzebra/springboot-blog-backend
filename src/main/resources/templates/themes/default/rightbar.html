@@ -21,9 +21,28 @@
     </div>
     <div class="row rightbar-layer">
         <h3 class="rightbar-title">文章分类</h3>
+        <th:block th:each="c : ${commons.categories()}">
+            <div class="btn-group m-b-10">
+                <a th:href="@{/category/}+${c.name}" th:target="_blank">
+                    <button type="button" style="margin: 5px;"
+                            th:class="'btn btn-sm btn-'+${adminCommons.randColor()}+' waves-effect waves-light'">
+                        <th:block th:text="${c.name}"></th:block>
+                        <th:block th:text="' ('+${c.count}+')'"/>
+                    </button>
+                </a>
+            </div>
+        </th:block>
     </div>
     <div class="row rightbar-layer">
         <h3 class="rightbar-title">归档</h3>
+        <th:block th:each="c : ${commons.archives()}">
+            <div class="btn-group m-b-10">
+                <a th:href="@{/archive/}+${c.date}" th:target="_blank">
+                    <th:block th:text="${c.date}"></th:block>
+                    <th:block th:text="' ('+${c.count}+')'"/>
+                </a>
+            </div>
+        </th:block>
     </div>
     <div class="row rightbar-layer">
         <h3 class="rightbar-title">标签</h3>

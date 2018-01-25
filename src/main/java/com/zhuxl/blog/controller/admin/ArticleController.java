@@ -7,10 +7,8 @@ import com.zhuxl.blog.dto.LogActions;
 import com.zhuxl.blog.dto.Types;
 import com.zhuxl.blog.exception.TipException;
 import com.zhuxl.blog.modal.bo.RestResponseBo;
-import com.zhuxl.blog.modal.vo.ContentVo;
-import com.zhuxl.blog.modal.vo.ContentVoExample;
-import com.zhuxl.blog.modal.vo.MetaVo;
-import com.zhuxl.blog.modal.vo.UserVo;
+import com.zhuxl.blog.modal.vo.*;
+import com.zhuxl.blog.service.IAttachService;
 import com.zhuxl.blog.service.IContentService;
 import com.zhuxl.blog.service.ILogService;
 import com.zhuxl.blog.service.IMetaService;
@@ -18,6 +16,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +41,8 @@ public class ArticleController extends BaseController {
 
     @Resource
     private IMetaService metasService;
+    @Autowired
+    private IAttachService attachService;
 
     @Resource
     private ILogService logService;
@@ -61,6 +62,8 @@ public class ArticleController extends BaseController {
     public String newArticle(HttpServletRequest request) {
         List<MetaVo> categories = metasService.getMetas(Types.CATEGORY.getType());
         request.setAttribute("categories", categories);
+        PageInfo<AttachVo> attachPaginator = attachService.getAttachs(1, 12);
+        request.setAttribute("attachs", attachPaginator);
         return "admin/article_edit";
     }
 

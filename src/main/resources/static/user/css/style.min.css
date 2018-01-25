@@ -655,7 +655,6 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 }
 
 .main-content {
-    max-width: 850px;
     margin: 0 50px;
     -webkit-animation: fade-in .5s;
     animation: fade-in;
@@ -1316,7 +1315,6 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     position: relative;
     z-index: 1;
     color: #5f5f5f;
-    background-color: #f7f7f7
 }
 
 #comments {

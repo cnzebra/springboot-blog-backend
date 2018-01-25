@@ -2,15 +2,20 @@ package com.zhuxl.blog.utils;
 
 
 import com.zhuxl.blog.constant.WebConst;
+import com.zhuxl.blog.dto.MetaDto;
+import com.zhuxl.blog.dto.Types;
 import com.zhuxl.blog.modal.vo.ContentVo;
 import com.github.pagehelper.PageInfo;
 import com.vdurmont.emoji.EmojiParser;
+import com.zhuxl.blog.service.IMetaService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,6 +34,10 @@ public final class Commons {
             "bg-ico-image", "bg-ico-web", "bg-ico-link", "bg-ico-design", "bg-ico-lock"};
     public static String THEME = "themes/default";
     private static Pattern srcPattern = Pattern.compile("src\\s*=\\s*\'?\"?(.*?)(\'|\"|>|\\s+)");
+
+    @Autowired
+    private IMetaService metasService;
+
 
     /**
      * 判断分页中是否有数据
@@ -230,7 +239,7 @@ public final class Commons {
             String[] arr = tags.split(",");
             StringBuffer sbuf = new StringBuffer();
             for (String c : arr) {
-                sbuf.append("<a href=\"/tag/" + URLEncoder.encode(c, "UTF-8") + "\">" + c + "</a>");
+                sbuf.append("<a href=\"/tag/" + URLEncoder.encode(c, "UTF-8") + "\" target=\"_blank\">" + c + "</a>");
             }
             return sbuf.toString();
         }
@@ -345,4 +354,13 @@ public final class Commons {
         return map;
     }
 
+    public  List<MetaDto> categories(){
+        List<MetaDto> categories = metasService.getMetaList(Types.CATEGORY.getType(), null, WebConst.MAX_POSTS);
+        return categories;
+    }
+
+    public  List<MetaDto> tags(){
+        List<MetaDto> tags = metasService.getMetaList(Types.TAG.getType(), null, WebConst.MAX_POSTS);
+        return tags;
+    }
 }

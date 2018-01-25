@@ -11,16 +11,32 @@
 <body>
 <div class="rightbar-container">
     <div class="row rightbar-layer">
-        <th:block>
-            <h3 class="rightbar-title">公告</h3>
-            <p>本站文章仅供参考,欢迎留言交流!!!</p>
-        </th:block>
+        <h3 class="rightbar-title">公告</h3>
+        <p>本站文章仅供参考,欢迎留言交流!!!</p>
     </div>
     <div class="row rightbar-layer">
-        <th:block>
-            <h3 class="rightbar-title">我的微信</h3>
-            <img style="width: 70%;height:70%;margin: 10px 30px;" th:src="@{/admin/images/myqrcode.png}" alt="朱晓龙的微信二维码"
-                 title="微信扫一扫加我好友"/>
+        <h3 class="rightbar-title">我的微信</h3>
+        <img style="width: 70%;height:70%;margin: 10px 30px;" th:src="@{/admin/images/myqrcode.png}" alt="朱晓龙的微信二维码"
+             title="微信扫一扫加我好友"/>
+    </div>
+    <div class="row rightbar-layer">
+        <h3 class="rightbar-title">文章分类</h3>
+    </div>
+    <div class="row rightbar-layer">
+        <h3 class="rightbar-title">归档</h3>
+    </div>
+    <div class="row rightbar-layer">
+        <h3 class="rightbar-title">标签</h3>
+        <th:block th:each="c : ${commons.tags()}">
+            <div class="btn-group m-b-10">
+                <a th:href="@{/tag/}+${c.name}" th:target="_blank">
+                    <button type="button" style="margin: 5px;"
+                            th:class="'btn btn-sm btn-'+${adminCommons.randColor()}+' waves-effect waves-light'">
+                        <th:block th:text="${c.name}"></th:block>
+                        <th:block th:text="' ('+${c.count}+')'"/>
+                    </button>
+                </a>
+            </div>
         </th:block>
     </div>
 </div>

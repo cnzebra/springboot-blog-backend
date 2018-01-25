@@ -101,7 +101,7 @@
                             <div class="row" style="padding: 10px;">
                                 <div class="form-group col-md-6" style="padding: 0 10px 0 0;">
                                     <a href="javascript:void(0);"
-                                       class="btn btn-default btn-sm waves-effect waves-light" data-toggle="modal"
+                                       class="btn submit" data-toggle="modal"
                                        data-target="#selectCoverModal">
                                         请选择文章封面
                                     </a>
@@ -137,7 +137,7 @@
                                                     <th:block th:unless="${commons.isEmpty(attachs)}">
                                                         <th:block th:each="attach : ${attachs.list}">
                                                             <div class="col-md-2 text-center m-t-10">
-                                                                <a th:href="${commons.siteUrl(attach.fkey)}"
+                                                                <a th:onclick="'selectedCover(\''+${commons.siteUrl(attach.fkey)}+'\')'"
                                                                    target="_blank">
                                                                     <img class="attach-img"
                                                                          th:src="@{${attach.ftype == 'image'}?${attach.fkey}: '/admin/images/attach.png'}"
@@ -236,5 +236,10 @@
 <script th:src="@{//cdn.bootcss.com/select2/3.4.8/select2.min.js}"></script>
 <script th:src="@{//cdn.bootcss.com/jquery-toggles/2.0.4/toggles.min.js}"></script>
 <script th:src="@{/admin/js/article.js}"></script>
+<script type="application/javascript">
+    function selectedCover(href) {
+        $("#cover").val(href);
+    }
+</script>
 </body>
 </html>

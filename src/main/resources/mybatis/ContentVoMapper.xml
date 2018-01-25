@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="com.zhuxl.blog.modal.vo.ContentVo">
         <id column="cid" jdbcType="INTEGER" property="cid"/>
         <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="cover" jdbcType="VARCHAR" property="cover"/>
         <result column="slug" jdbcType="VARCHAR" property="slug"/>
         <result column="created" jdbcType="INTEGER" property="created"/>
         <result column="modified" jdbcType="INTEGER" property="modified"/>
@@ -82,7 +83,7 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-        cid, title, slug, created, modified, author_id, type, status, tags, categories, hits,
+        cid, title, cover,slug, created, modified, author_id, type, status, tags, categories, hits,
         comments_num, allow_comment, allow_ping, allow_feed
     </sql>
     <sql id="Blob_Column_List">
@@ -146,13 +147,13 @@
         </if>
     </delete>
     <insert id="insert" parameterType="com.zhuxl.blog.modal.vo.ContentVo" useGeneratedKeys="true" keyProperty="cid">
-        insert into t_contents (cid, title, slug,
+        insert into t_contents (cid, title,cover, slug,
         created, modified, author_id,
         type, status, tags,
         categories, hits, comments_num,
         allow_comment, allow_ping, allow_feed,
         content)
-        values (#{cid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{slug,jdbcType=VARCHAR},
+        values (#{cid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{cover},#{slug,jdbcType=VARCHAR},
         #{created,jdbcType=INTEGER}, #{modified,jdbcType=INTEGER}, #{authorId,jdbcType=INTEGER},
         #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR},
         #{categories,jdbcType=VARCHAR}, #{hits,jdbcType=INTEGER}, #{commentsNum,jdbcType=INTEGER},

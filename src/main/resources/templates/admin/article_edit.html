@@ -100,11 +100,13 @@
                             </div>
                             <div class="row" style="padding: 10px;">
                                 <div class="form-group col-md-6" style="padding: 0 10px 0 0;">
-                                    <a href="javascript:void(0);"
+                                    <a href="javascript:void(0);" style="margin: 50px 50px 0 0"
                                        class="btn submit" data-toggle="modal"
                                        data-target="#selectCoverModal">
                                         请选择文章封面
                                     </a>
+                                    <img class="attach-img" id="attach-img-default" style="cursor: pointer;"
+                                         th:src="@{${contents!=null and contents.cover !=null}?${contents.cover}: '/admin/images/attach.png'}"/>
                                     <input name="cover" id="cover" type="hidden"
                                            th:value="${contents!=null and contents.cover !=null}?${contents.cover}: ''"/>
                                 </div>
@@ -137,9 +139,10 @@
                                                     <th:block th:unless="${commons.isEmpty(attachs)}">
                                                         <th:block th:each="attach : ${attachs.list}">
                                                             <div class="col-md-2 text-center m-t-10">
-                                                                <a th:onclick="'selectedCover(\''+${commons.siteUrl(attach.fkey)}+'\')'"
+                                                                <a th:onclick="'selectedCover(\''+${commons.siteUrl(attach.fkey)}+'\','+this+')'"
                                                                    target="_blank">
-                                                                    <img class="attach-img"
+                                                                    <img class="attach-img attach-img-cover"
+                                                                         style="cursor: pointer"
                                                                          th:src="@{${attach.ftype == 'image'}?${attach.fkey}: '/admin/images/attach.png'}"
                                                                          th:title="${attach.fname}"/>
                                                                 </a>
@@ -237,8 +240,15 @@
 <script th:src="@{//cdn.bootcss.com/jquery-toggles/2.0.4/toggles.min.js}"></script>
 <script th:src="@{/admin/js/article.js}"></script>
 <script type="application/javascript">
-    function selectedCover(href) {
+    function selectedCover(href, element) {
         $("#cover").val(href);
+        $(".attach-img-cover").css({
+            "border": "none"
+        })
+        $("#attach-img-default").attr("src", href);
+        $(element).find(".attach-img-cover").css({
+            "border": "5px solid red"
+        })
     }
 </script>
 </body>

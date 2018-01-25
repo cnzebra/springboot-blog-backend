@@ -29,12 +29,17 @@ var tale = new $.tale();
 function subArticle(status) {
     var title = $('#articleForm input[name=title]').val();
     var content = $('#text').val();
+    var cover = $('#cover').val();
     if (title == '') {
         tale.alertWarn('请输入文章标题');
         return;
     }
     if (content == '') {
         tale.alertWarn('请输入文章内容');
+        return;
+    }
+    if (cover == '') {
+        tale.alertWarn('请选择文章封面');
         return;
     }
     $('#content-editor').val(content);

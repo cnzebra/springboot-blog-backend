@@ -11,19 +11,9 @@
                     <div class="post-lists-body">
                         <th:block th:each="article : ${archive.articles}">
                             <div class="post-list-item-archive">
-                                <!--<div class="post-list-item-container">-->
-                                <!--<div class="item-label">-->
-                                <!--<div class="item-title">-->
                                 <th:block th:text="${commons.fmtdate(article.created,'MM-dd HH:mm')}"/>
                                 <a th:href="${commons.permalink(article.cid, article.slug)}"
                                    th:text="${article.title}" style="color: #629bff;margin-left: 50px;"></a>
-                                <!--</div>-->
-                                <!--<div class="item-meta clearfix">-->
-                                <!--<div class="item-meta-date">发布于-->
-                                <!--</div>-->
-                                <!--</div>-->
-                                <!--</div>-->
-                                <!--</div>-->
                             </div>
                         </th:block>
                     </div>

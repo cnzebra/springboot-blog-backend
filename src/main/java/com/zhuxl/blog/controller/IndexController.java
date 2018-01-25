@@ -1,5 +1,7 @@
 package com.zhuxl.blog.controller;
 
+import com.github.pagehelper.PageInfo;
+import com.vdurmont.emoji.EmojiParser;
 import com.zhuxl.blog.constant.WebConst;
 import com.zhuxl.blog.dto.ErrorCode;
 import com.zhuxl.blog.dto.MetaDto;
@@ -17,8 +19,6 @@ import com.zhuxl.blog.service.ISiteService;
 import com.zhuxl.blog.utils.IPKit;
 import com.zhuxl.blog.utils.PatternKit;
 import com.zhuxl.blog.utils.TaleUtils;
-import com.github.pagehelper.PageInfo;
-import com.vdurmont.emoji.EmojiParser;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -276,9 +276,11 @@ public class IndexController extends BaseController {
      *
      * @return
      */
-    @GetMapping(value = "archives")
-    public String archives(HttpServletRequest request) {
-        List<ArchiveBo> archives = siteService.getArchives();
+    @GetMapping(value = {"archives", "archives/{year}/{month}"})
+    public String archives(HttpServletRequest request,
+                           @PathVariable(value = "year", required = false) String year,
+                           @PathVariable(value = "month", required = false) String month) {
+        List<ArchiveBo> archives = siteService.getArchives(year,month);
         request.setAttribute("archives", archives);
         return this.render("archives");
     }

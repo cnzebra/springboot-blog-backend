@@ -103,7 +103,7 @@ public interface ContentDao {
     /**
      * @return
      */
-    List<ArchiveBo> findReturnArchiveBo();
+    List<ArchiveBo> findReturnArchiveBo(String year,String month);
 
     /**
      * @param mid

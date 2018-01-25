@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class ArchiveBo implements Serializable {
 
+    private String year;
+    private String month;
     private String date;
     private String count;
     private List<ContentVo> articles;
@@ -46,5 +48,21 @@ public class ArchiveBo implements Serializable {
                 ", count='" + count + '\'' +
                 ", articles=" + articles +
                 ']';
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
     }
 }

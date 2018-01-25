@@ -180,9 +180,9 @@ public class SiteServiceImpl implements ISiteService {
     }
 
     @Override
-    public List<ArchiveBo> getArchives() {
+    public List<ArchiveBo> getArchives(String year,String month) {
         LOGGER.debug("Enter getArchives method");
-        List<ArchiveBo> archives = contentDao.findReturnArchiveBo();
+        List<ArchiveBo> archives = contentDao.findReturnArchiveBo(year,month);
         if (null != archives) {
             archives.forEach(archive -> {
                 ContentVoExample example = new ContentVoExample();

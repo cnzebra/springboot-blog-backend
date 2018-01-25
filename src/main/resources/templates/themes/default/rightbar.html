@@ -37,7 +37,7 @@
         <h3 class="rightbar-title">归档</h3>
         <th:block th:each="c : ${commons.archives()}">
             <div class="btn-group m-b-10">
-                <a th:href="@{/archive/}+${c.date}" th:target="_blank">
+                <a th:href="@{/archives/}+${c.year}+'/'+${c.month}" th:target="_blank">
                     <th:block th:text="${c.date}"></th:block>
                     <th:block th:text="' ('+${c.count}+')'"/>
                 </a>

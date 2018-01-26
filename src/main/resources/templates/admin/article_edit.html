@@ -261,7 +261,8 @@
         $("#select_cover_ok_btn").click(function () {
             var href = $(".attach-img-cover-border").attr("src");
             if (!href) {
-                tale.alertWarn("请选择一张图片作为文章封面")
+                tale.alertWarn("请选择一张图片作为文章封面");
+                return;
             }
             $("#cover").val(href);
             $("#attach-img-default").attr("src", href);

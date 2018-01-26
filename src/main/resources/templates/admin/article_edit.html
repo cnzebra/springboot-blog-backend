@@ -28,6 +28,14 @@
         border-radius: 10px;
         box-shadow: 0px 0px 8px #333;
     }
+
+    .attach-img-cover-border-none {
+        border: none;
+    }
+
+    .attach-img-cover-border {
+        border: 5px solid red
+    }
 </style>
 <body class="fixed-left">
 <div id="wrapper">
@@ -139,7 +147,7 @@
                                                     <th:block th:unless="${commons.isEmpty(attachs)}">
                                                         <th:block th:each="attach : ${attachs.list}">
                                                             <div class="col-md-2 text-center m-t-10">
-                                                                <a th:onclick="'selectedCover(\''+${commons.siteUrl(attach.fkey)}+'\','+this+')'"
+                                                                <a onclick="selectedCover(this)"
                                                                    target="_blank">
                                                                     <img class="attach-img attach-img-cover"
                                                                          style="cursor: pointer"
@@ -164,9 +172,11 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">不选
                                             </button>
-                                            <!--<button type="button" class="btn btn-primary">确定</button>-->
+                                            <button id="select_cover_ok_btn" type="button" class="btn btn-primary">
+                                                就选这个
+                                            </button>
                                         </div>
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal -->
@@ -240,16 +250,24 @@
 <script th:src="@{//cdn.bootcss.com/jquery-toggles/2.0.4/toggles.min.js}"></script>
 <script th:src="@{/admin/js/article.js}"></script>
 <script type="application/javascript">
-    function selectedCover(href, element) {
-        $("#cover").val(href);
-        $(".attach-img-cover").css({
-            "border": "none"
-        })
-        $("#attach-img-default").attr("src", href);
-        $(element).find(".attach-img-cover").css({
-            "border": "5px solid red"
-        })
+    function selectedCover(element) {
+//        $("#cover").val(href);
+        $(".attach-img-cover").removeClass("attach-img-cover-border").addClass("attach-img-cover-border-none")
+//        $("#attach-img-default").attr("src", href);
+        $(element).find(".attach-img-cover").removeClass("attach-img-cover-border-none").addClass("attach-img-cover-border")
     }
+
+    $(function () {
+        $("#select_cover_ok_btn").click(function () {
+            var href = $(".attach-img-cover-border").attr("src");
+            if (!href) {
+                tale.alertWarn("请选择一张图片作为文章封面")
+            }
+            $("#cover").val(href);
+            $("#attach-img-default").attr("src", href);
+            $("#selectCoverModal").modal("hide");
+        })
+    })
 </script>
 </body>
 </html>

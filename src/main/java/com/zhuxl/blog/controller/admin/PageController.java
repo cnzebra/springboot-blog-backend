@@ -68,6 +68,7 @@ public class PageController extends BaseController {
         UserVo users = this.user(request);
         ContentVo contents = new ContentVo();
         contents.setTitle(title);
+        contents.setCover("");
         contents.setContent(content);
         contents.setStatus(status);
         contents.setSlug(slug);

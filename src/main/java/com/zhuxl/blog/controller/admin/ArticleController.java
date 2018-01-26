@@ -74,6 +74,10 @@ public class ArticleController extends BaseController {
         List<MetaVo> categories = metasService.getMetas(Types.CATEGORY.getType());
         request.setAttribute("categories", categories);
         request.setAttribute("active", "article");
+
+        PageInfo<AttachVo> attachPaginator = attachService.getAttachs(1, 12);
+        request.setAttribute("attachs", attachPaginator);
+
         return "admin/article_edit";
     }
 

@@ -375,6 +375,9 @@
             <if test="title != null">
                 title = #{title,jdbcType=VARCHAR},
             </if>
+            <if test="cover !=null">
+                cover=#{cover,jdbcType=VARCHAR},
+            </if>
             <if test="slug != null">
                 slug = #{slug,jdbcType=VARCHAR},
             </if>
@@ -468,17 +471,17 @@
 
     <select id="findReturnArchiveBo" resultMap="archiveBoMap" parameterType="string">
         select
-          from_unixtime(created,'%Y') as year,
-          from_unixtime(created,'%m') as month,
-          FROM_UNIXTIME(created, '%Y年%m月') as date,
-          count(*) as count
+        from_unixtime(created,'%Y') as year,
+        from_unixtime(created,'%m') as month,
+        FROM_UNIXTIME(created, '%Y年%m月') as date,
+        count(*) as count
         from
-          t_contents
+        t_contents
         where
-          type = 'post' and status = 'publish'
-          <if test="arg0!=null and arg1!=null">
-              and from_unixtime(created,'%Y')=#{arg0} and from_unixtime(created,'%m')=#{arg1}
-          </if>
+        type = 'post' and status = 'publish'
+        <if test="arg0!=null and arg1!=null">
+            and from_unixtime(created,'%Y')=#{arg0} and from_unixtime(created,'%m')=#{arg1}
+        </if>
         group by date
         order by date desc
     </select>

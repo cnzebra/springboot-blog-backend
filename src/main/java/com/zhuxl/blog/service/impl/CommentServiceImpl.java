@@ -1,6 +1,6 @@
 package com.zhuxl.blog.service.impl;
 
-import com.zhuxl.blog.constant.WebConst;
+import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.dao.CommentDao;
 import com.zhuxl.blog.exception.TipException;
 import com.zhuxl.blog.modal.bo.CommentBo;

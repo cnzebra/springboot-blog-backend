@@ -1,4 +1,4 @@
-package com.zhuxl.blog.utils;
+package com.zhuxl.blog.interceptor;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;

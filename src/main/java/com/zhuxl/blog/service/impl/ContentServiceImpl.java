@@ -1,6 +1,6 @@
 package com.zhuxl.blog.service.impl;
 
-import com.zhuxl.blog.constant.WebConst;
+import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.dao.ContentDao;
 import com.zhuxl.blog.dao.MetaDao;
 import com.zhuxl.blog.dto.Types;

@@ -1,6 +1,7 @@
 package com.zhuxl.blog.utils;
 
-import com.zhuxl.blog.constant.WebConst;
+import com.zhuxl.blog.component.common.Commons;
+import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.controller.admin.AttachController;
 import com.zhuxl.blog.exception.TipException;
 import com.zhuxl.blog.modal.vo.UserVo;

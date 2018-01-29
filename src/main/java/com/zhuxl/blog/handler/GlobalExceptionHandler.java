@@ -1,4 +1,4 @@
-package com.zhuxl.blog.controller;
+package com.zhuxl.blog.handler;
 
 import com.zhuxl.blog.exception.TipException;
 import org.slf4j.Logger;

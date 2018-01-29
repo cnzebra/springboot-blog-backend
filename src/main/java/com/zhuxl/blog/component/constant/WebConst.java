@@ -1,4 +1,4 @@
-package com.zhuxl.blog.constant;
+package com.zhuxl.blog.component.constant;
 
 import com.zhuxl.blog.modal.vo.OptionVo;
 import com.zhuxl.blog.service.IOptionService;

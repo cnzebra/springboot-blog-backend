@@ -1,7 +1,8 @@
-package com.zhuxl.blog.utils;
+package com.zhuxl.blog.component.common;
 
 
 import com.zhuxl.blog.modal.vo.MetaVo;
+import com.zhuxl.blog.utils.Tools;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 

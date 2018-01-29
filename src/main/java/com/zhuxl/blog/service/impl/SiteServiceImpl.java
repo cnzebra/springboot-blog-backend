@@ -1,6 +1,6 @@
 package com.zhuxl.blog.service.impl;
 
-import com.zhuxl.blog.constant.WebConst;
+import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.controller.admin.AttachController;
 import com.zhuxl.blog.dao.AttachDao;
 import com.zhuxl.blog.dao.CommentDao;

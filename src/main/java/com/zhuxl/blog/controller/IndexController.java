@@ -2,7 +2,7 @@ package com.zhuxl.blog.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.vdurmont.emoji.EmojiParser;
-import com.zhuxl.blog.constant.WebConst;
+import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.dto.ErrorCode;
 import com.zhuxl.blog.dto.MetaDto;
 import com.zhuxl.blog.dto.Types;

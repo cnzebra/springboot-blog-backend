@@ -1,6 +1,6 @@
 package com.zhuxl.blog.service.impl;
 
-import com.zhuxl.blog.constant.WebConst;
+import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.dao.LogDao;
 import com.zhuxl.blog.modal.vo.LogVo;
 import com.zhuxl.blog.modal.vo.LogVoExample;

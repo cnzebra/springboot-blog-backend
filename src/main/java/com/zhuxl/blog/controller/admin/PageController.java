@@ -1,6 +1,6 @@
 package com.zhuxl.blog.controller.admin;
 
-import com.zhuxl.blog.constant.WebConst;
+import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.controller.BaseController;
 import com.zhuxl.blog.dto.LogActions;
 import com.zhuxl.blog.dto.Types;

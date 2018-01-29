@@ -1,7 +1,7 @@
 package com.zhuxl.blog.controller.admin;
 
 import com.github.pagehelper.PageInfo;
-import com.zhuxl.blog.constant.WebConst;
+import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.controller.BaseController;
 import com.zhuxl.blog.dto.LogActions;
 import com.zhuxl.blog.dto.Types;
@@ -10,7 +10,7 @@ import com.zhuxl.blog.modal.vo.AttachVo;
 import com.zhuxl.blog.modal.vo.UserVo;
 import com.zhuxl.blog.service.IAttachService;
 import com.zhuxl.blog.service.ILogService;
-import com.zhuxl.blog.utils.Commons;
+import com.zhuxl.blog.component.common.Commons;
 import com.zhuxl.blog.utils.TaleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

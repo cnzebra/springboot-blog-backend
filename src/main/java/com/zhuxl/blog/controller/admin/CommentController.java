@@ -2,10 +2,10 @@ package com.zhuxl.blog.controller.admin;
 
 import com.zhuxl.blog.controller.BaseController;
 import com.zhuxl.blog.modal.bo.RestResponseBo;
-import com.zhuxl.blog.modal.vo.CommentVo;
-import com.zhuxl.blog.modal.vo.CommentVoExample;
-import com.zhuxl.blog.modal.vo.UserVo;
-import com.zhuxl.blog.service.ICommentService;
+import com.zhuxl.blog.modal.entity.CommentDO;
+import com.zhuxl.blog.modal.entity.CommentDOExample;
+import com.zhuxl.blog.modal.entity.UserDO;
+import com.zhuxl.blog.service.CommentService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,16 +26,16 @@ public class CommentController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommentController.class);
 
     @Resource
-    private ICommentService commentsService;
+    private CommentService commentsService;
 
     @GetMapping(value = "")
     public String index(@RequestParam(value = "page", defaultValue = "1") int page,
                         @RequestParam(value = "limit", defaultValue = "15") int limit, HttpServletRequest request) {
-        UserVo users = this.user(request);
-        CommentVoExample commentVoExample = new CommentVoExample();
-        commentVoExample.setOrderByClause("coid desc");
-        commentVoExample.createCriteria().andAuthorIdNotEqualTo(users.getUid());
-        PageInfo<CommentVo> commentsPaginator = commentsService.getCommentsWithPage(commentVoExample, page, limit);
+        UserDO users = this.user(request);
+        CommentDOExample commentDOExample = new CommentDOExample();
+        commentDOExample.setOrderByClause("coid desc");
+        commentDOExample.createCriteria().andAuthorIdNotEqualTo(users.getUid());
+        PageInfo<CommentDO> commentsPaginator = commentsService.getCommentsWithPage(commentDOExample, page, limit);
         request.setAttribute("comments", commentsPaginator);
         return "admin/comment_list";
     }
@@ -50,7 +50,7 @@ public class CommentController extends BaseController {
     @ResponseBody
     public RestResponseBo delete(@RequestParam Integer coid) {
         try {
-            CommentVo comments = commentsService.getCommentById(coid);
+            CommentDO comments = commentsService.getCommentById(coid);
             if (null == comments) {
                 return RestResponseBo.fail("不存在该评论");
             }
@@ -67,7 +67,7 @@ public class CommentController extends BaseController {
     @ResponseBody
     public RestResponseBo delete(@RequestParam Integer coid, @RequestParam String status) {
         try {
-            CommentVo comments = commentsService.getCommentById(coid);
+            CommentDO comments = commentsService.getCommentById(coid);
             if (comments != null) {
                 comments.setCoid(coid);
                 comments.setStatus(status);

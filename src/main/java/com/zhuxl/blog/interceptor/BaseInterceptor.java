@@ -4,9 +4,9 @@ import com.zhuxl.blog.component.common.AdminCommons;
 import com.zhuxl.blog.component.common.Commons;
 import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.dto.Types;
-import com.zhuxl.blog.modal.vo.OptionVo;
-import com.zhuxl.blog.modal.vo.UserVo;
-import com.zhuxl.blog.service.IOptionService;
+import com.zhuxl.blog.modal.entity.OptionDO;
+import com.zhuxl.blog.modal.entity.UserDO;
+import com.zhuxl.blog.service.OptionService;
 import com.zhuxl.blog.service.IUserService;
 import com.zhuxl.blog.utils.*;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ public class BaseInterceptor implements HandlerInterceptor {
     private IUserService userService;
 
     @Resource
-    private IOptionService optionService;
+    private OptionService optionService;
 
     private MapCache cache = MapCache.single();
 
@@ -53,7 +53,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 
 
         //请求拦截处理
-        UserVo user = TaleUtils.getLoginUser(request);
+        UserDO user = TaleUtils.getLoginUser(request);
         if (null == user) {
             Integer uid = TaleUtils.getCookieUid(request);
             if (null != uid) {
@@ -79,7 +79,7 @@ public class BaseInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o,
                            ModelAndView modelAndView) throws Exception {
-        OptionVo ov = optionService.getOptionByName("site_record");
+        OptionDO ov = optionService.getOptionByName("site_record");
         // 一些工具类和公共方法
         httpServletRequest.setAttribute("commons", commons);
         httpServletRequest.setAttribute("option", ov);

@@ -7,11 +7,11 @@ import com.zhuxl.blog.dto.LogActions;
 import com.zhuxl.blog.dto.Types;
 import com.zhuxl.blog.exception.TipException;
 import com.zhuxl.blog.modal.bo.RestResponseBo;
-import com.zhuxl.blog.modal.vo.*;
-import com.zhuxl.blog.service.IAttachService;
-import com.zhuxl.blog.service.IContentService;
-import com.zhuxl.blog.service.ILogService;
-import com.zhuxl.blog.service.IMetaService;
+import com.zhuxl.blog.modal.entity.*;
+import com.zhuxl.blog.service.AttachFileService;
+import com.zhuxl.blog.service.ArticleService;
+import com.zhuxl.blog.service.LogService;
+import com.zhuxl.blog.service.MetaService;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -37,45 +37,45 @@ public class ArticleController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleController.class);
 
     @Resource
-    private IContentService contentsService;
+    private ArticleService contentsService;
 
     @Resource
-    private IMetaService metasService;
+    private MetaService metasService;
     @Autowired
-    private IAttachService attachService;
+    private AttachFileService attachService;
 
     @Resource
-    private ILogService logService;
+    private LogService logService;
 
     @GetMapping(value = "")
     public String index(@RequestParam(value = "page", defaultValue = "1") int page,
                         @RequestParam(value = "limit", defaultValue = "15") int limit, HttpServletRequest request) {
-        ContentVoExample contentVoExample = new ContentVoExample();
-        contentVoExample.setOrderByClause("created desc");
-        contentVoExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType());
-        PageInfo<ContentVo> contentsPaginator = contentsService.getArticlesWithpage(contentVoExample, page, limit);
+        ArticleDOExample articleDOExample = new ArticleDOExample();
+        articleDOExample.setOrderByClause("created desc");
+        articleDOExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType());
+        PageInfo<ArticleDO> contentsPaginator = contentsService.getArticlesWithpage(articleDOExample, page, limit);
         request.setAttribute("articles", contentsPaginator);
         return "admin/article_list";
     }
 
     @GetMapping(value = "/publish")
     public String newArticle(HttpServletRequest request) {
-        List<MetaVo> categories = metasService.getMetas(Types.CATEGORY.getType());
+        List<MetaDO> categories = metasService.getMetas(Types.CATEGORY.getType());
         request.setAttribute("categories", categories);
-        PageInfo<AttachVo> attachPaginator = attachService.getAttachs(1, 12);
+        PageInfo<AttachFileDO> attachPaginator = attachService.getAttachs(1, 12);
         request.setAttribute("attachs", attachPaginator);
         return "admin/article_edit";
     }
 
     @GetMapping(value = "/{cid}")
     public String editArticle(@PathVariable String cid, HttpServletRequest request) {
-        ContentVo contents = contentsService.getContents(cid);
+        ArticleDO contents = contentsService.getContents(cid);
         request.setAttribute("contents", contents);
-        List<MetaVo> categories = metasService.getMetas(Types.CATEGORY.getType());
+        List<MetaDO> categories = metasService.getMetas(Types.CATEGORY.getType());
         request.setAttribute("categories", categories);
         request.setAttribute("active", "article");
 
-        PageInfo<AttachVo> attachPaginator = attachService.getAttachs(1, 12);
+        PageInfo<AttachFileDO> attachPaginator = attachService.getAttachs(1, 12);
         request.setAttribute("attachs", attachPaginator);
 
         return "admin/article_edit";
@@ -83,8 +83,8 @@ public class ArticleController extends BaseController {
 
     @PostMapping(value = "/publish")
     @ResponseBody
-    public RestResponseBo publishArticle(ContentVo contents, HttpServletRequest request) {
-        UserVo users = this.user(request);
+    public RestResponseBo publishArticle(ArticleDO contents, HttpServletRequest request) {
+        UserDO users = this.user(request);
         contents.setAuthorId(users.getUid());
         contents.setType(Types.ARTICLE.getType());
         if (StringUtils.isBlank(contents.getCategories())) {
@@ -99,8 +99,8 @@ public class ArticleController extends BaseController {
 
     @PostMapping(value = "/modify")
     @ResponseBody
-    public RestResponseBo modifyArticle(ContentVo contents, HttpServletRequest request) {
-        UserVo users = this.user(request);
+    public RestResponseBo modifyArticle(ArticleDO contents, HttpServletRequest request) {
+        UserDO users = this.user(request);
         contents.setAuthorId(users.getUid());
         contents.setType(Types.ARTICLE.getType());
         String result = contentsService.updateArticle(contents);

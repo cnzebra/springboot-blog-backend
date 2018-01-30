@@ -1,18 +1,17 @@
 package com.zhuxl.blog.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.dao.CommentDao;
 import com.zhuxl.blog.exception.TipException;
 import com.zhuxl.blog.modal.bo.CommentBo;
-import com.zhuxl.blog.modal.vo.CommentVo;
-import com.zhuxl.blog.modal.vo.CommentVoExample;
-import com.zhuxl.blog.modal.vo.ContentVo;
-import com.zhuxl.blog.service.ICommentService;
-import com.zhuxl.blog.service.IContentService;
-import com.zhuxl.blog.utils.DateKit;
+import com.zhuxl.blog.modal.entity.ArticleDO;
+import com.zhuxl.blog.modal.entity.CommentDO;
+import com.zhuxl.blog.modal.entity.CommentDOExample;
+import com.zhuxl.blog.service.ArticleService;
+import com.zhuxl.blog.service.CommentService;
 import com.zhuxl.blog.utils.TaleUtils;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,25 +28,25 @@ import java.util.List;
  * @date 2017/3/16
  */
 @Service
-public class CommentServiceImpl implements ICommentService {
+public class CommentServiceImpl implements CommentService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommentServiceImpl.class);
 
     @Resource
     private CommentDao commentDao;
 
     @Resource
-    private IContentService contentService;
+    private ArticleService articleService;
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public String insertComment(CommentVo comments) {
+    public String insertComment(CommentDO comments) {
         if (null == comments) {
             return "评论对象为空";
         }
         if (StringUtils.isBlank(comments.getAuthor())) {
             comments.setAuthor("热心网友");
         }
-        if (StringUtils.isNotBlank(comments.getMail()) && !TaleUtils.isEmail(comments.getMail())) {
+        if (StringUtils.isNotBlank(comments.getEmail()) && !TaleUtils.isEmail(comments.getEmail())) {
             return "请输入正确的邮箱格式";
         }
         if (StringUtils.isBlank(comments.getContent())) {
@@ -55,37 +55,37 @@ public class CommentServiceImpl implements ICommentService {
         if (comments.getContent().length() < 5 || comments.getContent().length() > 2000) {
             return "评论字数在5-2000个字符";
         }
-        if (null == comments.getCid()) {
+        if (null == comments.getArticleId()) {
             return "评论文章不能为空";
         }
-        ContentVo contents = contentService.getContents(String.valueOf(comments.getCid()));
+        ArticleDO contents = articleService.getContents(String.valueOf(comments.getArticleId()));
         if (null == contents) {
             return "不存在的文章";
         }
         comments.setOwnerId(contents.getAuthorId());
         comments.setStatus("not_audit");
-        comments.setCreated(DateKit.getCurrentUnixTime());
+        comments.setGmtCreate(new Date());
         commentDao.insertSelective(comments);
 
-        ContentVo temp = new ContentVo();
-        temp.setCid(contents.getCid());
+        ArticleDO temp = new ArticleDO();
+        temp.setId(contents.getId());
         temp.setCommentsNum(contents.getCommentsNum() + 1);
-        contentService.updateContentByCid(temp);
+        articleService.updateContentByCid(temp);
 
         return WebConst.SUCCESS_RESULT;
     }
 
     @Override
-    public PageInfo<CommentBo> getComments(Integer cid, int page, int limit) {
+    public PageInfo<CommentBo> getComments(Long cid, int page, int limit) {
 
         if (null != cid) {
             PageHelper.startPage(page, limit);
-            CommentVoExample commentVoExample = new CommentVoExample();
-            commentVoExample.createCriteria().andCidEqualTo(cid).andParentEqualTo(0).andStatusIsNotNull()
+            CommentDOExample commentDOExample = new CommentDOExample();
+            commentDOExample.createCriteria().andIdEqualTo(cid).andParentEqualTo(0).andStatusIsNotNull()
                     .andStatusEqualTo("approved");
-            commentVoExample.setOrderByClause("coid desc");
-            List<CommentVo> parents = commentDao.selectByExampleWithBLOBs(commentVoExample);
-            PageInfo<CommentVo> commentPaginator = new PageInfo<>(parents);
+            commentDOExample.setOrderByClause("id desc");
+            List<CommentDO> parents = commentDao.selectByExampleWithBLOBs(commentDOExample);
+            PageInfo<CommentDO> commentPaginator = new PageInfo<>(parents);
             PageInfo<CommentBo> returnBo = copyPageInfo(commentPaginator);
             if (parents.size() != 0) {
                 List<CommentBo> comments = new ArrayList<>(parents.size());
@@ -101,41 +101,41 @@ public class CommentServiceImpl implements ICommentService {
     }
 
     @Override
-    public PageInfo<CommentVo> getCommentsWithPage(CommentVoExample commentVoExample, int page, int limit) {
+    public PageInfo<CommentDO> getCommentsWithPage(CommentDOExample commentDOExample, int page, int limit) {
         PageHelper.startPage(page, limit);
-        List<CommentVo> commentVos = commentDao.selectByExampleWithBLOBs(commentVoExample);
-        PageInfo<CommentVo> pageInfo = new PageInfo<>(commentVos);
+        List<CommentDO> commentDOS = commentDao.selectByExampleWithBLOBs(commentDOExample);
+        PageInfo<CommentDO> pageInfo = new PageInfo<>(commentDOS);
         return pageInfo;
     }
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void update(CommentVo comments) {
-        if (null != comments && null != comments.getCoid()) {
+    public void update(CommentDO comments) {
+        if (null != comments && null != comments.getId()) {
             commentDao.updateByPrimaryKeyWithBLOBs(comments);
         }
     }
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void delete(Integer coid, Integer cid) {
-        if (null == coid) {
+    public void delete(Long commentId, Long articleId) {
+        if (null == commentId) {
             throw new TipException("主键为空");
         }
-        commentDao.deleteByPrimaryKey(coid);
-        ContentVo contents = contentService.getContents(cid + "");
+        commentDao.deleteByPrimaryKey(commentId);
+        ArticleDO contents = articleService.getContents(articleId + "");
         if (null != contents && contents.getCommentsNum() > 0) {
-            ContentVo temp = new ContentVo();
-            temp.setCid(cid);
+            ArticleDO temp = new ArticleDO();
+            temp.setId(articleId);
             temp.setCommentsNum(contents.getCommentsNum() - 1);
-            contentService.updateContentByCid(temp);
+            articleService.updateContentByCid(temp);
         }
     }
 
     @Override
-    public CommentVo getCommentById(Integer coid) {
-        if (null != coid) {
-            return commentDao.selectByPrimaryKey(coid);
+    public CommentDO getCommentById(Long commentId) {
+        if (null != commentId) {
+            return commentDao.selectByPrimaryKey(commentId);
         }
         return null;
     }

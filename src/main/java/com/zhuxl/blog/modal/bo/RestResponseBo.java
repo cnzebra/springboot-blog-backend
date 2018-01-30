@@ -1,5 +1,8 @@
 package com.zhuxl.blog.modal.bo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * rest返回对象
  * ^
@@ -7,6 +10,8 @@ package com.zhuxl.blog.modal.bo;
  * @param <T>
  * @author zhuxiaolong
  */
+@Getter
+@Setter
 public class RestResponseBo<T> {
 
     /**
@@ -99,46 +104,6 @@ public class RestResponseBo<T> {
 
     public static RestResponseBo fail(int code, String msg) {
         return new RestResponseBo(false, msg, code);
-    }
-
-    public T getPayload() {
-        return payload;
-    }
-
-    public void setPayload(T payload) {
-        this.payload = payload;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
     }
 
 }

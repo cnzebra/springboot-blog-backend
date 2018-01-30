@@ -1,9 +1,9 @@
 package com.zhuxl.blog.service.impl;
 
 import com.zhuxl.blog.dao.OptionDao;
-import com.zhuxl.blog.modal.vo.OptionVo;
-import com.zhuxl.blog.modal.vo.OptionVoExample;
-import com.zhuxl.blog.service.IOptionService;
+import com.zhuxl.blog.modal.entity.OptionDO;
+import com.zhuxl.blog.modal.entity.OptionDOExample;
+import com.zhuxl.blog.service.OptionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.Map;
  * @date 2017/3/7
  */
 @Service
-public class OptionServiceImpl implements IOptionService {
+public class OptionServiceImpl implements OptionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OptionServiceImpl.class);
 
@@ -28,9 +28,9 @@ public class OptionServiceImpl implements IOptionService {
     private OptionDao optionDao;
 
     @Override
-    public void insertOption(OptionVo optionVo) {
-        LOGGER.debug("Enter insertOption method:optionVo={}", optionVo);
-        optionDao.insertSelective(optionVo);
+    public void insertOption(OptionDO optionDO) {
+        LOGGER.debug("Enter insertOption method:optionDO={}", optionDO);
+        optionDao.insertSelective(optionDO);
         LOGGER.debug("Exit insertOption method.");
     }
 
@@ -38,13 +38,13 @@ public class OptionServiceImpl implements IOptionService {
     @Transactional(rollbackFor = {Exception.class})
     public void insertOption(String name, String value) {
         LOGGER.debug("Enter insertOption method:name={},value={}", name, value);
-        OptionVo optionVo = new OptionVo();
-        optionVo.setName(name);
-        optionVo.setValue(value);
+        OptionDO optionDO = new OptionDO();
+        optionDO.setName(name);
+        optionDO.setValue(value);
         if (optionDao.selectByPrimaryKey(name) == null) {
-            optionDao.insertSelective(optionVo);
+            optionDao.insertSelective(optionDO);
         } else {
-            optionDao.updateByPrimaryKeySelective(optionVo);
+            optionDao.updateByPrimaryKeySelective(optionDO);
         }
         LOGGER.debug("Exit insertOption method.");
     }
@@ -58,12 +58,12 @@ public class OptionServiceImpl implements IOptionService {
     }
 
     @Override
-    public OptionVo getOptionByName(String name) {
+    public OptionDO getOptionByName(String name) {
         return optionDao.selectByPrimaryKey(name);
     }
 
     @Override
-    public List<OptionVo> getOptions() {
-        return optionDao.selectByExample(new OptionVoExample());
+    public List<OptionDO> getOptions() {
+        return optionDao.selectByExample(new OptionDOExample());
     }
 }

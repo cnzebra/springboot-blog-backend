@@ -1,6 +1,6 @@
 package com.zhuxl.blog;
 
-import com.zhuxl.blog.modal.vo.UserVo;
+import com.zhuxl.blog.modal.entity.UserDO;
 import com.zhuxl.blog.utils.TaleUtils;
 
 /**
@@ -8,7 +8,7 @@ import com.zhuxl.blog.utils.TaleUtils;
  */
 public class Pwdtest {
     public static void main(String args[]) {
-        UserVo user = new UserVo();
+        UserDO user = new UserDO();
         user.setUsername("admin");
         user.setPassword("J9lew2irojE23");
         String encodePwd = TaleUtils.md5encode(user.getUsername() + user.getPassword());

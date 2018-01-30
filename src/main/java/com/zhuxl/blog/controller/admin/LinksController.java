@@ -3,8 +3,8 @@ package com.zhuxl.blog.controller.admin;
 import com.zhuxl.blog.controller.BaseController;
 import com.zhuxl.blog.dto.Types;
 import com.zhuxl.blog.modal.bo.RestResponseBo;
-import com.zhuxl.blog.modal.vo.MetaVo;
-import com.zhuxl.blog.service.IMetaService;
+import com.zhuxl.blog.modal.entity.MetaDO;
+import com.zhuxl.blog.service.MetaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -25,11 +25,11 @@ public class LinksController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(LinksController.class);
 
     @Resource
-    private IMetaService metasService;
+    private MetaService metasService;
 
     @GetMapping(value = "")
     public String index(HttpServletRequest request) {
-        List<MetaVo> metas = metasService.getMetas(Types.LINK.getType());
+        List<MetaDO> metas = metasService.getMetas(Types.LINK.getType());
         request.setAttribute("links", metas);
         return "admin/links";
     }
@@ -40,7 +40,7 @@ public class LinksController extends BaseController {
                                    @RequestParam String logo, @RequestParam Integer mid,
                                    @RequestParam(value = "sort", defaultValue = "0") int sort) {
         try {
-            MetaVo metas = new MetaVo();
+            MetaDO metas = new MetaDO();
             metas.setName(title);
             metas.setSlug(url);
             metas.setDescription(logo);

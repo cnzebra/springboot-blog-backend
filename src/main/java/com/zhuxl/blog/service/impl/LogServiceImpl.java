@@ -1,17 +1,17 @@
 package com.zhuxl.blog.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.dao.LogDao;
-import com.zhuxl.blog.modal.vo.LogVo;
-import com.zhuxl.blog.modal.vo.LogVoExample;
-import com.zhuxl.blog.service.ILogService;
-import com.zhuxl.blog.utils.DateKit;
-import com.github.pagehelper.PageHelper;
+import com.zhuxl.blog.modal.entity.LogDO;
+import com.zhuxl.blog.modal.entity.LogDOExample;
+import com.zhuxl.blog.service.LogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,7 +19,7 @@ import java.util.List;
  * @date 2017/3/4
  */
 @Service
-public class LogServiceImpl implements ILogService {
+public class LogServiceImpl implements LogService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogServiceImpl.class);
 
@@ -27,23 +27,23 @@ public class LogServiceImpl implements ILogService {
     private LogDao logDao;
 
     @Override
-    public void insertLog(LogVo logVo) {
-        logDao.insert(logVo);
+    public void insertLog(LogDO logDO) {
+        logDao.insert(logDO);
     }
 
     @Override
-    public void insertLog(String action, String data, String ip, Integer authorId) {
-        LogVo logs = new LogVo();
+    public void insertLog(String action, String data, String ip, Long authorId) {
+        LogDO logs = new LogDO();
         logs.setAction(action);
         logs.setData(data);
         logs.setIp(ip);
         logs.setAuthorId(authorId);
-        logs.setCreated(DateKit.getCurrentUnixTime());
+        logs.setGmtCreate(new Date());
         logDao.insert(logs);
     }
 
     @Override
-    public List<LogVo> getLogs(int page, int limit) {
+    public List<LogDO> getLogs(int page, int limit) {
         LOGGER.debug("Enter getLogs method:page={},linit={}", page, limit);
         if (page <= 0) {
             page = 1;
@@ -51,11 +51,11 @@ public class LogServiceImpl implements ILogService {
         if (limit < 1 || limit > WebConst.MAX_POSTS) {
             limit = 10;
         }
-        LogVoExample logVoExample = new LogVoExample();
-        logVoExample.setOrderByClause("id desc");
+        LogDOExample logDOExample = new LogDOExample();
+        logDOExample.setOrderByClause("id desc");
         PageHelper.startPage((page - 1) * limit, limit);
-        List<LogVo> logVos = logDao.selectByExample(logVoExample);
+        List<LogDO> logDOS = logDao.selectByExample(logDOExample);
         LOGGER.debug("Exit getLogs method");
-        return logVos;
+        return logDOS;
     }
 }

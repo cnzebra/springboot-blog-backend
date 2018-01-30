@@ -1,7 +1,7 @@
 package com.zhuxl.blog.dao;
 
-import com.zhuxl.blog.modal.vo.LogVo;
-import com.zhuxl.blog.modal.vo.LogVoExample;
+import com.zhuxl.blog.modal.entity.LogDO;
+import com.zhuxl.blog.modal.entity.LogDOExample;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,13 +16,13 @@ public interface LogDao {
      * @param example
      * @return
      */
-    long countByExample(LogVoExample example);
+    long countByExample(LogDOExample example);
 
     /**
      * @param example
      * @return
      */
-    int deleteByExample(LogVoExample example);
+    int deleteByExample(LogDOExample example);
 
     /**
      * @param id
@@ -34,49 +34,49 @@ public interface LogDao {
      * @param record
      * @return
      */
-    int insert(LogVo record);
+    int insert(LogDO record);
 
     /**
      * @param record
      * @return
      */
-    int insertSelective(LogVo record);
+    int insertSelective(LogDO record);
 
     /**
      * @param example
      * @return
      */
-    List<LogVo> selectByExample(LogVoExample example);
+    List<LogDO> selectByExample(LogDOExample example);
 
     /**
      * @param id
      * @return
      */
-    LogVo selectByPrimaryKey(Integer id);
+    LogDO selectByPrimaryKey(Integer id);
 
     /**
      * @param record
      * @param example
      * @return
      */
-    int updateByExampleSelective(@Param("record") LogVo record, @Param("example") LogVoExample example);
+    int updateByExampleSelective(@Param("record") LogDO record, @Param("example") LogDOExample example);
 
     /**
      * @param record
      * @param example
      * @return
      */
-    int updateByExample(@Param("record") LogVo record, @Param("example") LogVoExample example);
+    int updateByExample(@Param("record") LogDO record, @Param("example") LogDOExample example);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKeySelective(LogVo record);
+    int updateByPrimaryKeySelective(LogDO record);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKey(LogVo record);
+    int updateByPrimaryKey(LogDO record);
 }

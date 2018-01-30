@@ -6,11 +6,11 @@ import com.zhuxl.blog.dto.LogActions;
 import com.zhuxl.blog.exception.TipException;
 import com.zhuxl.blog.modal.bo.RestResponseBo;
 import com.zhuxl.blog.modal.bo.StatisticsBo;
-import com.zhuxl.blog.modal.vo.CommentVo;
-import com.zhuxl.blog.modal.vo.ContentVo;
-import com.zhuxl.blog.modal.vo.LogVo;
-import com.zhuxl.blog.modal.vo.UserVo;
-import com.zhuxl.blog.service.ILogService;
+import com.zhuxl.blog.modal.entity.ArticleDO;
+import com.zhuxl.blog.modal.entity.CommentDO;
+import com.zhuxl.blog.modal.entity.LogDO;
+import com.zhuxl.blog.modal.entity.UserDO;
+import com.zhuxl.blog.service.LogService;
 import com.zhuxl.blog.service.ISiteService;
 import com.zhuxl.blog.service.IUserService;
 import com.zhuxl.blog.utils.GsonUtils;
@@ -43,7 +43,7 @@ public class IndexController extends BaseController {
     private ISiteService siteService;
 
     @Resource
-    private ILogService logService;
+    private LogService logService;
 
     @Resource
     private IUserService userService;
@@ -56,11 +56,11 @@ public class IndexController extends BaseController {
     @GetMapping(value = {"", "/index"})
     public String index(HttpServletRequest request) {
         LOGGER.info("Enter admin index method");
-        List<CommentVo> comments = siteService.recentComments(5);
-        List<ContentVo> contents = siteService.recentContents(5);
+        List<CommentDO> comments = siteService.recentComments(5);
+        List<ArticleDO> contents = siteService.recentContents(5);
         StatisticsBo statistics = siteService.getStatistics();
         // 取最新的20条日志
-        List<LogVo> logs = logService.getLogs(1, 5);
+        List<LogDO> logs = logService.getLogs(1, 5);
 
         request.setAttribute("comments", comments);
         request.setAttribute("articles", contents);
@@ -86,9 +86,9 @@ public class IndexController extends BaseController {
     @ResponseBody
     public RestResponseBo saveProfile(@RequestParam String screenName, @RequestParam String email, HttpServletRequest
             request, HttpSession session) {
-        UserVo users = this.user(request);
+        UserDO users = this.user(request);
         if (StringUtils.isNotBlank(screenName) && StringUtils.isNotBlank(email)) {
-            UserVo temp = new UserVo();
+            UserDO temp = new UserDO();
             temp.setUid(users.getUid());
             temp.setScreenName(screenName);
             temp.setEmail(email);
@@ -97,7 +97,7 @@ public class IndexController extends BaseController {
                     (), this.getUid(request));
 
             //更新session中的数据
-            UserVo original = (UserVo) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
+            UserDO original = (UserDO) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
             original.setScreenName(screenName);
             original.setEmail(email);
             session.setAttribute(WebConst.LOGIN_SESSION_KEY, original);
@@ -112,7 +112,7 @@ public class IndexController extends BaseController {
     @ResponseBody
     public RestResponseBo upPwd(@RequestParam String oldPassword, @RequestParam String password, HttpServletRequest
             request, HttpSession session) {
-        UserVo users = this.user(request);
+        UserDO users = this.user(request);
         if (StringUtils.isBlank(oldPassword) || StringUtils.isBlank(password)) {
             return RestResponseBo.fail("请确认信息输入完整");
         }
@@ -125,7 +125,7 @@ public class IndexController extends BaseController {
         }
 
         try {
-            UserVo temp = new UserVo();
+            UserDO temp = new UserDO();
             temp.setUid(users.getUid());
             String pwd = TaleUtils.md5encode(users.getUsername() + password);
             temp.setPassword(pwd);
@@ -133,7 +133,7 @@ public class IndexController extends BaseController {
             logService.insertLog(LogActions.UP_PWD.getAction(), null, request.getRemoteAddr(), this.getUid(request));
 
             //更新session中的数据
-            UserVo original = (UserVo) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
+            UserDO original = (UserDO) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
             original.setPassword(pwd);
             session.setAttribute(WebConst.LOGIN_SESSION_KEY, original);
             return RestResponseBo.ok();

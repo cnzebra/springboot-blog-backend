@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhuxl.blog.dao.CommentDao">
-    <resultMap id="BaseResultMap" type="com.zhuxl.blog.modal.vo.CommentVo">
-        <id column="coid" jdbcType="INTEGER" property="coid"/>
-        <result column="cid" jdbcType="INTEGER" property="cid"/>
-        <result column="created" jdbcType="INTEGER" property="created"/>
+    <resultMap id="BaseResultMap" type="com.zhuxl.blog.modal.entity.CommentDO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="article_id" jdbcType="BIGINT" property="articleId"/>
         <result column="author" jdbcType="VARCHAR" property="author"/>
-        <result column="author_id" jdbcType="INTEGER" property="authorId"/>
-        <result column="owner_id" jdbcType="INTEGER" property="ownerId"/>
-        <result column="mail" jdbcType="VARCHAR" property="mail"/>
-        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="author_id" jdbcType="BIGINT" property="authorId"/>
+        <result column="owner_id" jdbcType="BIGINT" property="ownerId"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="site_url" jdbcType="VARCHAR" property="siteUrl"/>
         <result column="ip" jdbcType="VARCHAR" property="ip"/>
         <result column="agent" jdbcType="VARCHAR" property="agent"/>
         <result column="type" jdbcType="VARCHAR" property="type"/>
         <result column="status" jdbcType="VARCHAR" property="status"/>
-        <result column="parent" jdbcType="INTEGER" property="parent"/>
+        <result column="parent" jdbcType="BIGINT" property="parent"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
     </resultMap>
-    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.zhuxl.blog.modal.vo.CommentVo">
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.zhuxl.blog.modal.entity.CommentDO">
         <result column="content" jdbcType="LONGVARCHAR" property="content"/>
     </resultMap>
     <sql id="Example_Where_Clause">
@@ -80,13 +81,13 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-        coid, cid, created, author, author_id, owner_id, mail, url, ip, agent, type, status,
-        parent
+        id, article_id, author, author_id, owner_id, email, site_url, ip, agent, type, status,
+        parent,gmt_create,gmt_modified
     </sql>
     <sql id="Blob_Column_List">
         content
     </sql>
-    <select id="selectByExampleWithBLOBs" parameterType="com.zhuxl.blog.modal.vo.CommentVoExample"
+    <select id="selectByExampleWithBLOBs" parameterType="com.zhuxl.blog.modal.entity.CommentDOExample"
             resultMap="ResultMapWithBLOBs">
         select
         <if test="distinct">
@@ -95,7 +96,7 @@
         <include refid="Base_Column_List"/>
         ,
         <include refid="Blob_Column_List"/>
-        from t_comments
+        from t_b_comment
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -103,13 +104,13 @@
             order by ${orderByClause}
         </if>
     </select>
-    <select id="selectByExample" parameterType="com.zhuxl.blog.modal.vo.CommentVoExample" resultMap="BaseResultMap">
+    <select id="selectByExample" parameterType="com.zhuxl.blog.modal.entity.CommentDOExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
         </if>
         <include refid="Base_Column_List"/>
-        from t_comments
+        from t_b_comment
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -125,48 +126,45 @@
             </if>
         </if>
     </select>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
         select
         <include refid="Base_Column_List"/>
         ,
         <include refid="Blob_Column_List"/>
-        from t_comments
-        where coid = #{coid,jdbcType=INTEGER}
+        from t_b_comment
+        where id = #{id,jdbcType=BIGINT}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from t_comments
-        where coid = #{coid,jdbcType=INTEGER}
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from t_b_comment
+        where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.zhuxl.blog.modal.vo.CommentVoExample">
-        delete from t_comments
+    <delete id="deleteByExample" parameterType="com.zhuxl.blog.modal.entity.CommentDOExample">
+        delete from t_b_comment
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.zhuxl.blog.modal.vo.CommentVo" useGeneratedKeys="true" keyProperty="coid">
-        insert into t_comments (coid, cid, created,
+    <insert id="insert" parameterType="com.zhuxl.blog.modal.entity.CommentDO" useGeneratedKeys="true" keyProperty="id">
+        insert into t_b_comment (id, article_id,
         author, author_id, owner_id,
-        mail, url, ip, agent,
+        email, site_url, ip, agent,
         type, status, parent,
-        content)
-        values (#{coid,jdbcType=INTEGER}, #{cid,jdbcType=INTEGER}, #{created,jdbcType=INTEGER},
-        #{author,jdbcType=VARCHAR}, #{authorId,jdbcType=INTEGER}, #{ownerId,jdbcType=INTEGER},
-        #{mail,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{agent,jdbcType=VARCHAR},
-        #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{parent,jdbcType=INTEGER},
-        #{content,jdbcType=LONGVARCHAR})
+        content,gmt_create,gmt_modified)
+        values (#{id,jdbcType=BIGINT}, #{articleId,jdbcType=BIGINT},
+        #{author,jdbcType=VARCHAR}, #{authorId,jdbcType=BIGINT}, #{ownerId,jdbcType=BIGINT},
+        #{email,jdbcType=VARCHAR}, #{siteUrl,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{agent,jdbcType=VARCHAR},
+        #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{parent,jdbcType=BIGINT},
+        #{content,jdbcType=LONGVARCHAR},#{gmtCreate,jdbcType=TIMESTAMP},#{gmtModified,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.zhuxl.blog.modal.vo.CommentVo" useGeneratedKeys="true"
-            keyProperty="coid">
-        insert into t_comments
+    <insert id="insertSelective" parameterType="com.zhuxl.blog.modal.entity.CommentDO" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_b_comment
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="coid != null">
-                coid,
+            <if test="id != null">
+                id,
             </if>
-            <if test="cid != null">
-                cid,
-            </if>
-            <if test="created != null">
-                created,
+            <if test="articleId != null">
+                article_id,
             </if>
             <if test="author != null">
                 author,
@@ -177,11 +175,11 @@
             <if test="ownerId != null">
                 owner_id,
             </if>
-            <if test="mail != null">
-                mail,
+            <if test="email != null">
+                email,
             </if>
-            <if test="url != null">
-                url,
+            <if test="siteUrl != null">
+                site_url,
             </if>
             <if test="ip != null">
                 ip,
@@ -201,31 +199,34 @@
             <if test="content != null">
                 content,
             </if>
+            <if test="gmtCreate != null">
+                gmt_create,
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="coid != null">
-                #{coid,jdbcType=INTEGER},
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
             </if>
-            <if test="cid != null">
-                #{cid,jdbcType=INTEGER},
-            </if>
-            <if test="created != null">
-                #{created,jdbcType=INTEGER},
+            <if test="articleId != null">
+                #{articleId,jdbcType=BIGINT},
             </if>
             <if test="author != null">
                 #{author,jdbcType=VARCHAR},
             </if>
             <if test="authorId != null">
-                #{authorId,jdbcType=INTEGER},
+                #{authorId,jdbcType=BIGINT},
             </if>
             <if test="ownerId != null">
-                #{ownerId,jdbcType=INTEGER},
+                #{ownerId,jdbcType=BIGINT},
             </if>
-            <if test="mail != null">
-                #{mail,jdbcType=VARCHAR},
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
             </if>
-            <if test="url != null">
-                #{url,jdbcType=VARCHAR},
+            <if test="siteUrl != null">
+                #{site_url,jdbcType=VARCHAR},
             </if>
             <if test="ip != null">
                 #{ip,jdbcType=VARCHAR},
@@ -240,45 +241,48 @@
                 #{status,jdbcType=VARCHAR},
             </if>
             <if test="parent != null">
-                #{parent,jdbcType=INTEGER},
+                #{parent,jdbcType=BIGINT},
             </if>
             <if test="content != null">
                 #{content,jdbcType=LONGVARCHAR},
             </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.zhuxl.blog.modal.vo.CommentVoExample" resultType="java.lang.Long">
-        select count(*) from t_comments
+    <select id="countByExample" parameterType="com.zhuxl.blog.modal.entity.CommentDOExample" resultType="java.lang.Integer">
+        select count(*) from t_b_comment
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </select>
     <update id="updateByExampleSelective" parameterType="map">
-        update t_comments
+        update t_b_comment
         <set>
-            <if test="record.coid != null">
-                coid = #{record.coid,jdbcType=INTEGER},
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=BIGINT},
             </if>
-            <if test="record.cid != null">
-                cid = #{record.cid,jdbcType=INTEGER},
-            </if>
-            <if test="record.created != null">
-                created = #{record.created,jdbcType=INTEGER},
+            <if test="record.articleId != null">
+                article_id = #{record.articleId,jdbcType=BIGINT},
             </if>
             <if test="record.author != null">
                 author = #{record.author,jdbcType=VARCHAR},
             </if>
             <if test="record.authorId != null">
-                author_id = #{record.authorId,jdbcType=INTEGER},
+                author_id = #{record.authorId,jdbcType=BIGINT},
             </if>
             <if test="record.ownerId != null">
-                owner_id = #{record.ownerId,jdbcType=INTEGER},
+                owner_id = #{record.ownerId,jdbcType=BIGINT},
             </if>
-            <if test="record.mail != null">
-                mail = #{record.mail,jdbcType=VARCHAR},
+            <if test="record.email != null">
+                email = #{record.email,jdbcType=VARCHAR},
             </if>
             <if test="record.url != null">
-                url = #{record.url,jdbcType=VARCHAR},
+                site_url = #{record.siteUrl,jdbcType=VARCHAR},
             </if>
             <if test="record.ip != null">
                 ip = #{record.ip,jdbcType=VARCHAR},
@@ -293,10 +297,13 @@
                 status = #{record.status,jdbcType=VARCHAR},
             </if>
             <if test="record.parent != null">
-                parent = #{record.parent,jdbcType=INTEGER},
+                parent = #{record.parent,jdbcType=BIGINT},
             </if>
             <if test="record.content != null">
                 content = #{record.content,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="record.gmtModified != null">
+                gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
             </if>
         </set>
         <if test="_parameter != null">
@@ -304,67 +311,64 @@
         </if>
     </update>
     <update id="updateByExampleWithBLOBs" parameterType="map">
-        update t_comments
-        set coid = #{record.coid,jdbcType=INTEGER},
-        cid = #{record.cid,jdbcType=INTEGER},
-        created = #{record.created,jdbcType=INTEGER},
+        update t_b_comment
+        set id = #{record.id,jdbcType=BIGINT},
+        article_id = #{record.articleId,jdbcType=BIGINT},
         author = #{record.author,jdbcType=VARCHAR},
-        author_id = #{record.authorId,jdbcType=INTEGER},
-        owner_id = #{record.ownerId,jdbcType=INTEGER},
-        mail = #{record.mail,jdbcType=VARCHAR},
-        url = #{record.url,jdbcType=VARCHAR},
+        author_id = #{record.authorId,jdbcType=BIGINT},
+        owner_id = #{record.ownerId,jdbcType=BIGINT},
+        email = #{record.email,jdbcType=VARCHAR},
+        site_url = #{record.siteUrl,jdbcType=VARCHAR},
         ip = #{record.ip,jdbcType=VARCHAR},
         agent = #{record.agent,jdbcType=VARCHAR},
         type = #{record.type,jdbcType=VARCHAR},
         status = #{record.status,jdbcType=VARCHAR},
-        parent = #{record.parent,jdbcType=INTEGER},
-        content = #{record.content,jdbcType=LONGVARCHAR}
+        parent = #{record.parent,jdbcType=BIGINT},
+        content = #{record.content,jdbcType=LONGVARCHAR},
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
     <update id="updateByExample" parameterType="map">
-        update t_comments
-        set coid = #{record.coid,jdbcType=INTEGER},
-        cid = #{record.cid,jdbcType=INTEGER},
-        created = #{record.created,jdbcType=INTEGER},
+        update t_b_comment
+        set id = #{record.id,jdbcType=BIGINT},
+        article_id = #{record.articleId,jdbcType=BIGINT},
         author = #{record.author,jdbcType=VARCHAR},
-        author_id = #{record.authorId,jdbcType=INTEGER},
-        owner_id = #{record.ownerId,jdbcType=INTEGER},
-        mail = #{record.mail,jdbcType=VARCHAR},
-        url = #{record.url,jdbcType=VARCHAR},
+        author_id = #{record.authorId,jdbcType=BIGINT},
+        owner_id = #{record.ownerId,jdbcType=BIGINT},
+        email = #{record.email,jdbcType=VARCHAR},
+        site_url = #{record.siteUrl,jdbcType=VARCHAR},
         ip = #{record.ip,jdbcType=VARCHAR},
         agent = #{record.agent,jdbcType=VARCHAR},
         type = #{record.type,jdbcType=VARCHAR},
         status = #{record.status,jdbcType=VARCHAR},
-        parent = #{record.parent,jdbcType=INTEGER}
+        parent = #{record.parent,jdbcType=BIGINT},
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zhuxl.blog.modal.vo.CommentVo">
-        update t_comments
+    <update id="updateByPrimaryKeySelective" parameterType="com.zhuxl.blog.modal.entity.CommentDO">
+        update t_b_comment
         <set>
-            <if test="cid != null">
-                cid = #{cid,jdbcType=INTEGER},
-            </if>
-            <if test="created != null">
-                created = #{created,jdbcType=INTEGER},
+            <if test="id != null">
+                id = #{id,jdbcType=BIGINT},
             </if>
             <if test="author != null">
                 author = #{author,jdbcType=VARCHAR},
             </if>
             <if test="authorId != null">
-                author_id = #{authorId,jdbcType=INTEGER},
+                author_id = #{authorId,jdbcType=BIGINT},
             </if>
             <if test="ownerId != null">
-                owner_id = #{ownerId,jdbcType=INTEGER},
+                owner_id = #{ownerId,jdbcType=BIGINT},
             </if>
             <if test="mail != null">
-                mail = #{mail,jdbcType=VARCHAR},
+                email = #{email,jdbcType=VARCHAR},
             </if>
             <if test="url != null">
-                url = #{url,jdbcType=VARCHAR},
+                site_url = #{siteUrl,jdbcType=VARCHAR},
             </if>
             <if test="ip != null">
                 ip = #{ip,jdbcType=VARCHAR},
@@ -379,45 +383,48 @@
                 status = #{status,jdbcType=VARCHAR},
             </if>
             <if test="parent != null">
-                parent = #{parent,jdbcType=INTEGER},
+                parent = #{parent,jdbcType=BIGINT},
             </if>
             <if test="content != null">
                 content = #{content,jdbcType=LONGVARCHAR},
             </if>
+            <if test="gmtModified != null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
         </set>
-        where coid = #{coid,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zhuxl.blog.modal.vo.CommentVo">
-        update t_comments
-        set cid = #{cid,jdbcType=INTEGER},
-        created = #{created,jdbcType=INTEGER},
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zhuxl.blog.modal.entity.CommentDO">
+        update t_b_comment
+        set article_id = #{articleId,jdbcType=BIGINT},
         author = #{author,jdbcType=VARCHAR},
-        author_id = #{authorId,jdbcType=INTEGER},
-        owner_id = #{ownerId,jdbcType=INTEGER},
-        mail = #{mail,jdbcType=VARCHAR},
-        url = #{url,jdbcType=VARCHAR},
+        author_id = #{authorId,jdbcType=BIGINT},
+        owner_id = #{ownerId,jdbcType=BIGINT},
+        email = #{email,jdbcType=VARCHAR},
+        site_url = #{siteUrl,jdbcType=VARCHAR},
         ip = #{ip,jdbcType=VARCHAR},
         agent = #{agent,jdbcType=VARCHAR},
         type = #{type,jdbcType=VARCHAR},
         status = #{status,jdbcType=VARCHAR},
-        parent = #{parent,jdbcType=INTEGER},
-        content = #{content,jdbcType=LONGVARCHAR}
-        where coid = #{coid,jdbcType=INTEGER}
+        parent = #{parent,jdbcType=BIGINT},
+        content = #{content,jdbcType=LONGVARCHAR},
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.zhuxl.blog.modal.vo.CommentVo">
-        update t_comments
-        set cid = #{cid,jdbcType=INTEGER},
-        created = #{created,jdbcType=INTEGER},
+    <update id="updateByPrimaryKey" parameterType="com.zhuxl.blog.modal.entity.CommentDO">
+        update t_b_comment
+        set article_id = #{articleId,jdbcType=BIGINT},
         author = #{author,jdbcType=VARCHAR},
-        author_id = #{authorId,jdbcType=INTEGER},
-        owner_id = #{ownerId,jdbcType=INTEGER},
-        mail = #{mail,jdbcType=VARCHAR},
-        url = #{url,jdbcType=VARCHAR},
+        author_id = #{authorId,jdbcType=BIGINT},
+        owner_id = #{ownerId,jdbcType=BIGINT},
+        email = #{email,jdbcType=VARCHAR},
+        site_url = #{siteUrl,jdbcType=VARCHAR},
         ip = #{ip,jdbcType=VARCHAR},
         agent = #{agent,jdbcType=VARCHAR},
         type = #{type,jdbcType=VARCHAR},
         status = #{status,jdbcType=VARCHAR},
-        parent = #{parent,jdbcType=INTEGER}
-        where coid = #{coid,jdbcType=INTEGER}
+        parent = #{parent,jdbcType=BIGINT},
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+        where coid = #{coid,jdbcType=BIGINT}
     </update>
 </mapper>

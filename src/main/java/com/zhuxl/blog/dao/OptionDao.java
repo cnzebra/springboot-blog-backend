@@ -1,7 +1,7 @@
 package com.zhuxl.blog.dao;
 
-import com.zhuxl.blog.modal.vo.OptionVo;
-import com.zhuxl.blog.modal.vo.OptionVoExample;
+import com.zhuxl.blog.modal.entity.OptionDO;
+import com.zhuxl.blog.modal.entity.OptionDOExample;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,13 +16,13 @@ public interface OptionDao {
      * @param example
      * @return
      */
-    long countByExample(OptionVoExample example);
+    long countByExample(OptionDOExample example);
 
     /**
      * @param example
      * @return
      */
-    int deleteByExample(OptionVoExample example);
+    int deleteByExample(OptionDOExample example);
 
     /**
      * @param name
@@ -34,57 +34,57 @@ public interface OptionDao {
      * @param record
      * @return
      */
-    int insert(OptionVo record);
+    int insert(OptionDO record);
 
     /**
      * @param record
      * @return
      */
-    int insertSelective(OptionVo record);
+    int insertSelective(OptionDO record);
 
     /**
      * @param example
      * @return
      */
-    List<OptionVo> selectByExample(OptionVoExample example);
+    List<OptionDO> selectByExample(OptionDOExample example);
 
     /**
      * @param name
      * @return
      */
-    OptionVo selectByPrimaryKey(String name);
+    OptionDO selectByPrimaryKey(String name);
 
     /**
      * @param record
      * @param example
      * @return
      */
-    int updateByExampleSelective(@Param("record") OptionVo record, @Param("example") OptionVoExample example);
+    int updateByExampleSelective(@Param("record") OptionDO record, @Param("example") OptionDOExample example);
 
     /**
      * @param record
      * @param example
      * @return
      */
-    int updateByExample(@Param("record") OptionVo record, @Param("example") OptionVoExample example);
+    int updateByExample(@Param("record") OptionDO record, @Param("example") OptionDOExample example);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKeySelective(OptionVo record);
+    int updateByPrimaryKeySelective(OptionDO record);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKey(OptionVo record);
+    int updateByPrimaryKey(OptionDO record);
 
     /**
      * 批量保存
      *
-     * @param optionVos list
+     * @param optionDOS list
      * @return 保存的个数
      */
-    int insertOptions(List<OptionVo> optionVos);
+    int insertOptions(List<OptionDO> optionDOS);
 }

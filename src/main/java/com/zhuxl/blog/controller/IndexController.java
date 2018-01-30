@@ -9,12 +9,12 @@ import com.zhuxl.blog.dto.Types;
 import com.zhuxl.blog.modal.bo.ArchiveBo;
 import com.zhuxl.blog.modal.bo.CommentBo;
 import com.zhuxl.blog.modal.bo.RestResponseBo;
-import com.zhuxl.blog.modal.vo.CommentVo;
-import com.zhuxl.blog.modal.vo.ContentVo;
-import com.zhuxl.blog.modal.vo.MetaVo;
-import com.zhuxl.blog.service.ICommentService;
-import com.zhuxl.blog.service.IContentService;
-import com.zhuxl.blog.service.IMetaService;
+import com.zhuxl.blog.modal.entity.ArticleDO;
+import com.zhuxl.blog.modal.entity.CommentDO;
+import com.zhuxl.blog.modal.entity.MetaDO;
+import com.zhuxl.blog.service.CommentService;
+import com.zhuxl.blog.service.ArticleService;
+import com.zhuxl.blog.service.MetaService;
 import com.zhuxl.blog.service.ISiteService;
 import com.zhuxl.blog.utils.IPKit;
 import com.zhuxl.blog.utils.PatternKit;
@@ -44,13 +44,13 @@ public class IndexController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
 
     @Resource
-    private IContentService contentService;
+    private ArticleService articleService;
 
     @Resource
-    private ICommentService commentService;
+    private CommentService commentService;
 
     @Resource
-    private IMetaService metaService;
+    private MetaService metaService;
 
     @Resource
     private ISiteService siteService;
@@ -77,7 +77,7 @@ public class IndexController extends BaseController {
     public String index(HttpServletRequest request, @PathVariable int p, @RequestParam(value = "limit", defaultValue
             = "12") int limit) {
         p = p < 0 || p > WebConst.MAX_PAGE ? 1 : p;
-        PageInfo<ContentVo> articles = contentService.getContents(p, limit);
+        PageInfo<ArticleDO> articles = articleService.getContents(p, limit);
         request.setAttribute("articles", articles);
         if (p > 1) {
             this.title(request, "第" + p + "页");
@@ -94,7 +94,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping(value = {"article/{cid}", "article/{cid}.html"})
     public String getArticle(HttpServletRequest request, @PathVariable String cid) {
-        ContentVo contents = contentService.getContents(cid);
+        ArticleDO contents = articleService.getContents(cid);
         if (null == contents || "draft".equals(contents.getStatus())) {
             return this.render404();
         }
@@ -116,7 +116,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping(value = {"article/{cid}/preview", "article/{cid}.html"})
     public String articlePreview(HttpServletRequest request, @PathVariable String cid) {
-        ContentVo contents = contentService.getContents(cid);
+        ArticleDO contents = articleService.getContents(cid);
         if (null == contents) {
             return this.render404();
         }
@@ -135,7 +135,7 @@ public class IndexController extends BaseController {
      * @param request
      * @param contents
      */
-    private void completeArticle(HttpServletRequest request, ContentVo contents) {
+    private void completeArticle(HttpServletRequest request, ArticleDO contents) {
         if (contents.getAllowComment()) {
             String cp = request.getParameter("cp");
             if (StringUtils.isBlank(cp)) {
@@ -211,7 +211,7 @@ public class IndexController extends BaseController {
         author = EmojiParser.parseToAliases(author);
         text = EmojiParser.parseToAliases(text);
 
-        CommentVo comments = new CommentVo();
+        CommentDO comments = new CommentDO();
         comments.setAuthor(author);
         comments.setCid(cid);
         comments.setIp(request.getRemoteAddr());
@@ -260,7 +260,7 @@ public class IndexController extends BaseController {
             return this.render404();
         }
 
-        PageInfo<ContentVo> contentsPaginator = contentService.getArticles(metaDto.getMid(), page, limit);
+        PageInfo<ArticleDO> contentsPaginator = articleService.getArticles(metaDto.getMid(), page, limit);
 
         request.setAttribute("articles", contentsPaginator);
         request.setAttribute("meta", metaDto);
@@ -292,7 +292,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping(value = "links")
     public String links(HttpServletRequest request) {
-        List<MetaVo> links = metaService.getMetas(Types.LINK.getType());
+        List<MetaDO> links = metaService.getMetas(Types.LINK.getType());
         request.setAttribute("links", links);
         return this.render("links");
     }
@@ -302,7 +302,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping(value = "/{pagename}")
     public String page(@PathVariable String pagename, HttpServletRequest request) {
-        ContentVo contents = contentService.getContents(pagename);
+        ArticleDO contents = articleService.getContents(pagename);
         if (null == contents) {
             return this.render404();
         }
@@ -337,7 +337,7 @@ public class IndexController extends BaseController {
     public String search(HttpServletRequest request, @PathVariable String keyword, @PathVariable int page,
                          @RequestParam(value = "limit", defaultValue = "12") int limit) {
         page = page < 0 || page > WebConst.MAX_PAGE ? 1 : page;
-        PageInfo<ContentVo> articles = contentService.getArticles(keyword, page, limit);
+        PageInfo<ArticleDO> articles = articleService.getArticles(keyword, page, limit);
         request.setAttribute("articles", articles);
         request.setAttribute("type", "搜索");
         request.setAttribute("keyword", keyword);
@@ -357,10 +357,10 @@ public class IndexController extends BaseController {
         }
         hits = null == hits ? 1 : hits + 1;
         if (hits >= WebConst.HIT_EXCEED) {
-            ContentVo temp = new ContentVo();
+            ArticleDO temp = new ArticleDO();
             temp.setCid(cid);
             temp.setHits(chits + hits);
-            contentService.updateContentByCid(temp);
+            articleService.updateContentByCid(temp);
             cache.hset("article", "hits", 1);
         } else {
             cache.hset("article", "hits", hits);
@@ -400,7 +400,7 @@ public class IndexController extends BaseController {
             return this.render404();
         }
 
-        PageInfo<ContentVo> contentsPaginator = contentService.getArticles(metaDto.getMid(), page, limit);
+        PageInfo<ArticleDO> contentsPaginator = articleService.getArticles(metaDto.getMid(), page, limit);
         request.setAttribute("articles", contentsPaginator);
         request.setAttribute("meta", metaDto);
         request.setAttribute("type", "标签");

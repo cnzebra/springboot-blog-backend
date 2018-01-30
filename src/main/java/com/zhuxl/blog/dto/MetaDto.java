@@ -1,11 +1,11 @@
 package com.zhuxl.blog.dto;
 
-import com.zhuxl.blog.modal.vo.MetaVo;
+import com.zhuxl.blog.modal.entity.MetaDO;
 
 /**
  * @author zhuxiaolong
  */
-public class MetaDto extends MetaVo {
+public class MetaDto extends MetaDO {
 
     private int count;
 

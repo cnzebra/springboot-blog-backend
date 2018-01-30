@@ -1,7 +1,7 @@
 package com.zhuxl.blog.component.common;
 
 
-import com.zhuxl.blog.modal.vo.MetaVo;
+import com.zhuxl.blog.modal.entity.MetaDO;
 import com.zhuxl.blog.utils.Tools;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public final class AdminCommons {
      * @param cats
      * @return
      */
-    public static boolean existCat(MetaVo category, String cats) {
+    public static boolean existCat(MetaDO category, String cats) {
         String[] arr = StringUtils.split(cats, ",");
         if (null != arr && arr.length > 0) {
             for (String c : arr) {

@@ -7,8 +7,8 @@ import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.dto.MetaDto;
 import com.zhuxl.blog.dto.Types;
 import com.zhuxl.blog.modal.bo.ArchiveBo;
-import com.zhuxl.blog.modal.vo.ContentVo;
-import com.zhuxl.blog.service.IMetaService;
+import com.zhuxl.blog.modal.entity.ArticleDO;
+import com.zhuxl.blog.service.MetaService;
 import com.zhuxl.blog.service.ISiteService;
 import com.zhuxl.blog.utils.AbstractUUID;
 import com.zhuxl.blog.utils.DateKit;
@@ -41,7 +41,7 @@ public final class Commons {
     private static Pattern srcPattern = Pattern.compile("src\\s*=\\s*\'?\"?(.*?)(\'|\"|>|\\s+)");
 
     @Autowired
-    private IMetaService metasService;
+    private MetaService metasService;
     @Autowired
     private ISiteService siteService;
 
@@ -167,7 +167,7 @@ public final class Commons {
      * @param contents
      * @return
      */
-    public static String permalink(ContentVo contents) {
+    public static String permalink(ArticleDO contents) {
         return permalink(contents.getCid(), contents.getSlug());
     }
 
@@ -293,7 +293,7 @@ public final class Commons {
      *
      * @return
      */
-    public static String showThumb(ContentVo contents) {
+    public static String showThumb(ArticleDO contents) {
         int cid = contents.getCid();
         int size = cid % 20;
         size = size == 0 ? 1 : size;

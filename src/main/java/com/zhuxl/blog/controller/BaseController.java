@@ -1,6 +1,6 @@
 package com.zhuxl.blog.controller;
 
-import com.zhuxl.blog.modal.vo.UserVo;
+import com.zhuxl.blog.modal.entity.UserDO;
 import com.zhuxl.blog.utils.MapCache;
 import com.zhuxl.blog.utils.TaleUtils;
 
@@ -52,7 +52,7 @@ public abstract class BaseController {
      * @param request
      * @return
      */
-    public UserVo user(HttpServletRequest request) {
+    public UserDO user(HttpServletRequest request) {
         return TaleUtils.getLoginUser(request);
     }
 

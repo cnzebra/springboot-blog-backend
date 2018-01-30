@@ -6,9 +6,9 @@ import com.zhuxl.blog.dto.LogActions;
 import com.zhuxl.blog.exception.TipException;
 import com.zhuxl.blog.modal.bo.BackResponseBo;
 import com.zhuxl.blog.modal.bo.RestResponseBo;
-import com.zhuxl.blog.modal.vo.OptionVo;
-import com.zhuxl.blog.service.ILogService;
-import com.zhuxl.blog.service.IOptionService;
+import com.zhuxl.blog.modal.entity.OptionDO;
+import com.zhuxl.blog.service.LogService;
+import com.zhuxl.blog.service.OptionService;
 import com.zhuxl.blog.service.ISiteService;
 import com.zhuxl.blog.utils.GsonUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,10 +33,10 @@ public class SettingController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(SettingController.class);
 
     @Resource
-    private IOptionService optionService;
+    private OptionService optionService;
 
     @Resource
-    private ILogService logService;
+    private LogService logService;
 
     @Resource
     private ISiteService siteService;
@@ -46,7 +46,7 @@ public class SettingController extends BaseController {
      */
     @GetMapping(value = "")
     public String setting(HttpServletRequest request) {
-        List<OptionVo> voList = optionService.getOptions();
+        List<OptionDO> voList = optionService.getOptions();
         Map<String, String> options = new HashMap<>(16);
         voList.forEach((option) -> {
             options.put(option.getName(), option.getValue());

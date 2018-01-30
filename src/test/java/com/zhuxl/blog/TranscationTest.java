@@ -1,8 +1,8 @@
 package com.zhuxl.blog;
 
 import com.zhuxl.blog.exception.TipException;
-import com.zhuxl.blog.modal.vo.UserVo;
-import com.zhuxl.blog.service.IOptionService;
+import com.zhuxl.blog.modal.entity.UserDO;
+import com.zhuxl.blog.service.OptionService;
 import com.zhuxl.blog.service.IUserService;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -27,12 +27,12 @@ public class TranscationTest {
     private IUserService userService;
 
     @Resource
-    private IOptionService optionService;
+    private OptionService optionService;
 
     @org.junit.Test
     @Ignore
     public void test() {
-        UserVo user = new UserVo();
+        UserDO user = new UserDO();
         user.setUsername("wangqiang111");
         user.setPassword("123456");
         user.setEmail("8888");

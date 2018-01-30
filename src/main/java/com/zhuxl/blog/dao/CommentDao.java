@@ -1,7 +1,7 @@
 package com.zhuxl.blog.dao;
 
-import com.zhuxl.blog.modal.vo.CommentVo;
-import com.zhuxl.blog.modal.vo.CommentVoExample;
+import com.zhuxl.blog.modal.entity.CommentDO;
+import com.zhuxl.blog.modal.entity.CommentDOExample;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,79 +16,79 @@ public interface CommentDao {
      * @param example
      * @return
      */
-    long countByExample(CommentVoExample example);
+    long countByExample(CommentDOExample example);
 
     /**
      * @param example
      * @return
      */
-    int deleteByExample(CommentVoExample example);
+    int deleteByExample(CommentDOExample example);
 
     /**
      * @param coid
      * @return
      */
-    int deleteByPrimaryKey(Integer coid);
+    Integer deleteByPrimaryKey(Long coid);
 
     /**
      * @param record
      * @return
      */
-    int insert(CommentVo record);
+    int insert(CommentDO record);
 
     /**
      * @param record
      * @return
      */
-    int insertSelective(CommentVo record);
+    int insertSelective(CommentDO record);
 
     /**
      * @param example
      * @return
      */
-    List<CommentVo> selectByExampleWithBLOBs(CommentVoExample example);
+    List<CommentDO> selectByExampleWithBLOBs(CommentDOExample example);
 
     /**
      * @param example
      * @return
      */
-    List<CommentVo> selectByExample(CommentVoExample example);
+    List<CommentDO> selectByExample(CommentDOExample example);
 
     /**
      * @param coid
      * @return
      */
-    CommentVo selectByPrimaryKey(Integer coid);
+    CommentDO selectByPrimaryKey(Long commentId);
 
     /**
      * @param record
      * @param example
      * @return
      */
-    int updateByExampleSelective(@Param("record") CommentVo record, @Param("example") CommentVoExample example);
+    int updateByExampleSelective(@Param("record") CommentDO record, @Param("example") CommentDOExample example);
 
     /**
      * @param record
      * @param example
      * @return
      */
-    int updateByExample(@Param("record") CommentVo record, @Param("example") CommentVoExample example);
+    int updateByExample(@Param("record") CommentDO record, @Param("example") CommentDOExample example);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKeySelective(CommentVo record);
+    int updateByPrimaryKeySelective(CommentDO record);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKeyWithBLOBs(CommentVo record);
+    int updateByPrimaryKeyWithBLOBs(CommentDO record);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKey(CommentVo record);
+    int updateByPrimaryKey(CommentDO record);
 }

@@ -5,13 +5,13 @@ import com.zhuxl.blog.dao.MetaDao;
 import com.zhuxl.blog.dto.MetaDto;
 import com.zhuxl.blog.dto.Types;
 import com.zhuxl.blog.exception.TipException;
-import com.zhuxl.blog.modal.vo.ContentVo;
-import com.zhuxl.blog.modal.vo.MetaVo;
-import com.zhuxl.blog.modal.vo.MetaVoExample;
-import com.zhuxl.blog.modal.vo.RelationshipVoKey;
-import com.zhuxl.blog.service.IContentService;
-import com.zhuxl.blog.service.IMetaService;
-import com.zhuxl.blog.service.IRelationshipService;
+import com.zhuxl.blog.modal.entity.ArticleDO;
+import com.zhuxl.blog.modal.entity.MetaDO;
+import com.zhuxl.blog.modal.entity.MetaDOExample;
+import com.zhuxl.blog.modal.entity.ArticleMetaDO;
+import com.zhuxl.blog.service.ArticleService;
+import com.zhuxl.blog.service.MetaService;
+import com.zhuxl.blog.service.ArticleMetaService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,17 +28,17 @@ import java.util.Map;
  * @date 2017/3/17
  */
 @Service
-public class MetaServiceImpl implements IMetaService {
+public class MetaServiceImpl implements MetaService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MetaServiceImpl.class);
 
     @Resource
     private MetaDao metaDao;
 
     @Resource
-    private IRelationshipService relationshipService;
+    private ArticleMetaService relationshipService;
 
     @Resource
-    private IContentService contentService;
+    private ArticleService articleService;
 
     @Override
     public MetaDto getMeta(String type, String name) {
@@ -49,17 +49,17 @@ public class MetaServiceImpl implements IMetaService {
     }
 
     @Override
-    public Integer countMeta(Integer mid) {
-        return metaDao.countWithSql(mid);
+    public Integer countMeta(Long metaId) {
+        return metaDao.countWithSql(metaId);
     }
 
     @Override
-    public List<MetaVo> getMetas(String types) {
+    public List<MetaDO> getMetas(String types) {
         if (StringUtils.isNotBlank(types)) {
-            MetaVoExample metaVoExample = new MetaVoExample();
-            metaVoExample.setOrderByClause("sort desc, mid desc");
-            metaVoExample.createCriteria().andTypeEqualTo(types);
-            return metaDao.selectByExample(metaVoExample);
+            MetaDOExample metaDOExample = new MetaDOExample();
+            metaDOExample.setOrderByClause("sort desc, mid desc");
+            metaDOExample.createCriteria().andTypeEqualTo(types);
+            return metaDao.selectByExample(metaDOExample);
         }
         return null;
     }
@@ -84,54 +84,54 @@ public class MetaServiceImpl implements IMetaService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void delete(int mid) {
-        MetaVo metas = metaDao.selectByPrimaryKey(mid);
+    public void delete(Long metaId) {
+        MetaDO metas = metaDao.selectByPrimaryKey(metaId);
         if (null != metas) {
             String type = metas.getType();
             String name = metas.getName();
 
-            metaDao.deleteByPrimaryKey(mid);
+            metaDao.deleteByPrimaryKey(metaId);
 
-            List<RelationshipVoKey> rlist = relationshipService.getRelationshipById(null, mid);
+            List<ArticleMetaDO> rlist = relationshipService.getRelationshipById(null, metaId);
             if (null != rlist) {
-                for (RelationshipVoKey r : rlist) {
-                    ContentVo contents = contentService.getContents(String.valueOf(r.getCid()));
+                for (ArticleMetaDO r : rlist) {
+                    ArticleDO contents = articleService.getContents(String.valueOf(r.getArticleId()));
                     if (null != contents) {
-                        ContentVo temp = new ContentVo();
-                        temp.setCid(r.getCid());
+                        ArticleDO temp = new ArticleDO();
+                        temp.setId(r.getArticleId());
                         if (type.equals(Types.CATEGORY.getType())) {
                             temp.setCategories(reMeta(name, contents.getCategories()));
                         }
                         if (type.equals(Types.TAG.getType())) {
                             temp.setTags(reMeta(name, contents.getTags()));
                         }
-                        contentService.updateContentByCid(temp);
+                        articleService.updateContentByCid(temp);
                     }
                 }
             }
-            relationshipService.deleteById(null, mid);
+            relationshipService.deleteById(null, metaId);
         }
     }
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void saveMeta(String type, String name, Integer mid) {
+    public void saveMeta(String type, String name, Long metaId) {
         if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(name)) {
-            MetaVoExample metaVoExample = new MetaVoExample();
-            metaVoExample.createCriteria().andTypeEqualTo(type).andNameEqualTo(name);
-            List<MetaVo> metaVos = metaDao.selectByExample(metaVoExample);
-            MetaVo metas;
-            if (metaVos.size() != 0) {
+            MetaDOExample metaDOExample = new MetaDOExample();
+            metaDOExample.createCriteria().andTypeEqualTo(type).andNameEqualTo(name);
+            List<MetaDO> metaDOS = metaDao.selectByExample(metaDOExample);
+            MetaDO metas;
+            if (metaDOS.size() != 0) {
                 throw new TipException("已经存在该项");
             } else {
-                metas = new MetaVo();
+                metas = new MetaDO();
                 metas.setName(name);
-                if (null != mid) {
-                    MetaVo original = metaDao.selectByPrimaryKey(mid);
-                    metas.setMid(mid);
+                if (null != metaId) {
+                    MetaDO original = metaDao.selectByPrimaryKey(metaId);
+                    metas.setId(metaId);
                     metaDao.updateByPrimaryKeySelective(metas);
 //                    更新原有文章的categories
-                    contentService.updateCategory(original.getName(), name);
+                    articleService.updateCategory(original.getName(), name);
                 } else {
                     metas.setType(type);
                     metaDao.insertSelective(metas);
@@ -142,44 +142,44 @@ public class MetaServiceImpl implements IMetaService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void saveMetas(Integer cid, String names, String type) {
-        if (null == cid) {
+    public void saveMetas(Long articleId, String names, String type) {
+        if (null == articleId) {
             throw new TipException("项目关联id不能为空");
         }
         if (StringUtils.isNotBlank(names) && StringUtils.isNotBlank(type)) {
             String[] nameArr = StringUtils.split(names, ",");
             for (String name : nameArr) {
-                this.saveOrUpdate(cid, name, type);
+                this.saveOrUpdate(articleId, name, type);
             }
         }
     }
 
-    private void saveOrUpdate(Integer cid, String name, String type) {
-        MetaVoExample metaVoExample = new MetaVoExample();
-        metaVoExample.createCriteria().andTypeEqualTo(type).andNameEqualTo(name);
-        List<MetaVo> metaVos = metaDao.selectByExample(metaVoExample);
+    private void saveOrUpdate(Long articleId, String name, String type) {
+        MetaDOExample metaDOExample = new MetaDOExample();
+        metaDOExample.createCriteria().andTypeEqualTo(type).andNameEqualTo(name);
+        List<MetaDO> metaDOS = metaDao.selectByExample(metaDOExample);
 
-        int mid;
-        MetaVo metas;
-        if (metaVos.size() == 1) {
-            metas = metaVos.get(0);
-            mid = metas.getMid();
-        } else if (metaVos.size() > 1) {
+        Long mid;
+        MetaDO metas;
+        if (metaDOS.size() == 1) {
+            metas = metaDOS.get(0);
+            mid = metas.getId();
+        } else if (metaDOS.size() > 1) {
             throw new TipException("查询到多条数据");
         } else {
-            metas = new MetaVo();
-            metas.setSlug(name);
+            metas = new MetaDO();
+            metas.setValue(name);
             metas.setName(name);
             metas.setType(type);
             metaDao.insertSelective(metas);
-            mid = metas.getMid();
+            mid = metas.getId();
         }
         if (mid != 0) {
-            Long count = relationshipService.countById(cid, mid);
+            Integer count = relationshipService.countById(articleId, mid);
             if (count == 0) {
-                RelationshipVoKey relationships = new RelationshipVoKey();
-                relationships.setCid(cid);
-                relationships.setMid(mid);
+                ArticleMetaDO relationships = new ArticleMetaDO();
+                relationships.setArticleId(articleId);
+                relationships.setMetaId(mid);
                 relationshipService.insertVo(relationships);
             }
         }
@@ -202,7 +202,7 @@ public class MetaServiceImpl implements IMetaService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void saveMeta(MetaVo metas) {
+    public void saveMeta(MetaDO metas) {
         if (null != metas) {
             metaDao.insertSelective(metas);
         }
@@ -210,8 +210,8 @@ public class MetaServiceImpl implements IMetaService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void update(MetaVo metas) {
-        if (null != metas && null != metas.getMid()) {
+    public void update(MetaDO metas) {
+        if (null != metas && null != metas.getId()) {
             metaDao.updateByPrimaryKeySelective(metas);
         }
     }

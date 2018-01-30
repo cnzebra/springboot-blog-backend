@@ -4,7 +4,7 @@ import com.zhuxl.blog.component.common.Commons;
 import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.controller.admin.AttachController;
 import com.zhuxl.blog.exception.TipException;
-import com.zhuxl.blog.modal.vo.UserVo;
+import com.zhuxl.blog.modal.entity.UserDO;
 import org.apache.commons.lang3.StringUtils;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TablesExtension;
@@ -176,12 +176,12 @@ public class TaleUtils {
      *
      * @return
      */
-    public static UserVo getLoginUser(HttpServletRequest request) {
+    public static UserDO getLoginUser(HttpServletRequest request) {
         HttpSession session = request.getSession();
         if (null == session) {
             return null;
         }
-        return (UserVo) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
+        return (UserDO) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
     }
 
 

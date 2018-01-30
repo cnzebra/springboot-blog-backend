@@ -1,6 +1,8 @@
 package com.zhuxl.blog.modal.bo;
 
-import com.zhuxl.blog.modal.vo.CommentVo;
+import com.zhuxl.blog.modal.entity.CommentDO;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -10,38 +12,25 @@ import java.util.List;
  * @author 13
  * @date 2017/2/24
  */
-public class CommentBo extends CommentVo {
+@Getter
+@Setter
+public class CommentBo extends CommentDO {
 
     private int levels;
-    private List<CommentVo> children;
+    private List<CommentDO> children;
 
-    public CommentBo(CommentVo comments) {
+    public CommentBo(CommentDO comments) {
         setAuthor(comments.getAuthor());
-        setMail(comments.getMail());
-        setCoid(comments.getCoid());
+        setEmail(comments.getEmail());
+        setId(comments.getId());
         setAuthorId(comments.getAuthorId());
-        setUrl(comments.getUrl());
-        setCreated(comments.getCreated());
+        setSiteUrl(comments.getSiteUrl());
+        setGmtCreate(comments.getGmtCreate());
         setAgent(comments.getAgent());
         setIp(comments.getIp());
         setContent(comments.getContent());
         setOwnerId(comments.getOwnerId());
-        setCid(comments.getCid());
+        setArticleId(comments.getArticleId());
     }
 
-    public int getLevels() {
-        return levels;
-    }
-
-    public void setLevels(int levels) {
-        this.levels = levels;
-    }
-
-    public List<CommentVo> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<CommentVo> children) {
-        this.children = children;
-    }
 }

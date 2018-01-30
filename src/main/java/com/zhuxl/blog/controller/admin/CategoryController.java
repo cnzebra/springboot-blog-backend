@@ -5,7 +5,7 @@ import com.zhuxl.blog.controller.BaseController;
 import com.zhuxl.blog.dto.MetaDto;
 import com.zhuxl.blog.dto.Types;
 import com.zhuxl.blog.modal.bo.RestResponseBo;
-import com.zhuxl.blog.service.IMetaService;
+import com.zhuxl.blog.service.MetaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -26,7 +26,7 @@ public class CategoryController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
 
     @Resource
-    private IMetaService metasService;
+    private MetaService metasService;
 
     @GetMapping(value = "")
     public String index(HttpServletRequest request) {

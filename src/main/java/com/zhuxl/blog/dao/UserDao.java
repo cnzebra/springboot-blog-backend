@@ -1,7 +1,7 @@
 package com.zhuxl.blog.dao;
 
-import com.zhuxl.blog.modal.vo.UserVo;
-import com.zhuxl.blog.modal.vo.UserVoExample;
+import com.zhuxl.blog.modal.entity.UserDO;
+import com.zhuxl.blog.modal.entity.UserDOExample;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,13 +16,13 @@ public interface UserDao {
      * @param example
      * @return
      */
-    long countByExample(UserVoExample example);
+    long countByExample(UserDOExample example);
 
     /**
      * @param example
      * @return
      */
-    int deleteByExample(UserVoExample example);
+    int deleteByExample(UserDOExample example);
 
     /**
      * @param uid
@@ -34,49 +34,49 @@ public interface UserDao {
      * @param record
      * @return
      */
-    int insert(UserVo record);
+    int insert(UserDO record);
 
     /**
      * @param record
      * @return
      */
-    int insertSelective(UserVo record);
+    int insertSelective(UserDO record);
 
     /**
      * @param example
      * @return
      */
-    List<UserVo> selectByExample(UserVoExample example);
+    List<UserDO> selectByExample(UserDOExample example);
 
     /**
      * @param uid
      * @return
      */
-    UserVo selectByPrimaryKey(Integer uid);
+    UserDO selectByPrimaryKey(Long id);
 
     /**
      * @param record
      * @param example
      * @return
      */
-    int updateByExampleSelective(@Param("record") UserVo record, @Param("example") UserVoExample example);
+    int updateByExampleSelective(@Param("record") UserDO record, @Param("example") UserDOExample example);
 
     /**
      * @param record
      * @param example
      * @return
      */
-    int updateByExample(@Param("record") UserVo record, @Param("example") UserVoExample example);
+    int updateByExample(@Param("record") UserDO record, @Param("example") UserDOExample example);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKeySelective(UserVo record);
+    int updateByPrimaryKeySelective(UserDO record);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKey(UserVo record);
+    int updateByPrimaryKey(UserDO record);
 }

@@ -5,8 +5,8 @@ import com.zhuxl.blog.controller.BaseController;
 import com.zhuxl.blog.dto.LogActions;
 import com.zhuxl.blog.exception.TipException;
 import com.zhuxl.blog.modal.bo.RestResponseBo;
-import com.zhuxl.blog.modal.vo.UserVo;
-import com.zhuxl.blog.service.ILogService;
+import com.zhuxl.blog.modal.entity.UserDO;
+import com.zhuxl.blog.service.LogService;
 import com.zhuxl.blog.service.IUserService;
 import com.zhuxl.blog.utils.TaleUtils;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -40,7 +40,7 @@ public class AuthController extends BaseController {
     private IUserService usersService;
 
     @Resource
-    private ILogService logService;
+    private LogService logService;
 
     @GetMapping(value = "/login")
     public String login() {
@@ -57,7 +57,7 @@ public class AuthController extends BaseController {
 
         Integer errorCount = cache.get("login_error_count");
         try {
-            UserVo user = usersService.login(username, password);
+            UserDO user = usersService.login(username, password);
             request.getSession().setAttribute(WebConst.LOGIN_SESSION_KEY, user);
             if (StringUtils.isNotBlank(remeberMe)) {
                 TaleUtils.setCookie(response, user.getUid());

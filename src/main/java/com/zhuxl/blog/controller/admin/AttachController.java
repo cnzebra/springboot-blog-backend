@@ -6,10 +6,10 @@ import com.zhuxl.blog.controller.BaseController;
 import com.zhuxl.blog.dto.LogActions;
 import com.zhuxl.blog.dto.Types;
 import com.zhuxl.blog.modal.bo.RestResponseBo;
-import com.zhuxl.blog.modal.vo.AttachVo;
-import com.zhuxl.blog.modal.vo.UserVo;
-import com.zhuxl.blog.service.IAttachService;
-import com.zhuxl.blog.service.ILogService;
+import com.zhuxl.blog.modal.entity.AttachFileDO;
+import com.zhuxl.blog.modal.entity.UserDO;
+import com.zhuxl.blog.service.AttachFileService;
+import com.zhuxl.blog.service.LogService;
 import com.zhuxl.blog.component.common.Commons;
 import com.zhuxl.blog.utils.TaleUtils;
 import org.slf4j.Logger;
@@ -45,10 +45,10 @@ public class AttachController extends BaseController {
     public static final String CLASSPATH = TaleUtils.getUplodFilePath();
     private static final Logger LOGGER = LoggerFactory.getLogger(AttachController.class);
     @Resource
-    private IAttachService attachService;
+    private AttachFileService attachService;
 
     @Resource
-    private ILogService logService;
+    private LogService logService;
 
     /**
      * 附件页面
@@ -61,7 +61,7 @@ public class AttachController extends BaseController {
     @GetMapping(value = "")
     public String index(HttpServletRequest request, @RequestParam(value = "page", defaultValue = "1") int page,
                         @RequestParam(value = "limit", defaultValue = "12") int limit) {
-        PageInfo<AttachVo> attachPaginator = attachService.getAttachs(page, limit);
+        PageInfo<AttachFileDO> attachPaginator = attachService.getAttachs(page, limit);
         request.setAttribute("attachs", attachPaginator);
         request.setAttribute(Types.ATTACH_URL.getType(), Commons.siteOption(Types.ATTACH_URL.getType(), Commons
                 .siteUrl()));
@@ -79,7 +79,7 @@ public class AttachController extends BaseController {
     @ResponseBody
     public RestResponseBo upload(HttpServletRequest request, @RequestParam("file") MultipartFile[] multipartFiles)
             throws IOException {
-        UserVo users = this.user(request);
+        UserDO users = this.user(request);
         Integer uid = users.getUid();
         List<String> errorFiles = new ArrayList<>();
         try {
@@ -116,7 +116,7 @@ public class AttachController extends BaseController {
     @ResponseBody
     public RestResponseBo upload(HttpServletRequest request)
             throws IOException {
-        UserVo users = this.user(request);
+        UserDO users = this.user(request);
         Integer uid = users.getUid();
         List<String> errorFiles = new ArrayList<>();
         try {
@@ -162,7 +162,7 @@ public class AttachController extends BaseController {
     @ResponseBody
     public RestResponseBo delete(@RequestParam Integer id, HttpServletRequest request) {
         try {
-            AttachVo attach = attachService.selectById(id);
+            AttachFileDO attach = attachService.selectById(id);
             if (null == attach) {
                 return RestResponseBo.fail("不存在该附件");
             }

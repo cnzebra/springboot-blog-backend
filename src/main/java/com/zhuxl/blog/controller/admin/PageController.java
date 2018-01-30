@@ -5,11 +5,11 @@ import com.zhuxl.blog.controller.BaseController;
 import com.zhuxl.blog.dto.LogActions;
 import com.zhuxl.blog.dto.Types;
 import com.zhuxl.blog.modal.bo.RestResponseBo;
-import com.zhuxl.blog.modal.vo.ContentVo;
-import com.zhuxl.blog.modal.vo.ContentVoExample;
-import com.zhuxl.blog.modal.vo.UserVo;
-import com.zhuxl.blog.service.IContentService;
-import com.zhuxl.blog.service.ILogService;
+import com.zhuxl.blog.modal.entity.ArticleDO;
+import com.zhuxl.blog.modal.entity.ArticleDOExample;
+import com.zhuxl.blog.modal.entity.UserDO;
+import com.zhuxl.blog.service.ArticleService;
+import com.zhuxl.blog.service.LogService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,17 +30,17 @@ public class PageController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(PageController.class);
 
     @Resource
-    private IContentService contentsService;
+    private ArticleService contentsService;
 
     @Resource
-    private ILogService logService;
+    private LogService logService;
 
     @GetMapping(value = "")
     public String index(HttpServletRequest request) {
-        ContentVoExample contentVoExample = new ContentVoExample();
-        contentVoExample.setOrderByClause("created desc");
-        contentVoExample.createCriteria().andTypeEqualTo(Types.PAGE.getType());
-        PageInfo<ContentVo> contentsPaginator = contentsService.getArticlesWithpage(contentVoExample, 1, WebConst
+        ArticleDOExample articleDOExample = new ArticleDOExample();
+        articleDOExample.setOrderByClause("created desc");
+        articleDOExample.createCriteria().andTypeEqualTo(Types.PAGE.getType());
+        PageInfo<ArticleDO> contentsPaginator = contentsService.getArticlesWithpage(articleDOExample, 1, WebConst
                 .MAX_POSTS);
         request.setAttribute("articles", contentsPaginator);
         return "admin/page_list";
@@ -53,7 +53,7 @@ public class PageController extends BaseController {
 
     @GetMapping(value = "/{cid}")
     public String editPage(@PathVariable String cid, HttpServletRequest request) {
-        ContentVo contents = contentsService.getContents(cid);
+        ArticleDO contents = contentsService.getContents(cid);
         request.setAttribute("contents", contents);
         return "admin/page_edit";
     }
@@ -65,8 +65,8 @@ public class PageController extends BaseController {
                                       @RequestParam(required = false) Integer allowComment, @RequestParam(required =
             false) Integer allowPing, HttpServletRequest request) {
 
-        UserVo users = this.user(request);
-        ContentVo contents = new ContentVo();
+        UserDO users = this.user(request);
+        ArticleDO contents = new ArticleDO();
         contents.setTitle(title);
         contents.setCover("");
         contents.setContent(content);
@@ -95,8 +95,8 @@ public class PageController extends BaseController {
                                         @RequestParam(required = false) Integer allowComment, @RequestParam(required
             = false) Integer allowPing, HttpServletRequest request) {
 
-        UserVo users = this.user(request);
-        ContentVo contents = new ContentVo();
+        UserDO users = this.user(request);
+        ArticleDO contents = new ArticleDO();
         contents.setCid(cid);
         contents.setTitle(title);
         contents.setContent(content);

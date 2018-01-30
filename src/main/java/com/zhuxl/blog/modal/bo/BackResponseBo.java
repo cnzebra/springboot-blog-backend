@@ -1,38 +1,19 @@
 package com.zhuxl.blog.modal.bo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 
 /**
- * @author 13
- * @date 2017/2/25
+ * @author zhuxiaolong
+ * @date 2018年1月30日15:34:41
  */
+@Getter
+@Setter
 public class BackResponseBo implements Serializable {
 
     private String attachPath;
     private String themePath;
     private String sqlPath;
-
-    public String getAttachPath() {
-        return attachPath;
-    }
-
-    public void setAttachPath(String attachPath) {
-        this.attachPath = attachPath;
-    }
-
-    public String getThemePath() {
-        return themePath;
-    }
-
-    public void setThemePath(String themePath) {
-        this.themePath = themePath;
-    }
-
-    public String getSqlPath() {
-        return sqlPath;
-    }
-
-    public void setSqlPath(String sqlPath) {
-        this.sqlPath = sqlPath;
-    }
 }

@@ -1,10 +1,11 @@
 package com.zhuxl.blog.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.controller.admin.AttachController;
-import com.zhuxl.blog.dao.AttachDao;
+import com.zhuxl.blog.dao.ArticleDao;
+import com.zhuxl.blog.dao.AttachFileDao;
 import com.zhuxl.blog.dao.CommentDao;
-import com.zhuxl.blog.dao.ContentDao;
 import com.zhuxl.blog.dao.MetaDao;
 import com.zhuxl.blog.dto.MetaDto;
 import com.zhuxl.blog.dto.Types;
@@ -12,13 +13,12 @@ import com.zhuxl.blog.exception.TipException;
 import com.zhuxl.blog.modal.bo.ArchiveBo;
 import com.zhuxl.blog.modal.bo.BackResponseBo;
 import com.zhuxl.blog.modal.bo.StatisticsBo;
-import com.zhuxl.blog.modal.vo.*;
-import com.zhuxl.blog.service.ISiteService;
+import com.zhuxl.blog.modal.entity.*;
+import com.zhuxl.blog.service.SiteService;
 import com.zhuxl.blog.utils.DateKit;
 import com.zhuxl.blog.utils.TaleUtils;
 import com.zhuxl.blog.utils.ZipUtils;
 import com.zhuxl.blog.utils.backup.Backup;
-import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ import java.util.*;
  * @date 2017/3/7
  */
 @Service
-public class SiteServiceImpl implements ISiteService {
+public class SiteServiceImpl implements SiteService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SiteServiceImpl.class);
 
@@ -44,39 +44,39 @@ public class SiteServiceImpl implements ISiteService {
     private CommentDao commentDao;
 
     @Resource
-    private ContentDao contentDao;
+    private ArticleDao articleDao;
 
     @Resource
-    private AttachDao attachDao;
+    private AttachFileDao attachFileDao;
 
     @Resource
     private MetaDao metaDao;
 
     @Override
-    public List<CommentVo> recentComments(int limit) {
+    public List<CommentDO> recentComments(int limit) {
         LOGGER.debug("Enter recentComments method:limit={}", limit);
         if (limit < 0 || limit > 10) {
             limit = 10;
         }
-        CommentVoExample example = new CommentVoExample();
+        CommentDOExample example = new CommentDOExample();
         example.setOrderByClause("created desc");
         PageHelper.startPage(1, limit);
-        List<CommentVo> byPage = commentDao.selectByExampleWithBLOBs(example);
+        List<CommentDO> byPage = commentDao.selectByExampleWithBLOBs(example);
         LOGGER.debug("Exit recentComments method");
         return byPage;
     }
 
     @Override
-    public List<ContentVo> recentContents(int limit) {
+    public List<ArticleDO> recentContents(int limit) {
         LOGGER.debug("Enter recentContents method");
         if (limit < 0 || limit > 10) {
             limit = 10;
         }
-        ContentVoExample example = new ContentVoExample();
+        ArticleDOExample example = new ArticleDOExample();
         example.createCriteria().andStatusEqualTo(Types.PUBLISH.getType()).andTypeEqualTo(Types.ARTICLE.getType());
         example.setOrderByClause("created desc");
         PageHelper.startPage(1, limit);
-        List<ContentVo> list = contentDao.selectByExample(example);
+        List<ArticleDO> list = articleDao.selectByExample(example);
         LOGGER.debug("Exit recentContents method");
         return list;
     }
@@ -146,9 +146,9 @@ public class SiteServiceImpl implements ISiteService {
     }
 
     @Override
-    public CommentVo getComment(Integer coid) {
-        if (null != coid) {
-            return commentDao.selectByPrimaryKey(coid);
+    public CommentDO getComment(Long commentId) {
+        if (null != commentId) {
+            return commentDao.selectByPrimaryKey(commentId);
         }
         return null;
     }
@@ -158,18 +158,18 @@ public class SiteServiceImpl implements ISiteService {
         LOGGER.debug("Enter getStatistics method");
         StatisticsBo statistics = new StatisticsBo();
 
-        ContentVoExample contentVoExample = new ContentVoExample();
-        contentVoExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH
+        ArticleDOExample articleDOExample = new ArticleDOExample();
+        articleDOExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH
                 .getType());
-        Long articles = contentDao.countByExample(contentVoExample);
+        Long articles = articleDao.countByExample(articleDOExample);
 
-        Long comments = commentDao.countByExample(new CommentVoExample());
+        Long comments = commentDao.countByExample(new CommentDOExample());
 
-        Long attachs = attachDao.countByExample(new AttachVoExample());
+        Long attachs = attachFileDao.countByExample(new AttachFileDOExample());
 
-        MetaVoExample metaVoExample = new MetaVoExample();
-        metaVoExample.createCriteria().andTypeEqualTo(Types.LINK.getType());
-        Long links = metaDao.countByExample(metaVoExample);
+        MetaDOExample metaDOExample = new MetaDOExample();
+        metaDOExample.createCriteria().andTypeEqualTo(Types.LINK.getType());
+        Long links = metaDao.countByExample(metaDOExample);
 
         statistics.setArticles(articles);
         statistics.setComments(comments);
@@ -180,22 +180,22 @@ public class SiteServiceImpl implements ISiteService {
     }
 
     @Override
-    public List<ArchiveBo> getArchives(String year,String month) {
+    public List<ArchiveBo> getArchives(String year, String month) {
         LOGGER.debug("Enter getArchives method");
-        List<ArchiveBo> archives = contentDao.findReturnArchiveBo(year,month);
+        List<ArchiveBo> archives = articleDao.findReturnArchiveBo(year, month);
         if (null != archives) {
             archives.forEach(archive -> {
-                ContentVoExample example = new ContentVoExample();
-                ContentVoExample.CriteriaAbstract criteria = example.createCriteria().andTypeEqualTo(Types.ARTICLE
+                ArticleDOExample example = new ArticleDOExample();
+                ArticleDOExample.CriteriaAbstract criteria = example.createCriteria().andTypeEqualTo(Types.ARTICLE
                         .getType()).andStatusEqualTo(Types.PUBLISH.getType());
                 example.setOrderByClause("created desc");
                 String date = archive.getDate();
                 Date sd = DateKit.dateFormat(date, "yyyy年MM月");
                 int start = DateKit.getUnixTimeByDate(sd);
                 int end = DateKit.getUnixTimeByDate(DateKit.dateAdd(DateKit.INTERVAL_MONTH, sd, 1)) - 1;
-                criteria.andCreatedGreaterThan(start);
-                criteria.andCreatedLessThan(end);
-                List<ContentVo> contentss = contentDao.selectByExample(example);
+                criteria.andGmtCreateGreaterThan(start);
+                criteria.andGmtCreateLessThan(end);
+                List<ArticleDO> contentss = articleDao.selectByExample(example);
                 archive.setArticles(contentss);
             });
         }

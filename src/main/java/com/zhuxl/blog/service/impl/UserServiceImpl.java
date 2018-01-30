@@ -2,9 +2,9 @@ package com.zhuxl.blog.service.impl;
 
 import com.zhuxl.blog.dao.UserDao;
 import com.zhuxl.blog.exception.TipException;
-import com.zhuxl.blog.modal.vo.UserVo;
-import com.zhuxl.blog.modal.vo.UserVoExample;
-import com.zhuxl.blog.service.IUserService;
+import com.zhuxl.blog.modal.entity.UserDO;
+import com.zhuxl.blog.modal.entity.UserDOExample;
+import com.zhuxl.blog.service.UserService;
 import com.zhuxl.blog.utils.TaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -20,7 +20,7 @@ import java.util.List;
  * @date 2017/3/3
  */
 @Service
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Resource
@@ -28,54 +28,54 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public Integer insertUser(UserVo userVo) {
+    public Long insertUser(UserDO userDO) {
         Integer uid = null;
-        if (StringUtils.isNotBlank(userVo.getUsername()) && StringUtils.isNotBlank(userVo.getEmail())) {
+        if (StringUtils.isNotBlank(userDO.getLoginName()) && StringUtils.isNotBlank(userDO.getEmail())) {
 //            用户密码加密
-            String encodePwd = TaleUtils.md5encode(userVo.getUsername() + userVo.getPassword());
-            userVo.setPassword(encodePwd);
-            userDao.insertSelective(userVo);
+            String encodePwd = TaleUtils.md5encode(userDO.getLoginName() + userDO.getPassword());
+            userDO.setPassword(encodePwd);
+            userDao.insertSelective(userDO);
         }
-        return userVo.getUid();
+        return userDO.getId();
     }
 
     @Override
-    public UserVo queryUserById(Integer uid) {
-        UserVo userVo = null;
-        if (uid != null) {
-            userVo = userDao.selectByPrimaryKey(uid);
+    public UserDO queryUserById(Long id) {
+        UserDO userDO = null;
+        if (id != null) {
+            userDO = userDao.selectByPrimaryKey(id);
         }
-        return userVo;
+        return userDO;
     }
 
     @Override
-    public UserVo login(String username, String password) {
-        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+    public UserDO login(String loginName, String password) {
+        if (StringUtils.isBlank(loginName) || StringUtils.isBlank(password)) {
             throw new TipException("用户名和密码不能为空");
         }
-        UserVoExample example = new UserVoExample();
-        UserVoExample.CriteriaAbstract criteria = example.createCriteria();
-        criteria.andUsernameEqualTo(username);
+        UserDOExample example = new UserDOExample();
+        UserDOExample.CriteriaAbstract criteria = example.createCriteria();
+        criteria.andLoginNameEqualTo(loginName);
         long count = userDao.countByExample(example);
         if (count < 1) {
             throw new TipException("不存在该用户");
         }
-        String pwd = TaleUtils.md5encode(username + password);
+        String pwd = TaleUtils.md5encode(loginName + password);
         criteria.andPasswordEqualTo(pwd);
-        List<UserVo> userVos = userDao.selectByExample(example);
-        if (userVos.size() != 1) {
+        List<UserDO> userDOS = userDao.selectByExample(example);
+        if (userDOS.size() != 1) {
             throw new TipException("用户名或密码错误");
         }
-        return userVos.get(0);
+        return userDOS.get(0);
     }
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void updateByUid(UserVo userVo) {
-        if (null == userVo || null == userVo.getUid()) {
-            throw new TipException("userVo is null");
+    public void updateById(UserDO userDO) {
+        if (null == userDO || null == userDO.getId()) {
+            throw new TipException("userDO is null");
         }
-        int i = userDao.updateByPrimaryKeySelective(userVo);
+        int i = userDao.updateByPrimaryKeySelective(userDO);
         if (i != 1) {
             throw new TipException("update user by uid and retrun is not one");
         }

@@ -1,8 +1,8 @@
 package com.zhuxl.blog.dao;
 
 import com.zhuxl.blog.dto.MetaDto;
-import com.zhuxl.blog.modal.vo.MetaVo;
-import com.zhuxl.blog.modal.vo.MetaVoExample;
+import com.zhuxl.blog.modal.entity.MetaDO;
+import com.zhuxl.blog.modal.entity.MetaDOExample;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,69 +18,69 @@ public interface MetaDao {
      * @param example
      * @return
      */
-    long countByExample(MetaVoExample example);
+    long countByExample(MetaDOExample example);
 
     /**
      * @param example
      * @return
      */
-    int deleteByExample(MetaVoExample example);
+    int deleteByExample(MetaDOExample example);
 
     /**
      * @param mid
      * @return
      */
-    int deleteByPrimaryKey(Integer mid);
+    int deleteByPrimaryKey(Long mid);
 
     /**
      * @param record
      * @return
      */
-    int insert(MetaVo record);
+    int insert(MetaDO record);
 
     /**
      * @param record
      * @return
      */
-    int insertSelective(MetaVo record);
+    int insertSelective(MetaDO record);
 
     /**
      * @param example
      * @return
      */
-    List<MetaVo> selectByExample(MetaVoExample example);
+    List<MetaDO> selectByExample(MetaDOExample example);
 
     /**
      * @param mid
      * @return
      */
-    MetaVo selectByPrimaryKey(Integer mid);
+    MetaDO selectByPrimaryKey(Long mid);
 
     /**
      * @param record
      * @param example
      * @return
      */
-    int updateByExampleSelective(@Param("record") MetaVo record, @Param("example") MetaVoExample example);
+    int updateByExampleSelective(@Param("record") MetaDO record, @Param("example") MetaDOExample example);
 
     /**
      * @param record
      * @param example
      * @return
      */
-    int updateByExample(@Param("record") MetaVo record, @Param("example") MetaVoExample example);
+    int updateByExample(@Param("record") MetaDO record, @Param("example") MetaDOExample example);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKeySelective(MetaVo record);
+    int updateByPrimaryKeySelective(MetaDO record);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKey(MetaVo record);
+    int updateByPrimaryKey(MetaDO record);
 
     /**
      * @param paraMap
@@ -99,5 +99,5 @@ public interface MetaDao {
      * @param mid
      * @return
      */
-    Integer countWithSql(Integer mid);
+    Integer countWithSql(Long metaId);
 }

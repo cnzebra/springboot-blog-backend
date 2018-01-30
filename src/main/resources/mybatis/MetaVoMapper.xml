@@ -2,13 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhuxl.blog.dao.MetaDao">
     <resultMap id="BaseResultMap" type="com.zhuxl.blog.modal.entity.MetaDO">
-        <id column="mid" jdbcType="INTEGER" property="mid"/>
+        <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="slug" jdbcType="VARCHAR" property="slug"/>
+        <result column="value" jdbcType="VARCHAR" property="value"/>
         <result column="type" jdbcType="VARCHAR" property="type"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
         <result column="sort" jdbcType="INTEGER" property="sort"/>
-        <result column="parent" jdbcType="INTEGER" property="parent"/>
+        <result column="parent" jdbcType="BIGINT" property="parent"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
     </resultMap>
 
     <resultMap id="MetaDto" type="com.zhuxl.blog.dto.MetaDto" extends="BaseResultMap">
@@ -76,7 +78,7 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-        mid, name, slug, type, description, sort, parent
+        id, name, value, type, description, sort, parent,gmt_create,gmt_modified
     </sql>
     <select id="selectByExample" parameterType="com.zhuxl.blog.modal.entity.MetaDOExample" resultMap="BaseResultMap">
         select
@@ -84,7 +86,7 @@
             distinct
         </if>
         <include refid="Base_Column_List"/>
-        from t_metas
+        from t_b_meta
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -100,42 +102,42 @@
             </if>
         </if>
     </select>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from t_metas
-        where mid = #{mid,jdbcType=INTEGER}
+        from t_b_meta
+        where id = #{id,jdbcType=BIGINT}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from t_metas
-        where mid = #{mid,jdbcType=INTEGER}
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from t_b_meta
+        where id = #{id,jdbcType=BIGINT}
     </delete>
     <delete id="deleteByExample" parameterType="com.zhuxl.blog.modal.entity.MetaDOExample">
-        delete from t_metas
+        delete from t_b_meta
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.zhuxl.blog.modal.entity.MetaDO" useGeneratedKeys="true" keyProperty="mid">
-        insert into t_metas (mid, name, slug,
+    <insert id="insert" parameterType="com.zhuxl.blog.modal.entity.MetaDO" useGeneratedKeys="true" keyProperty="id">
+        insert into t_b_meta (id, name, value,
         type, description, sort,
-        parent)
-        values (#{mid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{slug,jdbcType=VARCHAR},
+        parent,gmt_create,gmt_modified)
+        values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{slug,jdbcType=VARCHAR},
         #{type,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER},
-        #{parent,jdbcType=INTEGER})
+        #{parent,jdbcType=BIGINT},#{gmtCreate,jdbcType=TIMESTAMP},#{gmtModified,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" parameterType="com.zhuxl.blog.modal.entity.MetaDO" useGeneratedKeys="true"
-            keyProperty="mid">
-        insert into t_metas
+            keyProperty="id">
+        insert into t_b_meta
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="mid != null">
-                mid,
+            <if test="id != null">
+                id,
             </if>
             <if test="name != null">
                 name,
             </if>
-            <if test="slug != null">
-                slug,
+            <if test="value != null">
+                value,
             </if>
             <if test="type != null">
                 type,
@@ -149,16 +151,22 @@
             <if test="parent != null">
                 parent,
             </if>
+            <if test="gmtCreate != null">
+                gmt_create,
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="mid != null">
-                #{mid,jdbcType=INTEGER},
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
             </if>
             <if test="name != null">
                 #{name,jdbcType=VARCHAR},
             </if>
-            <if test="slug != null">
-                #{slug,jdbcType=VARCHAR},
+            <if test="value != null">
+                #{value,jdbcType=VARCHAR},
             </if>
             <if test="type != null">
                 #{type,jdbcType=VARCHAR},
@@ -170,27 +178,34 @@
                 #{sort,jdbcType=INTEGER},
             </if>
             <if test="parent != null">
-                #{parent,jdbcType=INTEGER},
+                #{parent,jdbcType=BIGINT},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.zhuxl.blog.modal.entity.MetaDOExample" resultType="java.lang.Long">
-        select count(*) from t_metas
+    <select id="countByExample" parameterType="com.zhuxl.blog.modal.entity.MetaDOExample"
+            resultType="java.lang.Integer">
+        select count(*) from t_b_meta
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </select>
     <update id="updateByExampleSelective" parameterType="map">
-        update t_metas
+        update t_b_meta
         <set>
-            <if test="record.mid != null">
-                mid = #{record.mid,jdbcType=INTEGER},
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=BIGINT},
             </if>
             <if test="record.name != null">
                 name = #{record.name,jdbcType=VARCHAR},
             </if>
-            <if test="record.slug != null">
-                slug = #{record.slug,jdbcType=VARCHAR},
+            <if test="record.value != null">
+                value = #{record.value,jdbcType=VARCHAR},
             </if>
             <if test="record.type != null">
                 type = #{record.type,jdbcType=VARCHAR},
@@ -202,7 +217,10 @@
                 sort = #{record.sort,jdbcType=INTEGER},
             </if>
             <if test="record.parent != null">
-                parent = #{record.parent,jdbcType=INTEGER},
+                parent = #{record.parent,jdbcType=BIGINT},
+            </if>
+            <if test="record.gmtModified != null">
+                gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
             </if>
         </set>
         <if test="_parameter != null">
@@ -210,26 +228,27 @@
         </if>
     </update>
     <update id="updateByExample" parameterType="map">
-        update t_metas
-        set mid = #{record.mid,jdbcType=INTEGER},
+        update t_b_meta
+        set
         name = #{record.name,jdbcType=VARCHAR},
-        slug = #{record.slug,jdbcType=VARCHAR},
+        value = #{record.value,jdbcType=VARCHAR},
         type = #{record.type,jdbcType=VARCHAR},
         description = #{record.description,jdbcType=VARCHAR},
         sort = #{record.sort,jdbcType=INTEGER},
-        parent = #{record.parent,jdbcType=INTEGER}
+        parent = #{record.parent,jdbcType=BIGINT},
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
     <update id="updateByPrimaryKeySelective" parameterType="com.zhuxl.blog.modal.entity.MetaDO">
-        update t_metas
+        update t_b_meta
         <set>
             <if test="name != null">
                 name = #{name,jdbcType=VARCHAR},
             </if>
-            <if test="slug != null">
-                slug = #{slug,jdbcType=VARCHAR},
+            <if test="value != null">
+                value = #{value,jdbcType=VARCHAR},
             </if>
             <if test="type != null">
                 type = #{type,jdbcType=VARCHAR},
@@ -241,33 +260,48 @@
                 sort = #{sort,jdbcType=INTEGER},
             </if>
             <if test="parent != null">
-                parent = #{parent,jdbcType=INTEGER},
+                parent = #{parent,jdbcType=BIGINT},
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where mid = #{mid,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.zhuxl.blog.modal.entity.MetaDO">
-        update t_metas
-        set name = #{name,jdbcType=VARCHAR},
-        slug = #{slug,jdbcType=VARCHAR},
+        update t_b_meta
+        set
+        name = #{name,jdbcType=VARCHAR},
+        value = #{value,jdbcType=VARCHAR},
         type = #{type,jdbcType=VARCHAR},
         description = #{description,jdbcType=VARCHAR},
         sort = #{sort,jdbcType=INTEGER},
-        parent = #{parent,jdbcType=INTEGER}
-        where mid = #{mid,jdbcType=INTEGER}
+        parent = #{parent,jdbcType=BIGINT},
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
     </update>
 
-    <select id="selectFromSql" resultMap="MetaDto" parameterType="Map">
-    select a.*, count(b.cid) as count from t_metas a left join `t_relationships` b on a.mid = b.mid where a.type = #{type} group by a.mid order by #{order} limit #{limit}
+    <select id="selectFromSql" resultMap="MetaDto" parameterType="map">
+    select a.*, count(b.cid) as count
+    from t_b_meta a
+    left join t_b_article_meta b on a.id = b.meta_id
+    where a.type = #{type}
+    group by a.id
+    order by #{order} limit #{limit}
   </select>
 
     <select id="selectDtoByNameAndType" resultMap="MetaDto">
-    select a.*, count(b.cid) as count from t_metas a left join `t_relationships` b on a.mid = b.mid where a.type = #{type} and a.name = #{name} group by a.mid
+    select a.*, count(b.cid) as count
+    from t_b_meta a
+    left join t_b_article_meta b on a.id = b.meta_id
+    where a.type = #{type} and a.name = #{name}
+    group by a.id
   </select>
 
-    <select id="countWithSql" parameterType="Integer" resultType="Integer">
+    <select id="countWithSql" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     SELECT count(0)
-    FROM t_contents a LEFT JOIN t_relationships b ON a.cid = b.cid
-    WHERE b.mid = #{value} AND a.status = 'publish' AND a.type = 'post';
+    FROM t_b_article a
+    LEFT JOIN t_b_article_meta b ON a.id = b.article_id
+    WHERE b.article_id = #{value} AND a.status = 'publish' AND a.type = 'post';
   </select>
 </mapper>

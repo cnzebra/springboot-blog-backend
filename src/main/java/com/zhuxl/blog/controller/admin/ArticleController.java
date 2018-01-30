@@ -1,6 +1,7 @@
 package com.zhuxl.blog.controller.admin;
 
 
+import com.github.pagehelper.PageInfo;
 import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.controller.BaseController;
 import com.zhuxl.blog.dto.LogActions;
@@ -8,11 +9,10 @@ import com.zhuxl.blog.dto.Types;
 import com.zhuxl.blog.exception.TipException;
 import com.zhuxl.blog.modal.bo.RestResponseBo;
 import com.zhuxl.blog.modal.entity.*;
-import com.zhuxl.blog.service.AttachFileService;
 import com.zhuxl.blog.service.ArticleService;
+import com.zhuxl.blog.service.AttachFileService;
 import com.zhuxl.blog.service.LogService;
 import com.zhuxl.blog.service.MetaService;
-import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +51,7 @@ public class ArticleController extends BaseController {
     public String index(@RequestParam(value = "page", defaultValue = "1") int page,
                         @RequestParam(value = "limit", defaultValue = "15") int limit, HttpServletRequest request) {
         ArticleDOExample articleDOExample = new ArticleDOExample();
-        articleDOExample.setOrderByClause("created desc");
+        articleDOExample.setOrderByClause("gmt_create desc");
         articleDOExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType());
         PageInfo<ArticleDO> contentsPaginator = contentsService.getArticlesWithpage(articleDOExample, page, limit);
         request.setAttribute("articles", contentsPaginator);
@@ -67,9 +67,9 @@ public class ArticleController extends BaseController {
         return "admin/article_edit";
     }
 
-    @GetMapping(value = "/{cid}")
-    public String editArticle(@PathVariable String cid, HttpServletRequest request) {
-        ArticleDO contents = contentsService.getContents(cid);
+    @GetMapping(value = "/{articleId}")
+    public String editArticle(@PathVariable String articleId, HttpServletRequest request) {
+        ArticleDO contents = contentsService.getContents(articleId);
         request.setAttribute("contents", contents);
         List<MetaDO> categories = metasService.getMetas(Types.CATEGORY.getType());
         request.setAttribute("categories", categories);
@@ -85,7 +85,7 @@ public class ArticleController extends BaseController {
     @ResponseBody
     public RestResponseBo publishArticle(ArticleDO contents, HttpServletRequest request) {
         UserDO users = this.user(request);
-        contents.setAuthorId(users.getUid());
+        contents.setAuthorId(users.getId());
         contents.setType(Types.ARTICLE.getType());
         if (StringUtils.isBlank(contents.getCategories())) {
             contents.setCategories("默认分类");
@@ -101,7 +101,7 @@ public class ArticleController extends BaseController {
     @ResponseBody
     public RestResponseBo modifyArticle(ArticleDO contents, HttpServletRequest request) {
         UserDO users = this.user(request);
-        contents.setAuthorId(users.getUid());
+        contents.setAuthorId(users.getId());
         contents.setType(Types.ARTICLE.getType());
         String result = contentsService.updateArticle(contents);
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
@@ -112,9 +112,9 @@ public class ArticleController extends BaseController {
 
     @RequestMapping(value = "/delete")
     @ResponseBody
-    public RestResponseBo delete(@RequestParam int cid, HttpServletRequest request) {
-        String result = contentsService.deleteByCid(cid);
-        logService.insertLog(LogActions.DEL_ARTICLE.getAction(), cid + "", request.getRemoteAddr(), this.getUid
+    public RestResponseBo delete(@RequestParam Long articleId, HttpServletRequest request) {
+        String result = contentsService.deleteByCid(articleId);
+        logService.insertLog(LogActions.DEL_ARTICLE.getAction(), articleId + "", request.getRemoteAddr(), this.getUid
                 (request));
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
             return RestResponseBo.fail(result);

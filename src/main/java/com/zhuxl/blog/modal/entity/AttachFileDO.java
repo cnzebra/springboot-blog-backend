@@ -15,6 +15,6 @@ public class AttachFileDO extends AbstractEntity {
     private String fileName;
     private String fileType;
     private String fileKey;
-    private Integer authorId;
+    private Long authorId;
 
 }

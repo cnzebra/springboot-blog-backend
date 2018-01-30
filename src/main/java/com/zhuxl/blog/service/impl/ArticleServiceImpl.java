@@ -146,10 +146,10 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public PageInfo<ArticleDO> getArticles(Integer mid, int page, int limit) {
-        int total = metaDao.countWithSql(mid);
+    public PageInfo<ArticleDO> getArticles(Long metaId, int page, int limit) {
+        int total = metaDao.countWithSql(metaId);
         PageHelper.startPage(page, limit);
-        List<ArticleDO> list = articleDao.findByCatalog(mid);
+        List<ArticleDO> list = articleDao.findByCatalog(metaId);
         PageInfo<ArticleDO> paginator = new PageInfo<>(list);
         paginator.setTotal(total);
         return paginator;

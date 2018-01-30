@@ -9,7 +9,7 @@ import com.zhuxl.blog.modal.bo.RestResponseBo;
 import com.zhuxl.blog.modal.entity.OptionDO;
 import com.zhuxl.blog.service.LogService;
 import com.zhuxl.blog.service.OptionService;
-import com.zhuxl.blog.service.ISiteService;
+import com.zhuxl.blog.service.SiteService;
 import com.zhuxl.blog.utils.GsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ public class SettingController extends BaseController {
     private LogService logService;
 
     @Resource
-    private ISiteService siteService;
+    private SiteService siteService;
 
     /**
      * 系统设置

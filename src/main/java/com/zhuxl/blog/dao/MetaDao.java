@@ -96,8 +96,8 @@ public interface MetaDao {
     MetaDto selectDtoByNameAndType(@Param("name") String name, @Param("type") String type);
 
     /**
-     * @param mid
+     * @param metaId
      * @return
      */
-    Integer countWithSql(Long metaId);
+    Integer countWithSql(@Param("metaId") Long metaId);
 }

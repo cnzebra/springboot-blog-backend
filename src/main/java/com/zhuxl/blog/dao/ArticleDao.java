@@ -106,8 +106,8 @@ public interface ArticleDao {
     List<ArchiveBo> findReturnArchiveBo(String year,String month);
 
     /**
-     * @param mid
+     * @param metaId
      * @return
      */
-    List<ArticleDO> findByCatalog(Integer mid);
+    List<ArticleDO> findByCatalog(@Param("metaId") Long metaId);
 }

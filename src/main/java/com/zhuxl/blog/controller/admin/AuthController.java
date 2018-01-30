@@ -7,7 +7,7 @@ import com.zhuxl.blog.exception.TipException;
 import com.zhuxl.blog.modal.bo.RestResponseBo;
 import com.zhuxl.blog.modal.entity.UserDO;
 import com.zhuxl.blog.service.LogService;
-import com.zhuxl.blog.service.IUserService;
+import com.zhuxl.blog.service.UserService;
 import com.zhuxl.blog.utils.TaleUtils;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +37,7 @@ public class AuthController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
 
     @Resource
-    private IUserService usersService;
+    private UserService usersService;
 
     @Resource
     private LogService logService;
@@ -60,9 +60,9 @@ public class AuthController extends BaseController {
             UserDO user = usersService.login(username, password);
             request.getSession().setAttribute(WebConst.LOGIN_SESSION_KEY, user);
             if (StringUtils.isNotBlank(remeberMe)) {
-                TaleUtils.setCookie(response, user.getUid());
+                TaleUtils.setCookie(response, user.getId());
             }
-            logService.insertLog(LogActions.LOGIN.getAction(), null, request.getRemoteAddr(), user.getUid());
+            logService.insertLog(LogActions.LOGIN.getAction(), null, request.getRemoteAddr(), user.getId());
         } catch (Exception e) {
             errorCount = null == errorCount ? 1 : errorCount + 1;
             if (errorCount > 3) {

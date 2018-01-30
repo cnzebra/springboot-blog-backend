@@ -1,6 +1,7 @@
 package com.zhuxl.blog.controller.admin;
 
 import com.github.pagehelper.PageInfo;
+import com.zhuxl.blog.component.common.Commons;
 import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.controller.BaseController;
 import com.zhuxl.blog.dto.LogActions;
@@ -10,7 +11,6 @@ import com.zhuxl.blog.modal.entity.AttachFileDO;
 import com.zhuxl.blog.modal.entity.UserDO;
 import com.zhuxl.blog.service.AttachFileService;
 import com.zhuxl.blog.service.LogService;
-import com.zhuxl.blog.component.common.Commons;
 import com.zhuxl.blog.utils.TaleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +80,7 @@ public class AttachController extends BaseController {
     public RestResponseBo upload(HttpServletRequest request, @RequestParam("file") MultipartFile[] multipartFiles)
             throws IOException {
         UserDO users = this.user(request);
-        Integer uid = users.getUid();
+        Long id = users.getId();
         List<String> errorFiles = new ArrayList<>();
         try {
             for (MultipartFile multipartFile : multipartFiles) {
@@ -95,7 +95,7 @@ public class AttachController extends BaseController {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    attachService.save(fname, fkey, ftype, uid);
+                    attachService.save(fname, fkey, ftype, id);
                 } else {
                     errorFiles.add(fname);
                 }
@@ -117,7 +117,7 @@ public class AttachController extends BaseController {
     public RestResponseBo upload(HttpServletRequest request)
             throws IOException {
         UserDO users = this.user(request);
-        Integer uid = users.getUid();
+        Long id = users.getId();
         List<String> errorFiles = new ArrayList<>();
         try {
             CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(request.getSession()
@@ -143,7 +143,7 @@ public class AttachController extends BaseController {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            attachService.save(fname, fkey, ftype, uid);
+                            attachService.save(fname, fkey, ftype, id);
                         } else {
                             errorFiles.add(fname);
                         }
@@ -160,15 +160,15 @@ public class AttachController extends BaseController {
 
     @RequestMapping(value = "delete")
     @ResponseBody
-    public RestResponseBo delete(@RequestParam Integer id, HttpServletRequest request) {
+    public RestResponseBo delete(@RequestParam Long id, HttpServletRequest request) {
         try {
             AttachFileDO attach = attachService.selectById(id);
             if (null == attach) {
                 return RestResponseBo.fail("不存在该附件");
             }
             attachService.deleteById(id);
-            new File(CLASSPATH + attach.getFkey()).delete();
-            logService.insertLog(LogActions.DEL_ARTICLE.getAction(), attach.getFkey(), request.getRemoteAddr(), this
+            new File(CLASSPATH + attach.getFileKey()).delete();
+            logService.insertLog(LogActions.DEL_ARTICLE.getAction(), attach.getFileKey(), request.getRemoteAddr(), this
                     .getUid(request));
         } catch (Exception e) {
             String msg = "附件删除失败";

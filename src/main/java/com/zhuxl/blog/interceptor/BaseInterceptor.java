@@ -7,8 +7,11 @@ import com.zhuxl.blog.dto.Types;
 import com.zhuxl.blog.modal.entity.OptionDO;
 import com.zhuxl.blog.modal.entity.UserDO;
 import com.zhuxl.blog.service.OptionService;
-import com.zhuxl.blog.service.IUserService;
-import com.zhuxl.blog.utils.*;
+import com.zhuxl.blog.service.UserService;
+import com.zhuxl.blog.utils.AbstractUUID;
+import com.zhuxl.blog.utils.IPKit;
+import com.zhuxl.blog.utils.MapCache;
+import com.zhuxl.blog.utils.TaleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -31,7 +34,7 @@ public class BaseInterceptor implements HandlerInterceptor {
     private static final String USER_AGENT = "user-agent";
 
     @Resource
-    private IUserService userService;
+    private UserService userService;
 
     @Resource
     private OptionService optionService;
@@ -55,10 +58,10 @@ public class BaseInterceptor implements HandlerInterceptor {
         //请求拦截处理
         UserDO user = TaleUtils.getLoginUser(request);
         if (null == user) {
-            Integer uid = TaleUtils.getCookieUid(request);
-            if (null != uid) {
+            Long userId = TaleUtils.getCookieUid(request);
+            if (null != userId) {
                 //这里还是有安全隐患,cookie是可以伪造的
-                user = userService.queryUserById(uid);
+                user = userService.queryUserById(userId);
                 request.getSession().setAttribute(WebConst.LOGIN_SESSION_KEY, user);
             }
         }

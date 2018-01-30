@@ -56,8 +56,8 @@ public abstract class BaseController {
         return TaleUtils.getLoginUser(request);
     }
 
-    public Integer getUid(HttpServletRequest request) {
-        return this.user(request).getUid();
+    public Long getUid(HttpServletRequest request) {
+        return this.user(request).getId();
     }
 
     public String render404() {

@@ -11,8 +11,8 @@ import com.zhuxl.blog.modal.entity.CommentDO;
 import com.zhuxl.blog.modal.entity.LogDO;
 import com.zhuxl.blog.modal.entity.UserDO;
 import com.zhuxl.blog.service.LogService;
-import com.zhuxl.blog.service.ISiteService;
-import com.zhuxl.blog.service.IUserService;
+import com.zhuxl.blog.service.SiteService;
+import com.zhuxl.blog.service.UserService;
 import com.zhuxl.blog.utils.GsonUtils;
 import com.zhuxl.blog.utils.TaleUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,13 +40,13 @@ public class IndexController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
 
     @Resource
-    private ISiteService siteService;
+    private SiteService siteService;
 
     @Resource
     private LogService logService;
 
     @Resource
-    private IUserService userService;
+    private UserService userService;
 
     /**
      * 页面跳转
@@ -89,10 +89,10 @@ public class IndexController extends BaseController {
         UserDO users = this.user(request);
         if (StringUtils.isNotBlank(screenName) && StringUtils.isNotBlank(email)) {
             UserDO temp = new UserDO();
-            temp.setUid(users.getUid());
+            temp.setId(users.getId());
             temp.setScreenName(screenName);
             temp.setEmail(email);
-            userService.updateByUid(temp);
+            userService.updateById(temp);
             logService.insertLog(LogActions.UP_INFO.getAction(), GsonUtils.toJsonString(temp), request.getRemoteAddr
                     (), this.getUid(request));
 
@@ -117,7 +117,7 @@ public class IndexController extends BaseController {
             return RestResponseBo.fail("请确认信息输入完整");
         }
 
-        if (!users.getPassword().equals(TaleUtils.md5encode(users.getUsername() + oldPassword))) {
+        if (!users.getPassword().equals(TaleUtils.md5encode(users.getLoginName() + oldPassword))) {
             return RestResponseBo.fail("旧密码错误");
         }
         if (password.length() < 6 || password.length() > 14) {
@@ -126,10 +126,10 @@ public class IndexController extends BaseController {
 
         try {
             UserDO temp = new UserDO();
-            temp.setUid(users.getUid());
-            String pwd = TaleUtils.md5encode(users.getUsername() + password);
+            temp.setId(users.getId());
+            String pwd = TaleUtils.md5encode(users.getLoginName() + password);
             temp.setPassword(pwd);
-            userService.updateByUid(temp);
+            userService.updateById(temp);
             logService.insertLog(LogActions.UP_PWD.getAction(), null, request.getRemoteAddr(), this.getUid(request));
 
             //更新session中的数据

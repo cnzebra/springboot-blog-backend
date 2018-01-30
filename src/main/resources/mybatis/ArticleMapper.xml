@@ -457,26 +457,26 @@
 
     <select id="findReturnArchiveBo" resultMap="archiveBoMap" parameterType="string">
         select
-        from_unixtime(created,'%Y') as year,
-        from_unixtime(created,'%m') as month,
-        FROM_UNIXTIME(created, '%Y年%m月') as date,
+        from_unixtime(gmt_create,'%Y') as year,
+        from_unixtime(gmt_create,'%m') as month,
+        FROM_UNIXTIME(gmt_create, '%Y年%m月') as date,
         count(*) as count
         from
-        t_contents
+        t_b_article
         where
         type = 'post' and status = 'publish'
         <if test="arg0!=null and arg1!=null">
-            and from_unixtime(created,'%Y')=#{arg0} and from_unixtime(created,'%m')=#{arg1}
+            and from_unixtime(gmt_create,'%Y')=#{arg0} and from_unixtime(gmt_create,'%m')=#{arg1}
         </if>
         group by date
         order by date desc
     </select>
 
 
-    <select id="findByCatalog" resultMap="BaseResultMap" parameterType="Integer">
+    <select id="findByCatalog" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select a.*
-        from t_contents a left join t_relationships b on a.cid = b.cid
-        where b.mid = #{value} and a.status = 'publish' and a.type = 'post'
-        order by a.created desc
+        from t_b_article a left join t_b_article_meta b on a.id = b.article_id
+        where b.meta_id = #{metaId} and a.status = 'publish' and a.type = 'post'
+        order by a.gmt_create desc
     </select>
 </mapper>

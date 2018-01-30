@@ -14,7 +14,7 @@ public class CommentDO extends AbstractEntity {
     /**
      * post表主键,关联字段
      */
-    private Integer articleId;
+    private Long articleId;
     /**
      * 评论作者
      */

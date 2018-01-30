@@ -357,52 +357,52 @@ public class CommentDOExample {
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdEqualTo(Integer value) {
+        public CriteriaAbstract andAuthorIdEqualTo(Long value) {
             addCriterion("author_id =", value, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdNotEqualTo(Integer value) {
+        public CriteriaAbstract andAuthorIdNotEqualTo(Long value) {
             addCriterion("author_id <>", value, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdGreaterThan(Integer value) {
+        public CriteriaAbstract andAuthorIdGreaterThan(Long value) {
             addCriterion("author_id >", value, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdGreaterThanOrEqualTo(Integer value) {
+        public CriteriaAbstract andAuthorIdGreaterThanOrEqualTo(Long value) {
             addCriterion("author_id >=", value, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdLessThan(Integer value) {
+        public CriteriaAbstract andAuthorIdLessThan(Long value) {
             addCriterion("author_id <", value, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdLessThanOrEqualTo(Integer value) {
+        public CriteriaAbstract andAuthorIdLessThanOrEqualTo(Long value) {
             addCriterion("author_id <=", value, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdIn(List<Integer> values) {
+        public CriteriaAbstract andAuthorIdIn(List<Long> values) {
             addCriterion("author_id in", values, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdNotIn(List<Integer> values) {
+        public CriteriaAbstract andAuthorIdNotIn(List<Long> values) {
             addCriterion("author_id not in", values, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdBetween(Integer value1, Integer value2) {
+        public CriteriaAbstract andAuthorIdBetween(Long value1, Long value2) {
             addCriterion("author_id between", value1, value2, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdNotBetween(Integer value1, Integer value2) {
+        public CriteriaAbstract andAuthorIdNotBetween(Long value1, Long value2) {
             addCriterion("author_id not between", value1, value2, "authorId");
             return (CriteriaAbstract) this;
         }

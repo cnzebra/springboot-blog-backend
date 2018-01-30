@@ -1,12 +1,12 @@
 package com.zhuxl.blog.controller.admin;
 
+import com.github.pagehelper.PageInfo;
 import com.zhuxl.blog.controller.BaseController;
 import com.zhuxl.blog.modal.bo.RestResponseBo;
 import com.zhuxl.blog.modal.entity.CommentDO;
 import com.zhuxl.blog.modal.entity.CommentDOExample;
 import com.zhuxl.blog.modal.entity.UserDO;
 import com.zhuxl.blog.service.CommentService;
-import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -33,8 +33,8 @@ public class CommentController extends BaseController {
                         @RequestParam(value = "limit", defaultValue = "15") int limit, HttpServletRequest request) {
         UserDO users = this.user(request);
         CommentDOExample commentDOExample = new CommentDOExample();
-        commentDOExample.setOrderByClause("coid desc");
-        commentDOExample.createCriteria().andAuthorIdNotEqualTo(users.getUid());
+        commentDOExample.setOrderByClause("id desc");
+        commentDOExample.createCriteria().andAuthorIdNotEqualTo(users.getId());
         PageInfo<CommentDO> commentsPaginator = commentsService.getCommentsWithPage(commentDOExample, page, limit);
         request.setAttribute("comments", commentsPaginator);
         return "admin/comment_list";
@@ -48,13 +48,13 @@ public class CommentController extends BaseController {
      */
     @PostMapping(value = "delete")
     @ResponseBody
-    public RestResponseBo delete(@RequestParam Integer coid) {
+    public RestResponseBo delete(@RequestParam Long commentId) {
         try {
-            CommentDO comments = commentsService.getCommentById(coid);
+            CommentDO comments = commentsService.getCommentById(commentId);
             if (null == comments) {
                 return RestResponseBo.fail("不存在该评论");
             }
-            commentsService.delete(coid, comments.getCid());
+            commentsService.delete(commentId, comments.getArticleId());
         } catch (Exception e) {
             String msg = "评论删除失败";
             LOGGER.error(msg, e);
@@ -65,11 +65,11 @@ public class CommentController extends BaseController {
 
     @PostMapping(value = "status")
     @ResponseBody
-    public RestResponseBo delete(@RequestParam Integer coid, @RequestParam String status) {
+    public RestResponseBo delete(@RequestParam Long commentId, @RequestParam String status) {
         try {
-            CommentDO comments = commentsService.getCommentById(coid);
+            CommentDO comments = commentsService.getCommentById(commentId);
             if (comments != null) {
-                comments.setCoid(coid);
+                comments.setId(commentId);
                 comments.setStatus(status);
                 commentsService.update(comments);
             } else {

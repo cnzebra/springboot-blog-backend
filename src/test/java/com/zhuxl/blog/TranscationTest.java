@@ -3,7 +3,7 @@ package com.zhuxl.blog;
 import com.zhuxl.blog.exception.TipException;
 import com.zhuxl.blog.modal.entity.UserDO;
 import com.zhuxl.blog.service.OptionService;
-import com.zhuxl.blog.service.IUserService;
+import com.zhuxl.blog.service.UserService;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.annotation.MapperScan;
@@ -24,7 +24,7 @@ import javax.annotation.Resource;
 public class TranscationTest {
 
     @Resource
-    private IUserService userService;
+    private UserService userService;
 
     @Resource
     private OptionService optionService;
@@ -33,7 +33,7 @@ public class TranscationTest {
     @Ignore
     public void test() {
         UserDO user = new UserDO();
-        user.setUsername("wangqiang111");
+        user.setLoginName("wangqiang111");
         user.setPassword("123456");
         user.setEmail("8888");
         userService.insertUser(user);

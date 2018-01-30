@@ -39,9 +39,9 @@ public class CategoryController extends BaseController {
 
     @PostMapping(value = "save")
     @ResponseBody
-    public RestResponseBo saveCategory(@RequestParam String cname, @RequestParam Integer mid) {
+    public RestResponseBo saveCategory(@RequestParam String cname, @RequestParam Long metaId) {
         try {
-            metasService.saveMeta(Types.CATEGORY.getType(), cname, mid);
+            metasService.saveMeta(Types.CATEGORY.getType(), cname, metaId);
         } catch (Exception e) {
             String msg = "分类保存失败";
             LOGGER.error(msg, e);
@@ -52,9 +52,9 @@ public class CategoryController extends BaseController {
 
     @RequestMapping(value = "delete")
     @ResponseBody
-    public RestResponseBo delete(@RequestParam int mid) {
+    public RestResponseBo delete(@RequestParam Long metaId) {
         try {
-            metasService.delete(mid);
+            metasService.delete(metaId);
         } catch (Exception e) {
             String msg = "删除失败";
             LOGGER.error(msg, e);

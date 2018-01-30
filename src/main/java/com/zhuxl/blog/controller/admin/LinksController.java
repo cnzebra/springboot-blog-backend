@@ -37,17 +37,17 @@ public class LinksController extends BaseController {
     @PostMapping(value = "save")
     @ResponseBody
     public RestResponseBo saveLink(@RequestParam String title, @RequestParam String url,
-                                   @RequestParam String logo, @RequestParam Integer mid,
+                                   @RequestParam String logo, @RequestParam Long metaId,
                                    @RequestParam(value = "sort", defaultValue = "0") int sort) {
         try {
             MetaDO metas = new MetaDO();
             metas.setName(title);
-            metas.setSlug(url);
+            metas.setValue(url);
             metas.setDescription(logo);
             metas.setSort(sort);
             metas.setType(Types.LINK.getType());
-            if (null != mid) {
-                metas.setMid(mid);
+            if (null != metaId) {
+                metas.setId(metaId);
                 metasService.update(metas);
             } else {
                 metasService.saveMeta(metas);
@@ -62,9 +62,9 @@ public class LinksController extends BaseController {
 
     @RequestMapping(value = "delete")
     @ResponseBody
-    public RestResponseBo delete(@RequestParam int mid) {
+    public RestResponseBo delete(@RequestParam Long metaId) {
         try {
-            metasService.delete(mid);
+            metasService.delete(metaId);
         } catch (Exception e) {
             String msg = "友链删除失败";
             LOGGER.error(msg, e);

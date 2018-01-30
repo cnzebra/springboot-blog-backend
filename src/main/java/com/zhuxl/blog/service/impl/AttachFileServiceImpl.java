@@ -36,7 +36,7 @@ public class AttachFileServiceImpl implements AttachFileService {
     }
 
     @Override
-    public AttachFileDO selectById(Integer id) {
+    public AttachFileDO selectById(Long id) {
         if (null != id) {
             return attachFileDao.selectByPrimaryKey(id);
         }
@@ -45,7 +45,7 @@ public class AttachFileServiceImpl implements AttachFileService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void save(String fname, String fkey, String ftype, Integer author) {
+    public void save(String fname, String fkey, String ftype, Long author) {
         AttachFileDO attach = new AttachFileDO();
         attach.setFileName(fname);
         attach.setAuthorId(author);
@@ -57,7 +57,7 @@ public class AttachFileServiceImpl implements AttachFileService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         if (null != id) {
             attachFileDao.deleteByPrimaryKey(id);
         }

@@ -191,13 +191,13 @@ public class TaleUtils {
      * @param request
      * @return
      */
-    public static Integer getCookieUid(HttpServletRequest request) {
+    public static Long getCookieUid(HttpServletRequest request) {
         if (null != request) {
             Cookie cookie = cookieRaw(WebConst.USER_IN_COOKIE, request);
             if (cookie != null && cookie.getValue() != null) {
                 try {
-                    String uid = Tools.deAes(cookie.getValue(), WebConst.AES_SALT);
-                    return StringUtils.isNotBlank(uid) && Tools.isNumber(uid) ? Integer.valueOf(uid) : null;
+                    String userId = Tools.deAes(cookie.getValue(), WebConst.AES_SALT);
+                    return StringUtils.isNotBlank(userId) && Tools.isNumber(userId) ? Long.valueOf(userId) : null;
                 } catch (Exception e) {
                 }
             }
@@ -231,9 +231,9 @@ public class TaleUtils {
      * @param response
      * @param uid
      */
-    public static void setCookie(HttpServletResponse response, Integer uid) {
+    public static void setCookie(HttpServletResponse response, Long id) {
         try {
-            String val = Tools.enAes(uid.toString(), WebConst.AES_SALT);
+            String val = Tools.enAes(id.toString(), WebConst.AES_SALT);
             boolean isSSL = false;
             Cookie cookie = new Cookie(WebConst.USER_IN_COOKIE, val);
             cookie.setPath("/");

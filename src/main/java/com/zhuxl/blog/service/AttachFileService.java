@@ -25,7 +25,7 @@ public interface AttachFileService {
      * @param ftype
      * @param author
      */
-    void save(String fname, String fkey, String ftype, Integer author);
+    void save(String fname, String fkey, String ftype, Long author);
 
     /**
      * 根据附件id查询附件
@@ -33,12 +33,12 @@ public interface AttachFileService {
      * @param id
      * @return
      */
-    AttachFileDO selectById(Integer id);
+    AttachFileDO selectById(Long id);
 
     /**
      * 删除附件
      *
      * @param id
      */
-    void deleteById(Integer id);
+    void deleteById(Long id);
 }

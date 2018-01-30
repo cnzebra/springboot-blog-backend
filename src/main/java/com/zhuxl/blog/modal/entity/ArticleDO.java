@@ -26,7 +26,7 @@ public class ArticleDO extends AbstractEntity {
     /**
      * 内容所属用户id
      */
-    private Integer authorId;
+    private Long authorId;
     /**
      * 内容类别
      */

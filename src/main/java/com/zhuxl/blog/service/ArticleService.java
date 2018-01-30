@@ -52,7 +52,7 @@ public interface ArticleService {
      * @param limit limit
      * @return ArticleDO
      */
-    PageInfo<ArticleDO> getArticles(Integer mid, int page, int limit);
+    PageInfo<ArticleDO> getArticles(Long metaId, int page, int limit);
 
     /**
      * 搜索、分页

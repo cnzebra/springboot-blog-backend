@@ -12,10 +12,10 @@ import com.zhuxl.blog.modal.bo.RestResponseBo;
 import com.zhuxl.blog.modal.entity.ArticleDO;
 import com.zhuxl.blog.modal.entity.CommentDO;
 import com.zhuxl.blog.modal.entity.MetaDO;
-import com.zhuxl.blog.service.CommentService;
 import com.zhuxl.blog.service.ArticleService;
+import com.zhuxl.blog.service.CommentService;
 import com.zhuxl.blog.service.MetaService;
-import com.zhuxl.blog.service.ISiteService;
+import com.zhuxl.blog.service.SiteService;
 import com.zhuxl.blog.utils.IPKit;
 import com.zhuxl.blog.utils.PatternKit;
 import com.zhuxl.blog.utils.TaleUtils;
@@ -53,7 +53,7 @@ public class IndexController extends BaseController {
     private MetaService metaService;
 
     @Resource
-    private ISiteService siteService;
+    private SiteService siteService;
 
     /**
      * 首页
@@ -101,7 +101,7 @@ public class IndexController extends BaseController {
         request.setAttribute("article", contents);
         request.setAttribute("is_post", true);
         completeArticle(request, contents);
-        updateArticleHit(contents.getCid(), contents.getHits());
+        updateArticleHit(contents.getId(), contents.getHits());
         return this.render("post");
 
 
@@ -123,7 +123,7 @@ public class IndexController extends BaseController {
         request.setAttribute("article", contents);
         request.setAttribute("is_post", true);
         completeArticle(request, contents);
-        updateArticleHit(contents.getCid(), contents.getHits());
+        updateArticleHit(contents.getId(), contents.getHits());
         return this.render("post");
 
 
@@ -142,7 +142,7 @@ public class IndexController extends BaseController {
                 cp = "1";
             }
             request.setAttribute("cp", cp);
-            PageInfo<CommentBo> commentsPaginator = commentService.getComments(contents.getCid(), Integer.parseInt
+            PageInfo<CommentBo> commentsPaginator = commentService.getComments(contents.getId(), Integer.parseInt
                     (cp), 6);
             request.setAttribute("comments", commentsPaginator);
         }
@@ -165,7 +165,7 @@ public class IndexController extends BaseController {
     @PostMapping(value = "comment")
     @ResponseBody
     public RestResponseBo comment(HttpServletRequest request, HttpServletResponse response,
-                                  @RequestParam Integer cid, @RequestParam Integer coid,
+                                  @RequestParam Long articleId, @RequestParam Long commentId,
                                   @RequestParam String author, @RequestParam String mail,
                                   @RequestParam String url, @RequestParam String text, @RequestParam String csrfToken) {
 
@@ -179,7 +179,7 @@ public class IndexController extends BaseController {
             return RestResponseBo.fail(ErrorCode.BAD_REQUEST);
         }
 
-        if (null == cid || StringUtils.isBlank(text)) {
+        if (null == articleId || StringUtils.isBlank(text)) {
             return RestResponseBo.fail("请输入完整后评论");
         }
 
@@ -199,7 +199,7 @@ public class IndexController extends BaseController {
             return RestResponseBo.fail("请输入200个字符以内的评论");
         }
 
-        String val = IPKit.getIpAddrByRequest(request) + ":" + cid;
+        String val = IPKit.getIpAddrByRequest(request) + ":" + articleId;
         Integer count = cache.hget(Types.COMMENTS_FREQUENCY.getType(), val);
         if (null != count && count > 0) {
             return RestResponseBo.fail("您发表评论太快了，请过会再试");
@@ -213,12 +213,12 @@ public class IndexController extends BaseController {
 
         CommentDO comments = new CommentDO();
         comments.setAuthor(author);
-        comments.setCid(cid);
+        comments.setArticleId(articleId);
         comments.setIp(request.getRemoteAddr());
-        comments.setUrl(url);
+        comments.setSiteUrl(url);
         comments.setContent(text);
-        comments.setMail(mail);
-        comments.setParent(coid);
+        comments.setEmail(mail);
+        comments.setParent(commentId);
         try {
             String result = commentService.insertComment(comments);
             cookie("tale_remember_author", URLEncoder.encode(author, "UTF-8"), 7 * 24 * 60 * 60, response);
@@ -260,7 +260,7 @@ public class IndexController extends BaseController {
             return this.render404();
         }
 
-        PageInfo<ArticleDO> contentsPaginator = articleService.getArticles(metaDto.getMid(), page, limit);
+        PageInfo<ArticleDO> contentsPaginator = articleService.getArticles(metaDto.getId(), page, limit);
 
         request.setAttribute("articles", contentsPaginator);
         request.setAttribute("meta", metaDto);
@@ -311,12 +311,12 @@ public class IndexController extends BaseController {
             if (StringUtils.isBlank(cp)) {
                 cp = "1";
             }
-            PageInfo<CommentBo> commentsPaginator = commentService.getComments(contents.getCid(), Integer.parseInt
+            PageInfo<CommentBo> commentsPaginator = commentService.getComments(contents.getId(), Integer.parseInt
                     (cp), 6);
             request.setAttribute("comments", commentsPaginator);
         }
         request.setAttribute("article", contents);
-        updateArticleHit(contents.getCid(), contents.getHits());
+        updateArticleHit(contents.getId(), contents.getHits());
         return this.render("page");
     }
 
@@ -347,10 +347,10 @@ public class IndexController extends BaseController {
     /**
      * 更新文章的点击率
      *
-     * @param cid
+     * @param articeId
      * @param chits
      */
-    private void updateArticleHit(Integer cid, Integer chits) {
+    private void updateArticleHit(Long articeId, Integer chits) {
         Integer hits = cache.hget("article", "hits");
         if (chits == null) {
             chits = 0;
@@ -358,7 +358,7 @@ public class IndexController extends BaseController {
         hits = null == hits ? 1 : hits + 1;
         if (hits >= WebConst.HIT_EXCEED) {
             ArticleDO temp = new ArticleDO();
-            temp.setCid(cid);
+            temp.setId(articeId);
             temp.setHits(chits + hits);
             articleService.updateContentByCid(temp);
             cache.hset("article", "hits", 1);
@@ -400,7 +400,7 @@ public class IndexController extends BaseController {
             return this.render404();
         }
 
-        PageInfo<ArticleDO> contentsPaginator = articleService.getArticles(metaDto.getMid(), page, limit);
+        PageInfo<ArticleDO> contentsPaginator = articleService.getArticles(metaDto.getId(), page, limit);
         request.setAttribute("articles", contentsPaginator);
         request.setAttribute("meta", metaDto);
         request.setAttribute("type", "标签");

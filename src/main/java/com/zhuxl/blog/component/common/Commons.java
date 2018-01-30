@@ -9,7 +9,7 @@ import com.zhuxl.blog.dto.Types;
 import com.zhuxl.blog.modal.bo.ArchiveBo;
 import com.zhuxl.blog.modal.entity.ArticleDO;
 import com.zhuxl.blog.service.MetaService;
-import com.zhuxl.blog.service.ISiteService;
+import com.zhuxl.blog.service.SiteService;
 import com.zhuxl.blog.utils.AbstractUUID;
 import com.zhuxl.blog.utils.DateKit;
 import com.zhuxl.blog.utils.TaleUtils;
@@ -43,7 +43,7 @@ public final class Commons {
     @Autowired
     private MetaService metasService;
     @Autowired
-    private ISiteService siteService;
+    private SiteService siteService;
 
 
     /**
@@ -168,7 +168,7 @@ public final class Commons {
      * @return
      */
     public static String permalink(ArticleDO contents) {
-        return permalink(contents.getCid(), contents.getSlug());
+        return permalink(contents.getId(), contents.getPath());
     }
 
     /**
@@ -185,12 +185,12 @@ public final class Commons {
     /**
      * 返回文章链接地址
      *
-     * @param cid
-     * @param slug
+     * @param articleId
+     * @param path
      * @return
      */
-    public static String permalink(Integer cid, String slug) {
-        return siteUrl("/article/" + (StringUtils.isNotBlank(slug) ? slug : cid.toString()));
+    public static String permalink(Long articleId, String path) {
+        return siteUrl("/article/" + (StringUtils.isNotBlank(path) ? path : articleId.toString()));
     }
 
     /**
@@ -294,8 +294,8 @@ public final class Commons {
      * @return
      */
     public static String showThumb(ArticleDO contents) {
-        int cid = contents.getCid();
-        int size = cid % 20;
+        long cid = contents.getId();
+        long size = cid % 20;
         size = size == 0 ? 1 : size;
         return "/user/img/rand/" + size + ".jpg";
     }
@@ -372,7 +372,7 @@ public final class Commons {
     }
 
     public List<ArchiveBo> archives() {
-        List<ArchiveBo> archives = siteService.getArchives(null,null);
+        List<ArchiveBo> archives = siteService.getArchives(null, null);
         return archives;
     }
 }

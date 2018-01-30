@@ -1,5 +1,6 @@
 package com.zhuxl.blog.controller.admin;
 
+import com.github.pagehelper.PageInfo;
 import com.zhuxl.blog.component.constant.WebConst;
 import com.zhuxl.blog.controller.BaseController;
 import com.zhuxl.blog.dto.LogActions;
@@ -10,7 +11,6 @@ import com.zhuxl.blog.modal.entity.ArticleDOExample;
 import com.zhuxl.blog.modal.entity.UserDO;
 import com.zhuxl.blog.service.ArticleService;
 import com.zhuxl.blog.service.LogService;
-import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -61,7 +61,7 @@ public class PageController extends BaseController {
     @PostMapping(value = "publish")
     @ResponseBody
     public RestResponseBo publishPage(@RequestParam String title, @RequestParam String content,
-                                      @RequestParam String status, @RequestParam String slug,
+                                      @RequestParam String status, @RequestParam String path,
                                       @RequestParam(required = false) Integer allowComment, @RequestParam(required =
             false) Integer allowPing, HttpServletRequest request) {
 
@@ -71,7 +71,7 @@ public class PageController extends BaseController {
         contents.setCover("");
         contents.setContent(content);
         contents.setStatus(status);
-        contents.setSlug(slug);
+        contents.setPath(path);
         contents.setType(Types.PAGE.getType());
         if (null != allowComment) {
             contents.setAllowComment(allowComment == 1);
@@ -79,7 +79,7 @@ public class PageController extends BaseController {
         if (null != allowPing) {
             contents.setAllowPing(allowPing == 1);
         }
-        contents.setAuthorId(users.getUid());
+        contents.setAuthorId(users.getId());
         String result = contentsService.publish(contents);
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
             return RestResponseBo.fail(result);
@@ -89,19 +89,19 @@ public class PageController extends BaseController {
 
     @PostMapping(value = "modify")
     @ResponseBody
-    public RestResponseBo modifyArticle(@RequestParam Integer cid, @RequestParam String title,
+    public RestResponseBo modifyArticle(@RequestParam Long articleId, @RequestParam String title,
                                         @RequestParam String content,
-                                        @RequestParam String status, @RequestParam String slug,
+                                        @RequestParam String status, @RequestParam String path,
                                         @RequestParam(required = false) Integer allowComment, @RequestParam(required
             = false) Integer allowPing, HttpServletRequest request) {
 
         UserDO users = this.user(request);
         ArticleDO contents = new ArticleDO();
-        contents.setCid(cid);
+        contents.setId(articleId);
         contents.setTitle(title);
         contents.setContent(content);
         contents.setStatus(status);
-        contents.setSlug(slug);
+        contents.setPath(path);
         contents.setType(Types.PAGE.getType());
         if (null != allowComment) {
             contents.setAllowComment(allowComment == 1);
@@ -109,7 +109,7 @@ public class PageController extends BaseController {
         if (null != allowPing) {
             contents.setAllowPing(allowPing == 1);
         }
-        contents.setAuthorId(users.getUid());
+        contents.setAuthorId(users.getId());
         String result = contentsService.updateArticle(contents);
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
             return RestResponseBo.fail(result);
@@ -119,9 +119,9 @@ public class PageController extends BaseController {
 
     @RequestMapping(value = "delete")
     @ResponseBody
-    public RestResponseBo delete(@RequestParam int cid, HttpServletRequest request) {
-        String result = contentsService.deleteByCid(cid);
-        logService.insertLog(LogActions.DEL_ARTICLE.getAction(), cid + "", request.getRemoteAddr(), this.getUid
+    public RestResponseBo delete(@RequestParam Long articleId, HttpServletRequest request) {
+        String result = contentsService.deleteByCid(articleId);
+        logService.insertLog(LogActions.DEL_ARTICLE.getAction(), articleId + "", request.getRemoteAddr(), this.getUid
                 (request));
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
             return RestResponseBo.fail(result);

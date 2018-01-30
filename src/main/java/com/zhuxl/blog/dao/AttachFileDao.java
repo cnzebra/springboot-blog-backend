@@ -28,7 +28,7 @@ public interface AttachFileDao {
      * @param id
      * @return
      */
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     /**
      * @param record
@@ -52,7 +52,7 @@ public interface AttachFileDao {
      * @param id
      * @return
      */
-    AttachFileDO selectByPrimaryKey(Integer id);
+    AttachFileDO selectByPrimaryKey(Long id);
 
     /**
      * @param record

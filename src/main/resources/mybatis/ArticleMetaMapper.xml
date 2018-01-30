@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhuxl.blog.dao.ArticleMetaDao">
     <resultMap id="BaseResultMap" type="com.zhuxl.blog.modal.entity.ArticleMetaDO">
-        <id column="cid" jdbcType="INTEGER" property="cid"/>
-        <id column="mid" jdbcType="INTEGER" property="mid"/>
+        <id column="article_id" jdbcType="BIGINT" property="articleId"/>
+        <id column="meta_id" jdbcType="BIGINT" property="metaId"/>
     </resultMap>
     <sql id="Example_Where_Clause">
         <where>
@@ -66,7 +66,7 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-        cid, mid
+        article_id, meta_id
     </sql>
     <select id="selectByExample" parameterType="com.zhuxl.blog.modal.entity.ArticleMetaDOExample" resultMap="BaseResultMap">
         select
@@ -74,7 +74,7 @@
             distinct
         </if>
         <include refid="Base_Column_List"/>
-        from t_relationships
+        from t_b_article_meta
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -91,54 +91,54 @@
         </if>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="com.zhuxl.blog.modal.entity.ArticleMetaDO">
-        delete from t_relationships
-        where cid = #{cid,jdbcType=INTEGER}
-        and mid = #{mid,jdbcType=INTEGER}
+        delete from t_b_article_meta
+        where article_id = #{articleId,jdbcType=BIGINT}
+        and meta_id = #{meta_id,jdbcType=BIGINT}
     </delete>
     <delete id="deleteByExample" parameterType="com.zhuxl.blog.modal.entity.ArticleMetaDOExample">
-        delete from t_relationships
+        delete from t_b_article_meta
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
     <insert id="insert" parameterType="com.zhuxl.blog.modal.entity.ArticleMetaDO">
-        insert into t_relationships (cid, mid)
-        values (#{cid,jdbcType=INTEGER}, #{mid,jdbcType=INTEGER})
+        insert into t_b_article_meta (article_id, meta_id)
+        values (#{articleId,jdbcType=BIGINT}, #{metaId,jdbcType=BIGINT})
     </insert>
     <insert id="insertSelective" parameterType="com.zhuxl.blog.modal.entity.ArticleMetaDO">
-        insert into t_relationships
+        insert into t_b_article_meta
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="cid != null">
-                cid,
+            <if test="articleId != null">
+                article_id,
             </if>
-            <if test="mid != null">
-                mid,
+            <if test="metaId != null">
+                meta_id,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="cid != null">
-                #{cid,jdbcType=INTEGER},
+            <if test="articleId != null">
+                #{articleId,jdbcType=BIGINT},
             </if>
-            <if test="mid != null">
-                #{mid,jdbcType=INTEGER},
+            <if test="metaId != null">
+                #{metaId,jdbcType=BIGINT},
             </if>
         </trim>
     </insert>
     <select id="countByExample" parameterType="com.zhuxl.blog.modal.entity.ArticleMetaDOExample"
-            resultType="java.lang.Long">
-        select count(*) from t_relationships
+            resultType="java.lang.Integer">
+        select count(*) from t_b_article_meta
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </select>
     <update id="updateByExampleSelective" parameterType="map">
-        update t_relationships
+        update t_b_article_meta
         <set>
-            <if test="record.cid != null">
-                cid = #{record.cid,jdbcType=INTEGER},
+            <if test="record.articleId != null">
+                article_id = #{record.articleId,jdbcType=BIGINT},
             </if>
-            <if test="record.mid != null">
-                mid = #{record.mid,jdbcType=INTEGER},
+            <if test="record.metaId != null">
+                meta_id = #{record.metaId,jdbcType=BIGINT},
             </if>
         </set>
         <if test="_parameter != null">
@@ -146,9 +146,10 @@
         </if>
     </update>
     <update id="updateByExample" parameterType="map">
-        update t_relationships
-        set cid = #{record.cid,jdbcType=INTEGER},
-        mid = #{record.mid,jdbcType=INTEGER}
+        update t_b_article_meta
+        set
+        article_id = #{record.articleId,jdbcType=BIGINT},
+        meta_id = #{record.metaId,jdbcType=BIGINT}
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause"/>
         </if>

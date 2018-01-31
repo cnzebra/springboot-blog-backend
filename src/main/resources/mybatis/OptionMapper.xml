@@ -69,7 +69,7 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-        name, value, description,gmt_create.gmt_modified
+        name, value, description,gmt_create,gmt_modified
     </sql>
     <select id="selectByExample" parameterType="com.zhuxl.blog.modal.entity.OptionDOExample" resultMap="BaseResultMap">
         select

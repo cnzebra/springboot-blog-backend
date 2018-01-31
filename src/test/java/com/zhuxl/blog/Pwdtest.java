@@ -9,9 +9,9 @@ import com.zhuxl.blog.utils.TaleUtils;
 public class Pwdtest {
     public static void main(String args[]) {
         UserDO user = new UserDO();
-        user.setUsername("admin");
+        user.setLoginName("admin");
         user.setPassword("J9lew2irojE23");
-        String encodePwd = TaleUtils.md5encode(user.getUsername() + user.getPassword());
+        String encodePwd = TaleUtils.md5encode(user.getLoginName() + user.getPassword());
         System.out.println(encodePwd);
     }
 }

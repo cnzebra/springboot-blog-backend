@@ -57,8 +57,8 @@
                     <div class="col-md-12">
                         <form id="articleForm" role="form" novalidate="novalidate">
                             <input type="hidden" name="categories" id="categories"/>
-                            <input type="hidden" name="cid"
-                                   th:value="${contents!=null and contents.cid!=null}?${contents.cid}: ''" id="cid"/>
+                            <input type="hidden" name="id"
+                                   th:value="${contents!=null and contents.id!=null}?${contents.id}: ''" id="cid"/>
                             <input type="hidden" name="status"
                                    th:value="${contents!=null and contents.status !=null}?${contents.status}: 'publish'"
                                    id="status"/>
@@ -82,8 +82,8 @@
 
                                 <div class="form-group col-md-6" style="padding: 0 0 0 10px;">
                                     <input type="text" class="form-control"
-                                           placeholder="自定义访问路径，如：my-first-article  默认为文章id" name="slug"
-                                           th:value="${contents!=null and contents.slug !=null}?${contents.slug}: ''"/>
+                                           placeholder="自定义访问路径，如：my-first-article  默认为文章id" name="path"
+                                           th:value="${contents!=null and contents.path !=null}?${contents.path}: ''"/>
                                 </div>
                             </div>
                             <div class="row" style="padding: 10px;">
@@ -151,14 +151,14 @@
                                                                    target="_blank">
                                                                     <img class="attach-img attach-img-cover"
                                                                          style="cursor: pointer"
-                                                                         th:src="@{${attach.ftype == 'image'}?${attach.fkey}: '/admin/images/attach.png'}"
-                                                                         th:title="${attach.fname}"/>
+                                                                         th:src="@{${attach.fileType == 'image'}?${attach.fileKey}: '/admin/images/attach.png'}"
+                                                                         th:title="${attach.fileName}"/>
                                                                 </a>
                                                                 <div class="clearfix m-t-10">
                                                                 <span class="attach-text" data-toggle="tooltip"
                                                                       data-placement="top"
-                                                                      th:attr="data-original-title=${attach.fname}"
-                                                                      th:text="${commons.substr(attach.fname, 12)}">
+                                                                      th:attr="data-original-title=${attach.fileName}"
+                                                                      th:text="${commons.substr(attach.fileName, 12)}">
                                                                 </span>
                                                                 </div>
 

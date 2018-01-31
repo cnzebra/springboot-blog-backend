@@ -26,15 +26,15 @@
                             </thead>
                             <tbody>
                             <th:block th:each="comment : ${comments.list}">
-                                <tr th:attr="cid=${comment.coid}">
+                                <tr th:attr="cid=${comment.id}">
                                     <td>
-                                        <a th:href="@{${commons.siteUrl('/article/')}+${comment.cid}+'#comments'}"
+                                        <a th:href="@{${commons.siteUrl('/article/')}+${comment.articleId}+'#comments'}"
                                            target="_blank" th:utext="${commons.article(comment.content)}"></a>
                                     </td>
                                     <td th:text="${comment.author}"></td>
-                                    <td th:text="${commons.fmtdate(comment.created, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                                    <td th:text="${comment.mail}"></td>
-                                    <td><a th:href="@{${comment.url}}" target="_blank" th:text="${comment.url}"></a>
+                                    <td th:text="${commons.fmtdate(comment.gmtCreate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                                    <td th:text="${comment.email}"></td>
+                                    <td><a th:href="@{${comment.siteUrl}}" target="_blank" th:text="${comment.siteUrl}"></a>
                                     </td>
                                     <td>
                                         <th:block th:if="${comment.status == 'approved'}">
@@ -47,11 +47,11 @@
                                     <td>
                                         <th:block th:if="${comment.status == 'not_audit'}">
                                             <a href="javascript:void(0)"
-                                               th:onclick="'updateStatus('+${comment.coid}+');'"
+                                               th:onclick="'updateStatus('+${comment.id}+');'"
                                                class="btn btn-success btn-sm waves-effect waves-light m-b-5"><i
                                                     class="fa fa-check-square-o"></i> <span>通过</span></a>
                                         </th:block>
-                                        <a href="javascript:void(0)" th:onclick="'delComment('+${comment.coid}+');'"
+                                        <a href="javascript:void(0)" th:onclick="'delComment('+${comment.id}+');'"
                                            class="btn btn-danger btn-sm waves-effect waves-light m-b-5"><i
                                                 class="fa fa-trash-o"></i> <span>删除</span></a>
                                     </td>
@@ -72,13 +72,13 @@
     /*<![CDATA[*/
     var tale = new $.tale();
 
-    function delComment(coid) {
+    function delComment(id) {
         tale.alertConfirm({
             title: '确定删除该评论吗?',
             then: function () {
                 tale.post({
                     url: '/admin/comments/delete',
-                    data: {coid: coid},
+                    data: {id: id},
                     success: function (result) {
                         if (result && result.success) {
                             tale.alertOkAndReload('评论删除成功');
@@ -91,13 +91,13 @@
         });
     }
 
-    function updateStatus(coid) {
+    function updateStatus(id) {
         tale.alertConfirm({
             title: '确定审核通过吗?',
             then: function () {
                 tale.post({
                     url: '/admin/comments/status',
-                    data: {coid: coid, status: "approved"},
+                    data: {id: id, status: "approved"},
                     success: function (result) {
                         if (result && result.success) {
                             tale.alertOkAndReload('评论状态设置成功');

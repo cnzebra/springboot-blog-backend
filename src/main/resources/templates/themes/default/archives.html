@@ -11,8 +11,8 @@
                     <div class="post-lists-body">
                         <th:block th:each="article : ${archive.articles}">
                             <div class="post-list-item-archive">
-                                <th:block th:text="${commons.fmtdate(article.created,'MM-dd HH:mm')}"/>
-                                <a th:href="${commons.permalink(article.cid, article.slug)}"
+                                <th:block th:text="${commons.fmtdate(article.gmtCreate,'MM-dd HH:mm')}"/>
+                                <a th:href="${commons.permalink(article.id, article.path)}"
                                    th:text="${article.title}" style="color: #629bff;margin-left: 50px;"></a>
                             </div>
                         </th:block>

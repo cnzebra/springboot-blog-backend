@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -204,6 +205,16 @@ public final class Commons {
     }
 
     /**
+     * 格式化date时间戳为日期
+     *
+     * @param date
+     * @return
+     */
+    public static String fmtdate(Date date) {
+        return fmtdate(date.getTime(), "yyyy-MM-dd");
+    }
+
+    /**
      * 格式化unix时间戳为日期
      *
      * @param unixTime
@@ -213,6 +224,34 @@ public final class Commons {
     public static String fmtdate(Integer unixTime, String patten) {
         if (null != unixTime && StringUtils.isNotBlank(patten)) {
             return DateKit.formatDateByUnixTime(unixTime, patten);
+        }
+        return "";
+    }
+
+    /**
+     * 格式化unix时间戳为日期
+     *
+     * @param unixTime
+     * @param patten
+     * @return
+     */
+    public static String fmtdate(Long unixTime, String patten) {
+        if (null != unixTime && StringUtils.isNotBlank(patten)) {
+            return DateKit.formatDateByUnixTime(unixTime, patten);
+        }
+        return "";
+    }
+
+    /**
+     * 格式化date戳为日期
+     *
+     * @param unixTime
+     * @param patten
+     * @return
+     */
+    public static String fmtdate(Date date, String patten) {
+        if (null != date && StringUtils.isNotBlank(patten)) {
+            return DateKit.formatDateByUnixTime(date.getTime(), patten);
         }
         return "";
     }

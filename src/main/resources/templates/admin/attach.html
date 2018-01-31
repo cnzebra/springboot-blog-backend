@@ -78,18 +78,18 @@
                         <th:block th:unless="${commons.isEmpty(attachs)}">
                             <th:block th:each="attach : ${attachs.list}">
                                 <div class="col-md-2 text-center m-t-10">
-                                    <a th:href="${commons.siteUrl(attach.fkey)}" target="_blank">
+                                    <a th:href="${commons.siteUrl(attach.fileKey)}" target="_blank">
                                         <img class="attach-img"
-                                             th:src="@{${attach.ftype == 'image'}?${attach.fkey}: '/admin/images/attach.png'}"
-                                             th:title="${attach.fname}"/>
+                                             th:src="@{${attach.fileType == 'image'}?${attach.fileKey}: '/admin/images/attach.png'}"
+                                             th:title="${attach.fileName}"/>
                                     </a>
                                     <div class="clearfix m-t-10">
                 <span class="attach-text" data-toggle="tooltip" data-placement="top"
-                      th:attr="data-original-title=${attach.fname}"
-                      th:text="${commons.substr(attach.fname, 12)}"></span>
+                      th:attr="data-original-title=${attach.fileName}"
+                      th:text="${commons.substr(attach.fileName, 12)}"></span>
                                     </div>
                                     <div class="clearfix">
-                                        <button th:attr="url=${commons.siteUrl(attach.fkey)}" type="button"
+                                        <button th:attr="url=${commons.siteUrl(attach.fileKey)}" type="button"
                                                 class="btn btn-warning btn-sm waves-effect waves-light m-t-5 copy">
                                             <i class="fa fa-copy"></i> <span>复制</span>
                                         </button>

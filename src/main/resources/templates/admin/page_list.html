@@ -28,23 +28,23 @@
                             </thead>
                             <tbody>
                             <th:block th:each="post : ${articles.list}">
-                                <tr th:cid="${post.cid}">
+                                <tr th:cid="${post.id}">
                                     <td th:text="${post.title}"></td>
-                                    <td th:text="${post.slug}"></td>
-                                    <td th:text="${commons.fmtdate(post.created, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                                    <td th:text="${post.path}"></td>
+                                    <td th:text="${commons.fmtdate(post.gmtCreate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                                     <td>
                                         <th:block th:if="${post.status == 'publish'}" th:text="已发布"/>
                                         <th:block th:if="${post.status == 'draft'}" th:text="草稿"/>
                                     </td>
                                     <td>
-                                        <a th:href="@{'/admin/page/'+${post.cid}}"
+                                        <a th:href="@{'/admin/page/'+${post.id}}"
                                            class="btn btn-primary btn-sm waves-effect waves-light m-b-5"><i
                                                 class="fa fa-edit"></i> <span>编辑</span></a>
-                                        <a href="javascript:void(0)" th:onclick="'delPost('+${post.cid}+');'"
+                                        <a href="javascript:void(0)" th:onclick="'delPost('+${post.id}+');'"
                                            class="btn btn-danger btn-sm waves-effect waves-light m-b-5"><i
                                                 class="fa fa-trash-o"></i> <span>删除</span></a>
                                         <a class="btn btn-warning btn-sm waves-effect waves-light m-b-5"
-                                           th:href="@{'/'+${post.slug}}"
+                                           th:href="@{'/'+${post.path}}"
                                            target="_blank"><i
                                                 class="fa fa-rocket"></i> <span>预览</span></a>
                                     </td>
@@ -64,13 +64,13 @@
     /*<![CDATA[*/
     var tale = new $.tale();
 
-    function delPost(cid) {
+    function delPost(id) {
         tale.alertConfirm({
             title: '确定删除这个页面吗?',
             then: function () {
                 tale.post({
                     url: '/admin/page/delete',
-                    data: {cid: cid},
+                    data: {id: id},
                     success: function (result) {
                         if (result && result.success) {
                             tale.alertOkAndReload('页面删除成功');

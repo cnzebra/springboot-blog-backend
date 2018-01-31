@@ -61,7 +61,7 @@
                                         <li class="list-group-item" th:each="article : ${articles}">
                             <span class="badge badge-primary"
                                   th:title="${article.commentsNum}+'条评论'" th:text="${article.commentsNum}"></span>
-                                            <a target="_blank" th:href="${commons.siteUrl('/article/')}+${article.cid}"
+                                            <a target="_blank" th:href="${commons.siteUrl('/article/')}+${article.id}"
                                                th:text="${article.title}"></a>
                                         </li>
                                     </ul>
@@ -82,16 +82,16 @@
                                     <ul class="list-group"
                                         th:unless="${comments}==null and ${#lists.size(comments)}==0">
                                         <li class="list-group-item" th:each="comment : ${comments}">
-                                            <div th:if="${comment.url}!=null and ${comment.url}!=''">
-                                                <a th:href="@{${comment.url}}" target="_blank"
+                                            <div th:if="${comment.siteUrl}!=null and ${comment.siteUrl}!=''">
+                                                <a th:href="@{${comment.siteUrl}}" target="_blank"
                                                    th:text="${comment.author}"></a>
                                             </div>
-                                            <th:block th:unless="${comment.url}!=null and ${comment.url}!=''"
+                                            <th:block th:unless="${comment.siteUrl}!=null and ${comment.siteUrl}!=''"
                                                       th:text="${comment.author}"/>
                                             于
-                                            <th:block th:text="${commons.fmtdate(comment.created,'MM月dd日HH:mm')}"/>
+                                            <th:block th:text="${commons.fmtdate(comment.gmtCreate,'MM月dd日HH:mm')}"/>
                                             ：<a
-                                                th:href="${commons.siteUrl('/article/')}+${comment.cid}+'#comments'"
+                                                th:href="${commons.siteUrl('/article/')}+${comment.articleId}+'#comments'"
                                                 target="_blank" th:utext="${commons.article(comment.content)}"></a>
                                         </li>
                                     </ul>
@@ -106,7 +106,7 @@
                                 <div class="panel-body">
                                     <ul class="list-group">
                                         <li class="list-group-item" th:each="log : ${logs}">
-                                            <span th:text="${commons.fmtdate(log.created, 'yyyy-MM-dd HH:mm:ss')} +' => '+ ${log.action}"></span>
+                                            <span th:text="${commons.fmtdate(log.gmtCreate, 'yyyy-MM-dd HH:mm:ss')} +' => '+ ${log.action}"></span>
                                         </li>
                                     </ul>
                                 </div>

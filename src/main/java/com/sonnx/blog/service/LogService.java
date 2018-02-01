@@ -1,5 +1,6 @@
 package com.sonnx.blog.service;
 
+import com.github.pagehelper.PageInfo;
 import com.sonnx.blog.modal.entity.LogDO;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public interface LogService {
      * @param ip
      * @param authorId
      */
-    void insertLog(String action, String data,Integer level, String ip, Long authorId);
+    void insertLog(String action, String data, Integer level, String ip, Long authorId);
 
     /**
      * 获取日志分页
@@ -35,4 +36,12 @@ public interface LogService {
      * @return 日志
      */
     List<LogDO> getLogs(int page, int limit);
+
+
+    /**分页读取日志信息
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    PageInfo<LogDO> getLogsForPage(int page, int pageSize);
 }

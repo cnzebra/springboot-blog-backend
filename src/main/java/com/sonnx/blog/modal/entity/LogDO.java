@@ -28,6 +28,11 @@ public class LogDO extends AbstractEntity {
      * 发生人id
      */
     private Long authorId;
+
+    /**
+     * 发生人名称
+     */
+    private String author;
     /**
      * 日志产生的ip
      */

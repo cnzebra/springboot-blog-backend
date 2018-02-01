@@ -10,7 +10,7 @@
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
     <meta name="keywords" th:content="${keywords ?: commons.siteOption('site_keywords')}"/>
     <meta name="description" th:content="${description ?:commons.siteOption('site_description')}"/>
-    <link rel="shortcut icon" th:href="@{/user/img/favicon.png}"/>
+    <link rel="shortcut icon" th:href="@{/user/img/logo.png}"/>
     <link rel="apple-touch-icon" th:href="@{/user/img/apple-touch-icon.png}"/>
     <title>
         <th:block th:text="${title ?: '首页'}+' - '+${commons.siteOption('site_title','zhuxl的博客')}"></th:block>

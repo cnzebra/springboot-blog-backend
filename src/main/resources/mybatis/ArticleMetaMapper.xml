@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhuxl.blog.dao.ArticleMetaDao">
-    <resultMap id="BaseResultMap" type="com.zhuxl.blog.modal.entity.ArticleMetaDO">
+<mapper namespace="com.sonnx.blog.dao.ArticleMetaDao">
+    <resultMap id="BaseResultMap" type="com.sonnx.blog.modal.entity.ArticleMetaDO">
         <id column="article_id" jdbcType="BIGINT" property="articleId"/>
         <id column="meta_id" jdbcType="BIGINT" property="metaId"/>
     </resultMap>
@@ -68,7 +68,7 @@
     <sql id="Base_Column_List">
         article_id, meta_id
     </sql>
-    <select id="selectByExample" parameterType="com.zhuxl.blog.modal.entity.ArticleMetaDOExample" resultMap="BaseResultMap">
+    <select id="selectByExample" parameterType="com.sonnx.blog.modal.entity.ArticleMetaDOExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
@@ -90,22 +90,22 @@
             </if>
         </if>
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="com.zhuxl.blog.modal.entity.ArticleMetaDO">
+    <delete id="deleteByPrimaryKey" parameterType="com.sonnx.blog.modal.entity.ArticleMetaDO">
         delete from t_b_article_meta
         where article_id = #{articleId,jdbcType=BIGINT}
         and meta_id = #{meta_id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.zhuxl.blog.modal.entity.ArticleMetaDOExample">
+    <delete id="deleteByExample" parameterType="com.sonnx.blog.modal.entity.ArticleMetaDOExample">
         delete from t_b_article_meta
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.zhuxl.blog.modal.entity.ArticleMetaDO">
+    <insert id="insert" parameterType="com.sonnx.blog.modal.entity.ArticleMetaDO">
         insert into t_b_article_meta (article_id, meta_id)
         values (#{articleId,jdbcType=BIGINT}, #{metaId,jdbcType=BIGINT})
     </insert>
-    <insert id="insertSelective" parameterType="com.zhuxl.blog.modal.entity.ArticleMetaDO">
+    <insert id="insertSelective" parameterType="com.sonnx.blog.modal.entity.ArticleMetaDO">
         insert into t_b_article_meta
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="articleId != null">
@@ -124,7 +124,7 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.zhuxl.blog.modal.entity.ArticleMetaDOExample"
+    <select id="countByExample" parameterType="com.sonnx.blog.modal.entity.ArticleMetaDOExample"
             resultType="java.lang.Integer">
         select count(*) from t_b_article_meta
         <if test="_parameter != null">

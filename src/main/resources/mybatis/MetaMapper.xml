@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhuxl.blog.dao.MetaDao">
-    <resultMap id="BaseResultMap" type="com.zhuxl.blog.modal.entity.MetaDO">
+<mapper namespace="com.sonnx.blog.dao.MetaDao">
+    <resultMap id="BaseResultMap" type="com.sonnx.blog.modal.entity.MetaDO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="value" jdbcType="VARCHAR" property="value"/>
@@ -13,7 +13,7 @@
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
     </resultMap>
 
-    <resultMap id="MetaDto" type="com.zhuxl.blog.dto.MetaDto" extends="BaseResultMap">
+    <resultMap id="MetaDto" type="com.sonnx.blog.dto.MetaDto" extends="BaseResultMap">
         <result column="count" property="count" jdbcType="INTEGER"/>
     </resultMap>
 
@@ -80,7 +80,7 @@
     <sql id="Base_Column_List">
         id, name, value, type, description, sort, parent,gmt_create,gmt_modified
     </sql>
-    <select id="selectByExample" parameterType="com.zhuxl.blog.modal.entity.MetaDOExample" resultMap="BaseResultMap">
+    <select id="selectByExample" parameterType="com.sonnx.blog.modal.entity.MetaDOExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
@@ -112,13 +112,13 @@
         delete from t_b_meta
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.zhuxl.blog.modal.entity.MetaDOExample">
+    <delete id="deleteByExample" parameterType="com.sonnx.blog.modal.entity.MetaDOExample">
         delete from t_b_meta
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.zhuxl.blog.modal.entity.MetaDO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.sonnx.blog.modal.entity.MetaDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_b_meta (id, name, value,
         type, description, sort,
         parent,gmt_create,gmt_modified)
@@ -126,7 +126,7 @@
         #{type,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER},
         #{parent,jdbcType=BIGINT},#{gmtCreate,jdbcType=TIMESTAMP},#{gmtModified,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.zhuxl.blog.modal.entity.MetaDO" useGeneratedKeys="true"
+    <insert id="insertSelective" parameterType="com.sonnx.blog.modal.entity.MetaDO" useGeneratedKeys="true"
             keyProperty="id">
         insert into t_b_meta
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -188,7 +188,7 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.zhuxl.blog.modal.entity.MetaDOExample"
+    <select id="countByExample" parameterType="com.sonnx.blog.modal.entity.MetaDOExample"
             resultType="java.lang.Integer">
         select count(*) from t_b_meta
         <if test="_parameter != null">
@@ -241,7 +241,7 @@
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zhuxl.blog.modal.entity.MetaDO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.sonnx.blog.modal.entity.MetaDO">
         update t_b_meta
         <set>
             <if test="name != null">
@@ -268,7 +268,7 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.zhuxl.blog.modal.entity.MetaDO">
+    <update id="updateByPrimaryKey" parameterType="com.sonnx.blog.modal.entity.MetaDO">
         update t_b_meta
         set
         name = #{name,jdbcType=VARCHAR},

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhuxl.blog.dao.ArticleDao">
-    <resultMap id="BaseResultMap" type="com.zhuxl.blog.modal.entity.ArticleDO">
+<mapper namespace="com.sonnx.blog.dao.ArticleDao">
+    <resultMap id="BaseResultMap" type="com.sonnx.blog.modal.entity.ArticleDO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="title" jdbcType="VARCHAR" property="title"/>
         <result column="cover" jdbcType="VARCHAR" property="cover"/>
@@ -19,7 +19,7 @@
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
     </resultMap>
-    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.zhuxl.blog.modal.entity.ArticleDO">
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sonnx.blog.modal.entity.ArticleDO">
         <result column="content" jdbcType="LONGVARCHAR" property="content"/>
     </resultMap>
     <sql id="Example_Where_Clause">
@@ -89,7 +89,7 @@
     <sql id="Blob_Column_List">
         content
     </sql>
-    <select id="selectByExampleWithBLOBs" parameterType="com.zhuxl.blog.modal.entity.ArticleDOExample"
+    <select id="selectByExampleWithBLOBs" parameterType="com.sonnx.blog.modal.entity.ArticleDOExample"
             resultMap="ResultMapWithBLOBs">
         select
         <if test="distinct">
@@ -106,7 +106,7 @@
             order by ${orderByClause}
         </if>
     </select>
-    <select id="selectByExample" parameterType="com.zhuxl.blog.modal.entity.ArticleDOExample" resultMap="BaseResultMap">
+    <select id="selectByExample" parameterType="com.sonnx.blog.modal.entity.ArticleDOExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
@@ -140,13 +140,13 @@
         delete from t_b_article
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.zhuxl.blog.modal.entity.ArticleDOExample">
+    <delete id="deleteByExample" parameterType="com.sonnx.blog.modal.entity.ArticleDOExample">
         delete from t_b_article
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.zhuxl.blog.modal.entity.ArticleDO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.sonnx.blog.modal.entity.ArticleDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_b_article (id, title,cover, path,author_id,
         type, status, tags,
         categories, hits, comments_num,
@@ -158,7 +158,7 @@
         #{allowComment,jdbcType=BIT}, #{allowPing,jdbcType=BIT}, #{allowFeed,jdbcType=BIT},
         #{content,jdbcType=LONGVARCHAR},#{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.zhuxl.blog.modal.entity.ArticleDO" useGeneratedKeys="true"
+    <insert id="insertSelective" parameterType="com.sonnx.blog.modal.entity.ArticleDO" useGeneratedKeys="true"
             keyProperty="id">
         insert into t_b_article
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -262,7 +262,7 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.zhuxl.blog.modal.entity.ArticleDOExample"
+    <select id="countByExample" parameterType="com.sonnx.blog.modal.entity.ArticleDOExample"
             resultType="java.lang.Integer">
         select count(*) from t_b_article
         <if test="_parameter != null">
@@ -360,7 +360,7 @@
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zhuxl.blog.modal.entity.ArticleDO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.sonnx.blog.modal.entity.ArticleDO">
         update t_b_article
         <set>
             <if test="title != null">
@@ -411,7 +411,7 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zhuxl.blog.modal.entity.ArticleDO">
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sonnx.blog.modal.entity.ArticleDO">
         update t_b_article
         set title = #{title,jdbcType=VARCHAR},
         path = #{path,jdbcType=VARCHAR},
@@ -429,7 +429,7 @@
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.zhuxl.blog.modal.entity.ArticleDO">
+    <update id="updateByPrimaryKey" parameterType="com.sonnx.blog.modal.entity.ArticleDO">
         update t_b_article
         set title = #{title,jdbcType=VARCHAR},
         path = #{path,jdbcType=VARCHAR},
@@ -448,7 +448,7 @@
     </update>
 
 
-    <resultMap id="archiveBoMap" type="com.zhuxl.blog.modal.bo.ArchiveBo">
+    <resultMap id="archiveBoMap" type="com.sonnx.blog.modal.bo.ArchiveBo">
         <id column="date" property="date"/>
         <result column="year" property="year"/>
         <result column="month" property="month"/>

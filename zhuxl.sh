@@ -50,7 +50,7 @@ show_log(){
 
 show_help(){
     echo -e "\r\n\t欢迎使用Blog"
-    echo -e "\r\nUsage: sh zhuxl.sh start|stop|reload|status|log"
+    echo -e "\r\nUsage: sh sonnx.sh start|stop|reload|status|log"
     exit
 }
 

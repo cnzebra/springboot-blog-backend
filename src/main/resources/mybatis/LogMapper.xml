@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhuxl.blog.dao.LogDao">
-    <resultMap id="BaseResultMap" type="com.zhuxl.blog.modal.entity.LogDO">
+<mapper namespace="com.sonnx.blog.dao.LogDao">
+    <resultMap id="BaseResultMap" type="com.sonnx.blog.modal.entity.LogDO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="action" jdbcType="VARCHAR" property="action"/>
         <result column="data" jdbcType="VARCHAR" property="data"/>
@@ -73,7 +73,7 @@
     <sql id="Base_Column_List">
         id, action, data, author_id, ip, gmt_create,gmt_modified
     </sql>
-    <select id="selectByExample" parameterType="com.zhuxl.blog.modal.entity.LogDOExample" resultMap="BaseResultMap">
+    <select id="selectByExample" parameterType="com.sonnx.blog.modal.entity.LogDOExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
@@ -105,13 +105,13 @@
         delete from t_b_log
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.zhuxl.blog.modal.entity.LogDOExample">
+    <delete id="deleteByExample" parameterType="com.sonnx.blog.modal.entity.LogDOExample">
         delete from t_b_log
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.zhuxl.blog.modal.entity.LogDO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.sonnx.blog.modal.entity.LogDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_b_log (id, action, data,
         author_id, ip, gmt_create,gmt_modified
         )
@@ -119,7 +119,7 @@
         #{authorId,jdbcType=BIGINT}, #{ip,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
         )
     </insert>
-    <insert id="insertSelective" parameterType="com.zhuxl.blog.modal.entity.LogDO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSelective" parameterType="com.sonnx.blog.modal.entity.LogDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_b_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -168,7 +168,7 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.zhuxl.blog.modal.entity.LogDOExample" resultType="java.lang.Integer">
+    <select id="countByExample" parameterType="com.sonnx.blog.modal.entity.LogDOExample" resultType="java.lang.Integer">
         select count(*) from t_b_log
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
@@ -216,7 +216,7 @@
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zhuxl.blog.modal.entity.LogDO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.sonnx.blog.modal.entity.LogDO">
         update t_b_log
         <set>
             <if test="action != null">
@@ -240,7 +240,7 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.zhuxl.blog.modal.entity.LogDO">
+    <update id="updateByPrimaryKey" parameterType="com.sonnx.blog.modal.entity.LogDO">
         update t_b_log
         set action = #{action,jdbcType=VARCHAR},
         data = #{data,jdbcType=VARCHAR},

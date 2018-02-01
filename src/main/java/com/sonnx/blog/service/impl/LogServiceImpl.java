@@ -34,13 +34,16 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public void insertLog(String action, String data, String ip, Long authorId) {
+    public void insertLog(String action, String data, Integer level, String ip, Long authorId) {
         LogDO logs = new LogDO();
         logs.setAction(action);
         logs.setData(data);
+        level = level == null ? 0 : level;
+        logs.setLevel(level);
         logs.setIp(ip);
         logs.setAuthorId(authorId);
         logs.setGmtCreate(new Date());
+        logs.setGmtModified(new Date());
         logDao.insert(logs);
     }
 

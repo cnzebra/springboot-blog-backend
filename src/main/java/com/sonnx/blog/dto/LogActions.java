@@ -39,7 +39,11 @@ public enum LogActions {
     /**
      * 初始化站点
      */
-    INIT_SITE("初始化站点");
+    INIT_SITE("初始化站点"),
+    /**
+     * 访问站点
+     */
+    VISIT_SITE("访问站点");
 
     /**
      * action

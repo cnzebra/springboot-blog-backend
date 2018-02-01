@@ -544,6 +544,10 @@ public class DateKit {
         return dateFormat(new Date(unixTime * 1000L), dateFormat);
     }
 
+    public static String formatDate(Date date, String dateFormat) {
+        return dateFormat(date,dateFormat);
+    }
+
     public static Date convertToDate(String input) {
         Date date = null;
         if (null == input) {

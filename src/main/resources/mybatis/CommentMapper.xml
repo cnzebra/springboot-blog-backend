@@ -226,7 +226,7 @@
                 #{email,jdbcType=VARCHAR},
             </if>
             <if test="siteUrl != null">
-                #{site_url,jdbcType=VARCHAR},
+                #{siteUrl,jdbcType=VARCHAR},
             </if>
             <if test="ip != null">
                 #{ip,jdbcType=VARCHAR},

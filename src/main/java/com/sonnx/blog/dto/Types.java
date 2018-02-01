@@ -44,7 +44,7 @@ public enum Types {
     /**
      * csrf_token
      */
-    CSRF_TOKEN("csrf_token"),
+    CSRF_TOKEN("csrfToken"),
     /**
      * comments:frequency
      */

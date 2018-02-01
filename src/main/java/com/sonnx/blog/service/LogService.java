@@ -25,7 +25,7 @@ public interface LogService {
      * @param ip
      * @param authorId
      */
-    void insertLog(String action, String data, String ip, Long authorId);
+    void insertLog(String action, String data,Integer level, String ip, Long authorId);
 
     /**
      * 获取日志分页

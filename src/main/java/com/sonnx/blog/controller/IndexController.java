@@ -180,8 +180,8 @@ public class IndexController extends BaseController {
     @ResponseBody
     public RestResponseBo comment(HttpServletRequest request, HttpServletResponse response,
                                   @RequestParam Long articleId, @RequestParam Long commentId,
-                                  @RequestParam String author, @RequestParam String mail,
-                                  @RequestParam String url, @RequestParam String text, @RequestParam String csrfToken) {
+                                  @RequestParam String author, @RequestParam String email,
+                                  @RequestParam String siteUrl, @RequestParam String text, @RequestParam String csrfToken) {
 
         String ref = request.getHeader("Referer");
         if (StringUtils.isBlank(ref) || StringUtils.isBlank(csrfToken)) {
@@ -201,11 +201,11 @@ public class IndexController extends BaseController {
             return RestResponseBo.fail("姓名过长");
         }
 
-        if (StringUtils.isNotBlank(mail) && !TaleUtils.isEmail(mail)) {
+        if (StringUtils.isNotBlank(email) && !TaleUtils.isEmail(email)) {
             return RestResponseBo.fail("请输入正确的邮箱格式");
         }
 
-        if (StringUtils.isNotBlank(url) && !PatternKit.isURL(url)) {
+        if (StringUtils.isNotBlank(siteUrl) && !PatternKit.isURL(siteUrl)) {
             return RestResponseBo.fail("请输入正确的URL格式");
         }
 
@@ -229,16 +229,16 @@ public class IndexController extends BaseController {
         comments.setAuthor(author);
         comments.setArticleId(articleId);
         comments.setIp(request.getRemoteAddr());
-        comments.setSiteUrl(url);
+        comments.setSiteUrl(siteUrl);
         comments.setContent(text);
-        comments.setEmail(mail);
+        comments.setEmail(email);
         comments.setParent(commentId);
         try {
             String result = commentService.insertComment(comments);
             cookie("tale_remember_author", URLEncoder.encode(author, "UTF-8"), 7 * 24 * 60 * 60, response);
-            cookie("tale_remember_mail", URLEncoder.encode(mail, "UTF-8"), 7 * 24 * 60 * 60, response);
-            if (StringUtils.isNotBlank(url)) {
-                cookie("tale_remember_url", URLEncoder.encode(url, "UTF-8"), 7 * 24 * 60 * 60, response);
+            cookie("tale_remember_mail", URLEncoder.encode(email, "UTF-8"), 7 * 24 * 60 * 60, response);
+            if (StringUtils.isNotBlank(siteUrl)) {
+                cookie("tale_remember_url", URLEncoder.encode(siteUrl, "UTF-8"), 7 * 24 * 60 * 60, response);
             }
             // 设置对每个文章1分钟可以评论一次
             cache.hset(Types.COMMENTS_FREQUENCY.getType(), val, 1, 60);

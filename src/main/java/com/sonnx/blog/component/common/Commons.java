@@ -2,9 +2,6 @@ package com.sonnx.blog.component.common;
 
 
 import com.github.pagehelper.PageInfo;
-import com.sonnx.blog.dto.MetaDto;
-import com.sonnx.blog.dto.Types;
-import com.vdurmont.emoji.EmojiParser;
 import com.sonnx.blog.component.constant.WebConst;
 import com.sonnx.blog.dto.MetaDto;
 import com.sonnx.blog.dto.Types;
@@ -15,6 +12,7 @@ import com.sonnx.blog.service.SiteService;
 import com.sonnx.blog.utils.AbstractUUID;
 import com.sonnx.blog.utils.DateKit;
 import com.sonnx.blog.utils.TaleUtils;
+import com.vdurmont.emoji.EmojiParser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -213,7 +211,7 @@ public final class Commons {
      * @return
      */
     public static String fmtdate(Date date) {
-        return fmtdate(date.getTime(), "yyyy-MM-dd");
+        return fmtdate(date, "yyyy-MM-dd");
     }
 
     /**
@@ -253,7 +251,7 @@ public final class Commons {
      */
     public static String fmtdate(Date date, String patten) {
         if (null != date && StringUtils.isNotBlank(patten)) {
-            return DateKit.formatDateByUnixTime(date.getTime(), patten);
+            return DateKit.formatDate(date, patten);
         }
         return "";
     }

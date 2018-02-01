@@ -123,7 +123,7 @@ public class PageController extends BaseController {
     @ResponseBody
     public RestResponseBo delete(@RequestParam Long articleId, HttpServletRequest request) {
         String result = contentsService.deleteByCid(articleId);
-        logService.insertLog(LogActions.DEL_ARTICLE.getAction(), articleId + "", request.getRemoteAddr(), this.getUid
+        logService.insertLog(LogActions.DEL_ARTICLE.getAction(), articleId + "", null,request.getRemoteAddr(), this.getUid
                 (request));
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
             return RestResponseBo.fail(result);

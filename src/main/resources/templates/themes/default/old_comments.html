@@ -6,9 +6,9 @@
             如果你想 <a href="/logout" title="注销" data-no-instant>注销</a> ? #end</span>
 
         <form method="post" id="comment-form" class="comment-form" role="form" onsubmit="return comment_reply();">
-            <input type="hidden" name="id"/>
+            <input type="hidden" name="commentId"/>
             <input type="hidden" name="articleId" value="${article.id}"/>
-            <input type="hidden" name="_csrf_token" value="">
+            <input type="hidden" name="csrfToken" value="">
             <input type="text" name="author" maxlength="12" id="author" class="form-control input-control clearfix"
                    placeholder="姓名 (*)" value="${login_user.loginName ?! ''}" required/>
             <input type="email" name="email" id="mail" class="form-control input-control clearfix" placeholder="邮箱 (*)"
@@ -30,7 +30,7 @@
                 <div id="comment-${comment.id}">
                     <div class="comment-view" onclick="">
                         <div class="comment-header">
-                            <img class="avatar" src="${gravatar(comment.mail)}?s=80&r=G&d=" title="${comment.author}"
+                            <img class="avatar" src="${gravatar(comment.email)}?s=80&r=G&d=" title="${comment.author}"
                                  width="80" height="80">
                             <span class="comment-author">
                                 <a href="${comment.siteUrl}" target="_blank" rel="external nofollow">${comment.author}</a>
@@ -57,7 +57,7 @@
                             <div id="comment-${child.id}">
                                 <div class="comment-view">
                                     <div class="comment-header">
-                                        <img class="avatar" src="${gravatar(child.mail)}?s=80&r=G&d="
+                                        <img class="avatar" src="${gravatar(child.email)}?s=80&r=G&d="
                                              title="${child.author}" width="80" height="80">
                                         <span class="comment-author comment-by-author">
                                             <a href="${child.siteUrl}" target="_blank" rel="external nofollow">${child.author}</a>
@@ -107,7 +107,7 @@
 #include('/comm/tale_comment.html')
 <script type="text/javascript">
     function reply_user(commentId) {
-        $('#comment-form input[name=id]').val(commentId);
+        $('#comment-form input[name=commentId]').val(commentId);
         $("html,body").animate({scrollTop: $('div.comment-container').offset().top}, 500);
         $('#comment-form #textarea').focus();
     }
@@ -120,7 +120,7 @@
             async: false,
             dataType: 'json',
             success: function (result) {
-                $('#comment-form input[name=id]').val('');
+                $('#comment-form input[name=commentId]').val('');
                 if (result && result.success) {
                     window.location.reload();
                 } else {

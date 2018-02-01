@@ -63,7 +63,7 @@ public class AuthController extends BaseController {
             if (StringUtils.isNotBlank(remeberMe)) {
                 TaleUtils.setCookie(response, user.getId());
             }
-            logService.insertLog(LogActions.LOGIN.getAction(), null, request.getRemoteAddr(), user.getId());
+            logService.insertLog(LogActions.LOGIN.getAction(), null,null, request.getRemoteAddr(), user.getId());
         } catch (Exception e) {
             errorCount = null == errorCount ? 1 : errorCount + 1;
             if (errorCount > 3) {

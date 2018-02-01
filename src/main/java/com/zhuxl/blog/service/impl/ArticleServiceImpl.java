@@ -106,7 +106,7 @@ public class ArticleServiceImpl implements ArticleService {
     public PageInfo<ArticleDO> getContents(Integer p, Integer limit) {
         LOGGER.debug("Enter getContents method");
         ArticleDOExample example = new ArticleDOExample();
-        example.setOrderByClause("created desc");
+        example.setOrderByClause("gmt_create desc");
         example.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
         PageHelper.startPage(p, limit);
         List<ArticleDO> data = articleDao.selectByExampleWithBLOBs(example);
@@ -163,7 +163,7 @@ public class ArticleServiceImpl implements ArticleService {
         criteria.andTypeEqualTo(Types.ARTICLE.getType());
         criteria.andStatusEqualTo(Types.PUBLISH.getType());
         criteria.andTitleLike("%" + keyword + "%");
-        articleDOExample.setOrderByClause("created desc");
+        articleDOExample.setOrderByClause("gmt_create desc");
         List<ArticleDO> articleDOS = articleDao.selectByExampleWithBLOBs(articleDOExample);
         return new PageInfo<>(articleDOS);
     }
@@ -177,11 +177,11 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public String deleteByCid(Long cid) {
-        ArticleDO contents = this.getContents(cid + "");
+    public String deleteByCid(Long articleId) {
+        ArticleDO contents = this.getContents(articleId + "");
         if (null != contents) {
-            articleDao.deleteByPrimaryKey(cid);
-            articleMetaService.deleteById(cid, null);
+            articleDao.deleteByPrimaryKey(articleId);
+            articleMetaService.deleteById(articleId, null);
             return WebConst.SUCCESS_RESULT;
         }
         return "数据为空";

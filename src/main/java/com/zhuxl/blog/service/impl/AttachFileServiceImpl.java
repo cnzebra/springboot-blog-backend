@@ -52,6 +52,7 @@ public class AttachFileServiceImpl implements AttachFileService {
         attach.setFileKey(fkey);
         attach.setFileType(ftype);
         attach.setGmtCreate(new Date());
+        attach.setGmtModified(new Date());
         attachFileDao.insertSelective(attach);
     }
 

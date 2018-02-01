@@ -16,31 +16,31 @@ public interface AttachFileDao {
      * @param example
      * @return
      */
-    long countByExample(AttachFileDOExample example);
+    Integer countByExample(AttachFileDOExample example);
 
     /**
      * @param example
      * @return
      */
-    int deleteByExample(AttachFileDOExample example);
+    Integer deleteByExample(AttachFileDOExample example);
 
     /**
      * @param id
      * @return
      */
-    int deleteByPrimaryKey(Long id);
+    Integer deleteByPrimaryKey(Long id);
 
     /**
      * @param record
      * @return
      */
-    int insert(AttachFileDO record);
+    Integer insert(AttachFileDO record);
 
     /**
      * @param record
      * @return
      */
-    int insertSelective(AttachFileDO record);
+    Integer insertSelective(AttachFileDO record);
 
     /**
      * @param example
@@ -59,24 +59,24 @@ public interface AttachFileDao {
      * @param example
      * @return
      */
-    int updateByExampleSelective(@Param("record") AttachFileDO record, @Param("example") AttachFileDOExample example);
+    Integer updateByExampleSelective(@Param("record") AttachFileDO record, @Param("example") AttachFileDOExample example);
 
     /**
      * @param record
      * @param example
      * @return
      */
-    int updateByExample(@Param("record") AttachFileDO record, @Param("example") AttachFileDOExample example);
+    Integer updateByExample(@Param("record") AttachFileDO record, @Param("example") AttachFileDOExample example);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKeySelective(AttachFileDO record);
+    Integer updateByPrimaryKeySelective(AttachFileDO record);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKey(AttachFileDO record);
+    Integer updateByPrimaryKey(AttachFileDO record);
 }

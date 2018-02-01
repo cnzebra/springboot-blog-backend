@@ -24,7 +24,7 @@
                             </thead>
                             <tbody>
                             <th:block th:each="link : ${links}">
-                                <tr th:attr="mid=${link.id}">
+                                <tr th:attr="id=${link.id}">
                                     <td th:text="${link.name}"></td>
                                     <td><a th:href="@{${link.value}}" target="_blank" th:text="${link.value}"></a></td>
                                     <td th:text="${link.description}"></td>

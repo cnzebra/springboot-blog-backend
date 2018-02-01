@@ -16,7 +16,7 @@ public interface UserDao {
      * @param example
      * @return
      */
-    long countByExample(UserDOExample example);
+    Integer countByExample(UserDOExample example);
 
     /**
      * @param example

@@ -43,7 +43,7 @@ public interface CommentService {
     /**
      * 根据主键查询评论
      *
-     * @param coid
+     * @param commentId
      * @return
      */
     CommentDO getCommentById(Long commentId);
@@ -52,8 +52,8 @@ public interface CommentService {
     /**
      * 删除评论，暂时没用
      *
-     * @param coid
-     * @param cid
+     * @param commentId
+     * @param articleId
      * @throws Exception
      */
     void delete(Long commentId, Long articleId);

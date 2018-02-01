@@ -425,6 +425,6 @@
         status = #{status,jdbcType=VARCHAR},
         parent = #{parent,jdbcType=BIGINT},
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
-        where coid = #{coid,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
     </update>
 </mapper>

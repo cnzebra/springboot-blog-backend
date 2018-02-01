@@ -49,7 +49,7 @@ public class AuthController extends BaseController {
 
     @PostMapping(value = "login")
     @ResponseBody
-    public RestResponseBo doLogin(@RequestParam String username,
+    public RestResponseBo doLogin(@RequestParam String loginName,
                                   @RequestParam String password,
                                   @RequestParam(required = false) String remeberMe,
                                   HttpServletRequest request,
@@ -57,7 +57,7 @@ public class AuthController extends BaseController {
 
         Integer errorCount = cache.get("login_error_count");
         try {
-            UserDO user = usersService.login(username, password);
+            UserDO user = usersService.login(loginName, password);
             request.getSession().setAttribute(WebConst.LOGIN_SESSION_KEY, user);
             if (StringUtils.isNotBlank(remeberMe)) {
                 TaleUtils.setCookie(response, user.getId());

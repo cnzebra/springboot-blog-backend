@@ -31,8 +31,8 @@ CREATE TABLE `t_attach` (
 DROP TABLE IF EXISTS `t_comments`;
 
 CREATE TABLE `t_comments` (
-  `coid` int(10) unsigned NOT NULL AUTO_INCREMENT ,
-  `cid` int(10) unsigned DEFAULT '0' ,
+  `commentId` int(10) unsigned NOT NULL AUTO_INCREMENT ,
+  `articleId` int(10) unsigned DEFAULT '0' ,
   `gmtCreate` int(10) unsigned DEFAULT '0' ,
   `author` varchar(200) DEFAULT NULL ,
   `author_id` int(10) unsigned DEFAULT '0' ,
@@ -45,15 +45,15 @@ CREATE TABLE `t_comments` (
   `type` varchar(16) DEFAULT 'comment' ,
   `status` varchar(16) DEFAULT 'approved' ,
   `parent` int(10) unsigned DEFAULT '0',
-  PRIMARY KEY (`coid`),
-  KEY `cid` (`cid`),
+  PRIMARY KEY (`commentId`),
+  KEY `articleId` (`articleId`),
   KEY `gmtCreate` (`gmtCreate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `t_contents`;
 
 CREATE TABLE `t_contents` (
-  `cid` int(10) unsigned NOT NULL AUTO_INCREMENT ,
+  `articleId` int(10) unsigned NOT NULL AUTO_INCREMENT ,
   `title` varchar(200) DEFAULT NULL ,
   `slug` varchar(200) DEFAULT NULL ,
   `gmtCreate` int(10) unsigned DEFAULT '0' ,
@@ -69,14 +69,14 @@ CREATE TABLE `t_contents` (
   `allow_comment` tinyint(1) DEFAULT '1' ,
   `allow_ping` tinyint(1) DEFAULT '1' ,
   `allow_feed` tinyint(1) DEFAULT '1' ,
-  PRIMARY KEY (`cid`),
+  PRIMARY KEY (`articleId`),
   UNIQUE KEY `slug` (`slug`),
   KEY `gmtCreate` (`gmtCreate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 LOCK TABLES `t_contents` WRITE;
 
-INSERT INTO `t_contents` (`cid`, `title`, `slug`, `gmtCreate`, `modified`, `content`, `author_id`, `type`, `status`, `tags`, `categories`, `hits`, `comments_num`, `allow_comment`, `allow_ping`, `allow_feed`)
+INSERT INTO `t_contents` (`articleId`, `title`, `slug`, `gmtCreate`, `modified`, `content`, `author_id`, `type`, `status`, `tags`, `categories`, `hits`, `comments_num`, `allow_comment`, `allow_ping`, `allow_feed`)
 VALUES
 	(1,'about my blog','about',1487853610,1487872488,'### Hello World\r\n\r\nabout me\r\n\r\n### ...\r\n\r\n...',1,'page','publish',NULL,NULL,0,0,1,1,1),
 	(2,'Hello My Blog',NULL,1487861184,1487872798,'## Hello  World.\r\n\r\n> ...\r\n\r\n----------\r\n\r\n\r\n<!--more-->\r\n\r\n```java\r\npublic static void main(String[] args){\r\n    System.out.println(\"Hello 13 Blog.\");\r\n}\r\n```',1,'post','publish','','default',10,0,1,1,1);
@@ -134,14 +134,14 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `t_relationships`;
 
 CREATE TABLE `t_relationships` (
-  `cid` int(10) unsigned NOT NULL,
+  `articleId` int(10) unsigned NOT NULL,
   `mid` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`cid`,`mid`)
+  PRIMARY KEY (`articleId`,`mid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 LOCK TABLES `t_relationships` WRITE;
 
-INSERT INTO `t_relationships` (`cid`, `mid`)
+INSERT INTO `t_relationships` (`articleId`, `mid`)
 VALUES
 	(2,1);
 

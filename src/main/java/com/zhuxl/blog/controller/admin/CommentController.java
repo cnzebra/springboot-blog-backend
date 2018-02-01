@@ -43,7 +43,7 @@ public class CommentController extends BaseController {
     /**
      * 删除一条评论
      *
-     * @param coid
+     * @param commentId
      * @return
      */
     @PostMapping(value = "delete")

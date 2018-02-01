@@ -18,31 +18,31 @@ public interface MetaDao {
      * @param example
      * @return
      */
-    long countByExample(MetaDOExample example);
+    Integer countByExample(MetaDOExample example);
 
     /**
      * @param example
      * @return
      */
-    int deleteByExample(MetaDOExample example);
+    Integer deleteByExample(MetaDOExample example);
 
     /**
      * @param mid
      * @return
      */
-    int deleteByPrimaryKey(Long mid);
+    Integer deleteByPrimaryKey(Long mid);
 
     /**
      * @param record
      * @return
      */
-    int insert(MetaDO record);
+    Integer insert(MetaDO record);
 
     /**
      * @param record
      * @return
      */
-    int insertSelective(MetaDO record);
+    Integer insertSelective(MetaDO record);
 
     /**
      * @param example
@@ -61,26 +61,26 @@ public interface MetaDao {
      * @param example
      * @return
      */
-    int updateByExampleSelective(@Param("record") MetaDO record, @Param("example") MetaDOExample example);
+    Integer updateByExampleSelective(@Param("record") MetaDO record, @Param("example") MetaDOExample example);
 
     /**
      * @param record
      * @param example
      * @return
      */
-    int updateByExample(@Param("record") MetaDO record, @Param("example") MetaDOExample example);
+    Integer updateByExample(@Param("record") MetaDO record, @Param("example") MetaDOExample example);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKeySelective(MetaDO record);
+    Integer updateByPrimaryKeySelective(MetaDO record);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKey(MetaDO record);
+    Integer updateByPrimaryKey(MetaDO record);
 
     /**
      * @param paraMap

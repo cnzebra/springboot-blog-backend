@@ -35,10 +35,10 @@
                                                 <span
                                                         class="caret"></span></button>
                                             <ul class="dropdown-menu" role="menu">
-                                                <li><a href="javascript:void(0)" th:attr="mid=${c.mid},cname=${c.name}"
+                                                <li><a href="javascript:void(0)" th:attr="id=${c.id},cname=${c.name}"
                                                        class="edit-category">修改</a>
                                                 </li>
-                                                <li><a href="javascript:void(0)" th:attr="mid=${c.mid}"
+                                                <li><a href="javascript:void(0)" th:attr="id=${c.id}"
                                                        class="del-category">删除</a></li>
                                             </ul>
                                         </th:block>
@@ -105,7 +105,7 @@
         if (name && name != '') {
             tale.post({
                 url: '/admin/category/save',
-                data: {id: id, cname: name},
+                data: {metaId: id, cname: name},
                 success: function (result) {
                     $('#cform #id').val('');
                     $('#cform #name').val('');
@@ -133,7 +133,7 @@
             then: function () {
                 tale.post({
                     url: '/admin/category/delete',
-                    data: {id: id},
+                    data: {metaId: id},
                     success: function (result) {
                         if (result && result.success) {
                             tale.alertOkAndReload('删除成功');

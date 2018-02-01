@@ -139,10 +139,10 @@
             <if test="authorId != null">
                 author_id,
             </if>
-            <if test="gmt_create != null">
+            <if test="gmtCreate != null">
                 gmt_create,
             </if>
-            <if test="gmt_modified != null">
+            <if test="gmtModified != null">
                 gmt_modified,
             </if>
         </trim>

@@ -76,10 +76,10 @@ public interface ArticleService {
     /**
      * 根据文章id删除
      *
-     * @param cid
+     * @param articleId
      * @return
      */
-    String deleteByCid(Long cid);
+    String deleteByCid(Long articleId);
 
     /**
      * 编辑文章

@@ -112,11 +112,11 @@
         </if>
     </delete>
     <insert id="insert" parameterType="com.zhuxl.blog.modal.entity.LogDO" useGeneratedKeys="true" keyProperty="id">
-        insert into t_logs (id, action, data,
+        insert into t_b_log (id, action, data,
         author_id, ip, gmt_create,gmt_modified
         )
         values (#{id,jdbcType=BIGINT}, #{action,jdbcType=VARCHAR}, #{data,jdbcType=VARCHAR},
-        #{authorId,jdbcType=BIGINT}, #{ip,jdbcType=VARCHAR}, #{gmt_create,jdbcType=TIMESTAMP}, #{gmt_modified,jdbcType=TIMESTAMP}
+        #{authorId,jdbcType=BIGINT}, #{ip,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
         )
     </insert>
     <insert id="insertSelective" parameterType="com.zhuxl.blog.modal.entity.LogDO" useGeneratedKeys="true" keyProperty="id">
@@ -161,10 +161,10 @@
                 #{ip,jdbcType=VARCHAR},
             </if>
             <if test="gmtCreate != null">
-                #{gmt_create,jdbcType=TIMESTAMP},
+                #{gmtCreate,jdbcType=TIMESTAMP},
             </if>
             <if test="gmtModified != null">
-                #{gmt_modified,jdbcType=TIMESTAMP},
+                #{gmtModified,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
@@ -210,7 +210,7 @@
         data = #{record.data,jdbcType=VARCHAR},
         author_id = #{record.authorId,jdbcType=BIGINT},
         ip = #{record.ip,jdbcType=VARCHAR},
-        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP}
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
         gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause"/>
@@ -232,7 +232,7 @@
                 ip = #{ip,jdbcType=VARCHAR},
             </if>
             <if test="gmtCreate != null">
-                gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+                gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
             </if>
             <if test="gmtModified != null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},

@@ -26,7 +26,7 @@
                             </thead>
                             <tbody>
                             <th:block th:each="comment : ${comments.list}">
-                                <tr th:attr="cid=${comment.id}">
+                                <tr th:attr="id=${comment.id}">
                                     <td>
                                         <a th:href="@{${commons.siteUrl('/article/')}+${comment.articleId}+'#comments'}"
                                            target="_blank" th:utext="${commons.article(comment.content)}"></a>
@@ -78,7 +78,7 @@
             then: function () {
                 tale.post({
                     url: '/admin/comments/delete',
-                    data: {id: id},
+                    data: {commentId: id},
                     success: function (result) {
                         if (result && result.success) {
                             tale.alertOkAndReload('评论删除成功');
@@ -97,7 +97,7 @@
             then: function () {
                 tale.post({
                     url: '/admin/comments/status',
-                    data: {id: id, status: "approved"},
+                    data: {commentId: id, status: "approved"},
                     success: function (result) {
                         if (result && result.success) {
                             tale.alertOkAndReload('评论状态设置成功');

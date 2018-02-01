@@ -14,9 +14,9 @@ import java.io.Serializable;
 @Setter
 public class StatisticsBo implements Serializable {
 
-    private Long articles;
-    private Long comments;
-    private Long links;
-    private Long attachs;
+    private Integer articles;
+    private Integer comments;
+    private Integer links;
+    private Integer attachs;
 
 }

@@ -153,6 +153,7 @@ public class AttachController extends BaseController {
             }
 
         } catch (Exception e) {
+            LOGGER.error("上传附件报错:{}", e.getMessage(), e);
             return RestResponseBo.fail();
         }
         return RestResponseBo.ok(errorFiles);

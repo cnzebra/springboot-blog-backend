@@ -12,19 +12,19 @@ public interface ArticleMetaService {
     /**
      * 按住键删除
      *
-     * @param cid
+     * @param articleId
      * @param mid
      */
-    void deleteById(Long cid, Long mid);
+    void deleteById(Long articleId, Long mid);
 
     /**
      * 按主键统计条数
      *
-     * @param cid
+     * @param articleId
      * @param mid
      * @return 条数
      */
-    Integer countById(Long cid, Long mid);
+    Integer countById(Long articleId, Long mid);
 
 
     /**
@@ -37,9 +37,9 @@ public interface ArticleMetaService {
     /**
      * 根据id搜索
      *
-     * @param cid
+     * @param articleId
      * @param mid
      * @return
      */
-    List<ArticleMetaDO> getRelationshipById(Long cid, Long mid);
+    List<ArticleMetaDO> getRelationshipById(Long articleId, Long mid);
 }

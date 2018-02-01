@@ -16,31 +16,31 @@ public interface CommentDao {
      * @param example
      * @return
      */
-    long countByExample(CommentDOExample example);
+    Integer countByExample(CommentDOExample example);
 
     /**
      * @param example
      * @return
      */
-    int deleteByExample(CommentDOExample example);
+    Integer deleteByExample(CommentDOExample example);
 
     /**
-     * @param coid
+     * @param commentId
      * @return
      */
-    Integer deleteByPrimaryKey(Long coid);
-
-    /**
-     * @param record
-     * @return
-     */
-    int insert(CommentDO record);
+    Integer deleteByPrimaryKey(Long commentId);
 
     /**
      * @param record
      * @return
      */
-    int insertSelective(CommentDO record);
+    Integer insert(CommentDO record);
+
+    /**
+     * @param record
+     * @return
+     */
+    Integer insertSelective(CommentDO record);
 
     /**
      * @param example
@@ -55,7 +55,7 @@ public interface CommentDao {
     List<CommentDO> selectByExample(CommentDOExample example);
 
     /**
-     * @param coid
+     * @param commentId
      * @return
      */
     CommentDO selectByPrimaryKey(Long commentId);
@@ -65,30 +65,30 @@ public interface CommentDao {
      * @param example
      * @return
      */
-    int updateByExampleSelective(@Param("record") CommentDO record, @Param("example") CommentDOExample example);
+    Integer updateByExampleSelective(@Param("record") CommentDO record, @Param("example") CommentDOExample example);
 
     /**
      * @param record
      * @param example
      * @return
      */
-    int updateByExample(@Param("record") CommentDO record, @Param("example") CommentDOExample example);
+    Integer updateByExample(@Param("record") CommentDO record, @Param("example") CommentDOExample example);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKeySelective(CommentDO record);
+    Integer updateByPrimaryKeySelective(CommentDO record);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKeyWithBLOBs(CommentDO record);
+    Integer updateByPrimaryKeyWithBLOBs(CommentDO record);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKey(CommentDO record);
+    Integer updateByPrimaryKey(CommentDO record);
 }

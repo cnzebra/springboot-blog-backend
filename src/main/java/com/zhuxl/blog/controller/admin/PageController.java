@@ -38,7 +38,7 @@ public class PageController extends BaseController {
     @GetMapping(value = "")
     public String index(HttpServletRequest request) {
         ArticleDOExample articleDOExample = new ArticleDOExample();
-        articleDOExample.setOrderByClause("created desc");
+        articleDOExample.setOrderByClause("gmt_create desc");
         articleDOExample.createCriteria().andTypeEqualTo(Types.PAGE.getType());
         PageInfo<ArticleDO> contentsPaginator = contentsService.getArticlesWithpage(articleDOExample, 1, WebConst
                 .MAX_POSTS);
@@ -51,9 +51,9 @@ public class PageController extends BaseController {
         return "admin/page_edit";
     }
 
-    @GetMapping(value = "/{cid}")
-    public String editPage(@PathVariable String cid, HttpServletRequest request) {
-        ArticleDO contents = contentsService.getContents(cid);
+    @GetMapping(value = "/{id}")
+    public String editPage(@PathVariable String id, HttpServletRequest request) {
+        ArticleDO contents = contentsService.getContents(id);
         request.setAttribute("contents", contents);
         return "admin/page_edit";
     }

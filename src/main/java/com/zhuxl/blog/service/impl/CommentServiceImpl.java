@@ -76,12 +76,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public PageInfo<CommentBo> getComments(Long cid, int page, int limit) {
+    public PageInfo<CommentBo> getComments(Long articleId, int page, int limit) {
 
-        if (null != cid) {
+        if (null != articleId) {
             PageHelper.startPage(page, limit);
             CommentDOExample commentDOExample = new CommentDOExample();
-            commentDOExample.createCriteria().andIdEqualTo(cid).andParentEqualTo(0).andStatusIsNotNull()
+            commentDOExample.createCriteria().andIdEqualTo(articleId).andParentEqualTo(0).andStatusIsNotNull()
                     .andStatusEqualTo("approved");
             commentDOExample.setOrderByClause("id desc");
             List<CommentDO> parents = commentDao.selectByExampleWithBLOBs(commentDOExample);

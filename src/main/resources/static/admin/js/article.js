@@ -46,7 +46,7 @@ function subArticle(status) {
     $("#articleForm #status").val(status);
     $("#articleForm #categories").val($('#multiple-sel').val());
     var params = $("#articleForm").serialize();
-    var url = $('#articleForm #cid').val() != '' ? '/admin/article/modify' : '/admin/article/publish';
+    var url = $('#articleForm #id').val() != '' ? '/admin/article/modify' : '/admin/article/publish';
     tale.post({
         url: url,
         data: params,

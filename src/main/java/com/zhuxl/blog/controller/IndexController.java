@@ -89,12 +89,12 @@ public class IndexController extends BaseController {
      * 文章页
      *
      * @param request 请求
-     * @param cid     文章主键
+     * @param articleId     文章主键
      * @return
      */
-    @GetMapping(value = {"article/{cid}", "article/{cid}.html"})
-    public String getArticle(HttpServletRequest request, @PathVariable String cid) {
-        ArticleDO contents = articleService.getContents(cid);
+    @GetMapping(value = {"article/{id}", "article/{id}.html"})
+    public String getArticle(HttpServletRequest request, @PathVariable String id) {
+        ArticleDO contents = articleService.getContents(id);
         if (null == contents || "draft".equals(contents.getStatus())) {
             return this.render404();
         }
@@ -111,12 +111,12 @@ public class IndexController extends BaseController {
      * 文章页(预览)
      *
      * @param request 请求
-     * @param cid     文章主键
+     * @param articleId     文章主键
      * @return
      */
-    @GetMapping(value = {"article/{cid}/preview", "article/{cid}.html"})
-    public String articlePreview(HttpServletRequest request, @PathVariable String cid) {
-        ArticleDO contents = articleService.getContents(cid);
+    @GetMapping(value = {"article/{id}/preview", "article/{id}.html"})
+    public String articlePreview(HttpServletRequest request, @PathVariable String id) {
+        ArticleDO contents = articleService.getContents(id);
         if (null == contents) {
             return this.render404();
         }

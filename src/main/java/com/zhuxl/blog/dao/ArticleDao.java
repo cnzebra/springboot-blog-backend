@@ -17,31 +17,31 @@ public interface ArticleDao {
      * @param example
      * @return
      */
-    long countByExample(ArticleDOExample example);
+    Integer countByExample(ArticleDOExample example);
 
     /**
      * @param example
      * @return
      */
-    int deleteByExample(ArticleDOExample example);
+    Integer deleteByExample(ArticleDOExample example);
 
     /**
-     * @param cid
+     * @param articleId
      * @return
      */
-    int deleteByPrimaryKey(Long cid);
-
-    /**
-     * @param record
-     * @return
-     */
-    int insert(ArticleDO record);
+    Integer deleteByPrimaryKey(Long articleId);
 
     /**
      * @param record
      * @return
      */
-    int insertSelective(ArticleDO record);
+    Integer insert(ArticleDO record);
+
+    /**
+     * @param record
+     * @return
+     */
+    Integer insertSelective(ArticleDO record);
 
     /**
      * @param example
@@ -56,49 +56,49 @@ public interface ArticleDao {
     List<ArticleDO> selectByExample(ArticleDOExample example);
 
     /**
-     * @param cid
+     * @param articleId
      * @return
      */
-    ArticleDO selectByPrimaryKey(Long cid);
+    ArticleDO selectByPrimaryKey(Long articleId);
 
     /**
      * @param record
      * @param example
      * @return
      */
-    int updateByExampleSelective(@Param("record") ArticleDO record, @Param("example") ArticleDOExample example);
+    Integer updateByExampleSelective(@Param("record") ArticleDO record, @Param("example") ArticleDOExample example);
 
     /**
      * @param record
      * @param example
      * @return
      */
-    int updateByExampleWithBLOBs(@Param("record") ArticleDO record, @Param("example") ArticleDOExample example);
+    Integer updateByExampleWithBLOBs(@Param("record") ArticleDO record, @Param("example") ArticleDOExample example);
 
     /**
      * @param record
      * @param example
      * @return
      */
-    int updateByExample(@Param("record") ArticleDO record, @Param("example") ArticleDOExample example);
+    Integer updateByExample(@Param("record") ArticleDO record, @Param("example") ArticleDOExample example);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKeySelective(ArticleDO record);
+    Integer updateByPrimaryKeySelective(ArticleDO record);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKeyWithBLOBs(ArticleDO record);
+    Integer updateByPrimaryKeyWithBLOBs(ArticleDO record);
 
     /**
      * @param record
      * @return
      */
-    int updateByPrimaryKey(ArticleDO record);
+    Integer updateByPrimaryKey(ArticleDO record);
 
     /**
      * @return

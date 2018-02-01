@@ -333,8 +333,8 @@ public final class Commons {
      * @return
      */
     public static String showThumb(ArticleDO contents) {
-        long cid = contents.getId();
-        long size = cid % 20;
+        long articleId = contents.getId();
+        long size = articleId % 20;
         size = size == 0 ? 1 : size;
         return "/user/img/rand/" + size + ".jpg";
     }
@@ -378,11 +378,11 @@ public final class Commons {
     /**
      * 显示文章图标
      *
-     * @param cid
+     * @param articleId
      * @return
      */
-    public static String showIcon(int cid) {
-        return ICONS[cid % ICONS.length];
+    public static String showIcon(int articleId) {
+        return ICONS[articleId % ICONS.length];
     }
 
     /**

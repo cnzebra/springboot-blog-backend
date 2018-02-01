@@ -59,7 +59,7 @@ public class SiteServiceImpl implements SiteService {
             limit = 10;
         }
         CommentDOExample example = new CommentDOExample();
-        example.setOrderByClause("created desc");
+        example.setOrderByClause("gmt_create desc");
         PageHelper.startPage(1, limit);
         List<CommentDO> byPage = commentDao.selectByExampleWithBLOBs(example);
         LOGGER.debug("Exit recentComments method");
@@ -74,7 +74,7 @@ public class SiteServiceImpl implements SiteService {
         }
         ArticleDOExample example = new ArticleDOExample();
         example.createCriteria().andStatusEqualTo(Types.PUBLISH.getType()).andTypeEqualTo(Types.ARTICLE.getType());
-        example.setOrderByClause("created desc");
+        example.setOrderByClause("gmt_create desc");
         PageHelper.startPage(1, limit);
         List<ArticleDO> list = articleDao.selectByExample(example);
         LOGGER.debug("Exit recentContents method");
@@ -161,15 +161,15 @@ public class SiteServiceImpl implements SiteService {
         ArticleDOExample articleDOExample = new ArticleDOExample();
         articleDOExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH
                 .getType());
-        Long articles = articleDao.countByExample(articleDOExample);
+        Integer articles = articleDao.countByExample(articleDOExample);
 
-        Long comments = commentDao.countByExample(new CommentDOExample());
+        Integer comments = commentDao.countByExample(new CommentDOExample());
 
-        Long attachs = attachFileDao.countByExample(new AttachFileDOExample());
+        Integer attachs = attachFileDao.countByExample(new AttachFileDOExample());
 
         MetaDOExample metaDOExample = new MetaDOExample();
         metaDOExample.createCriteria().andTypeEqualTo(Types.LINK.getType());
-        Long links = metaDao.countByExample(metaDOExample);
+        Integer links = metaDao.countByExample(metaDOExample);
 
         statistics.setArticles(articles);
         statistics.setComments(comments);
@@ -188,7 +188,7 @@ public class SiteServiceImpl implements SiteService {
                 ArticleDOExample example = new ArticleDOExample();
                 ArticleDOExample.CriteriaAbstract criteria = example.createCriteria().andTypeEqualTo(Types.ARTICLE
                         .getType()).andStatusEqualTo(Types.PUBLISH.getType());
-                example.setOrderByClause("created desc");
+                example.setOrderByClause("gmt_create desc");
                 String date = archive.getDate();
                 Date sd = DateKit.dateFormat(date, "yyyy年MM月");
                 int start = DateKit.getUnixTimeByDate(sd);
@@ -209,7 +209,7 @@ public class SiteServiceImpl implements SiteService {
         List<MetaDto> retList = null;
         if (StringUtils.isNotBlank(type)) {
             if (StringUtils.isBlank(orderBy)) {
-                orderBy = "count desc, a.mid desc";
+                orderBy = "count desc, a.id desc";
             }
             if (limit < 1 || limit > WebConst.MAX_POSTS) {
                 limit = 10;

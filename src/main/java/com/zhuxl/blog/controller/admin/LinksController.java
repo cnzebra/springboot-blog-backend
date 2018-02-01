@@ -37,7 +37,7 @@ public class LinksController extends BaseController {
     @PostMapping(value = "save")
     @ResponseBody
     public RestResponseBo saveLink(@RequestParam String title, @RequestParam String url,
-                                   @RequestParam String logo, @RequestParam Long metaId,
+                                   @RequestParam String logo, @RequestParam Long id,
                                    @RequestParam(value = "sort", defaultValue = "0") int sort) {
         try {
             MetaDO metas = new MetaDO();
@@ -46,8 +46,8 @@ public class LinksController extends BaseController {
             metas.setDescription(logo);
             metas.setSort(sort);
             metas.setType(Types.LINK.getType());
-            if (null != metaId) {
-                metas.setId(metaId);
+            if (null != id) {
+                metas.setId(id);
                 metasService.update(metas);
             } else {
                 metasService.saveMeta(metas);

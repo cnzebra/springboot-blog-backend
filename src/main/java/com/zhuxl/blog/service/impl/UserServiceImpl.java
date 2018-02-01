@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         UserDOExample example = new UserDOExample();
         UserDOExample.CriteriaAbstract criteria = example.createCriteria();
         criteria.andLoginNameEqualTo(loginName);
-        long count = userDao.countByExample(example);
+        Integer count = userDao.countByExample(example);
         if (count < 1) {
             throw new TipException("不存在该用户");
         }

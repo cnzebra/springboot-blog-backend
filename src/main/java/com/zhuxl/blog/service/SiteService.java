@@ -37,7 +37,7 @@ public interface SiteService {
     /**
      * 查询一条评论
      *
-     * @param coid
+     * @param commentId
      * @return
      */
     CommentDO getComment(Long commentId);

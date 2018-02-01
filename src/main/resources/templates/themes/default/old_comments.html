@@ -1,5 +1,5 @@
 #if(null != article)
-<div id="${article.cid ?! 0}" class="comment-container">
+<div id="${article.id ?! 0}" class="comment-container">
     <div id="comments" class="clearfix">
         #if(article.allowComment)
         <span class="response">#if(null!=login_user) Hi，<a href="${login_user.homeUrl}" data-no-instant>${login_user.loginName}</a>
@@ -10,7 +10,7 @@
             <input type="hidden" name="articleId" value="${article.id}"/>
             <input type="hidden" name="_csrf_token" value="">
             <input type="text" name="author" maxlength="12" id="author" class="form-control input-control clearfix"
-                   placeholder="姓名 (*)" value="${login_user.username ?! ''}" required/>
+                   placeholder="姓名 (*)" value="${login_user.loginName ?! ''}" required/>
             <input type="email" name="email" id="mail" class="form-control input-control clearfix" placeholder="邮箱 (*)"
                    value="${login_user.email ?! ''}" required/>
             <input type="url" name="siteUrl" id="url" class="form-control input-control clearfix" placeholder="网址 (http://)"
@@ -106,8 +106,8 @@
 #end
 #include('/comm/tale_comment.html')
 <script type="text/javascript">
-    function reply_user(coid) {
-        $('#comment-form input[name=id]').val(coid);
+    function reply_user(commentId) {
+        $('#comment-form input[name=id]').val(commentId);
         $("html,body").animate({scrollTop: $('div.comment-container').offset().top}, 500);
         $('#comment-form #textarea').focus();
     }

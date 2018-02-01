@@ -28,7 +28,7 @@
                             </thead>
                             <tbody>
                             <th:block th:each="post : ${articles.list}">
-                                <tr th:cid="${post.id}">
+                                <tr th:id="${post.id}">
                                     <td th:text="${post.title}"></td>
                                     <td th:text="${post.path}"></td>
                                     <td th:text="${commons.fmtdate(post.gmtCreate, 'yyyy-MM-dd HH:mm:ss')}"></td>

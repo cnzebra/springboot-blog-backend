@@ -57,7 +57,7 @@ public class MetaServiceImpl implements MetaService {
     public List<MetaDO> getMetas(String types) {
         if (StringUtils.isNotBlank(types)) {
             MetaDOExample metaDOExample = new MetaDOExample();
-            metaDOExample.setOrderByClause("sort desc, mid desc");
+            metaDOExample.setOrderByClause("sort desc, id desc");
             metaDOExample.createCriteria().andTypeEqualTo(types);
             return metaDao.selectByExample(metaDOExample);
         }
@@ -68,7 +68,7 @@ public class MetaServiceImpl implements MetaService {
     public List<MetaDto> getMetaList(String type, String orderby, int limit) {
         if (StringUtils.isNotBlank(type)) {
             if (StringUtils.isBlank(orderby)) {
-                orderby = "count desc, a.mid desc";
+                orderby = "count desc, a.id desc";
             }
             if (limit < 1 || limit > WebConst.MAX_POSTS) {
                 limit = 10;

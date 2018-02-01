@@ -25,7 +25,7 @@
                             </thead>
                             <tbody>
                             <th:block th:each="post : ${articles.list}">
-                                <tr th:cid="${post.cid}">
+                                <tr th:id="${post.id}">
                                     <td>
                                         <a th:href="@{'/admin/article/'+${post.id}}" th:text="${post.title}"></a>
                                     </td>
@@ -47,7 +47,7 @@
                                         </th:block>
                                     </td>
                                     <td>
-                                        <a th:href="@{'/admin/article/'+${post.cid}}"
+                                        <a th:href="@{'/admin/article/'+${post.id}}"
                                            class="btn btn-primary btn-sm waves-effect waves-light m-b-5"><i
                                                 class="fa fa-edit"></i> <span>编辑</span></a>
                                         <a href="javascript:void(0)" th:onclick="'delPost('+${post.id}+');'"
@@ -76,13 +76,13 @@
     /*<![CDATA[*/
     var tale = new $.tale();
 
-    function delPost(cid) {
+    function delPost(id) {
         tale.alertConfirm({
             title: '确定删除该文章吗?',
             then: function () {
                 tale.post({
                     url: '/admin/article/delete',
-                    data: {cid: cid},
+                    data: {articleId: id},
                     success: function (result) {
                         if (result && result.success) {
                             tale.alertOkAndReload('文章删除成功');

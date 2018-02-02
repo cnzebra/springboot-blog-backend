@@ -3,6 +3,7 @@ package com.sonnx.blog.component.common;
 
 import com.github.pagehelper.PageInfo;
 import com.sonnx.blog.component.constant.WebConst;
+import com.sonnx.blog.dto.LogActions;
 import com.sonnx.blog.dto.MetaDto;
 import com.sonnx.blog.dto.Types;
 import com.sonnx.blog.modal.bo.ArchiveBo;
@@ -19,10 +20,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -413,5 +411,14 @@ public final class Commons {
     public List<ArchiveBo> archives() {
         List<ArchiveBo> archives = siteService.getArchives(null, null);
         return archives;
+    }
+
+    public static List<String> logActions() {
+        LogActions[] actions = LogActions.values();
+        List<String> actionList = new ArrayList<String>();
+        for (LogActions action : actions) {
+            actionList.add(action.getAction());
+        }
+        return actionList;
     }
 }

@@ -2,6 +2,7 @@ package com.sonnx.blog.service;
 
 import com.github.pagehelper.PageInfo;
 import com.sonnx.blog.modal.entity.LogDO;
+import com.sonnx.blog.modal.entity.LogDOExample;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public interface LogService {
      * @param pageSize
      * @return
      */
-    PageInfo<LogDO> getLogsForPage(int page, int pageSize);
+    PageInfo<LogDO> getLogsForPage(int page, int pageSize, LogDOExample logDOExample);
 
     Integer deleteById(Long logId);
 }

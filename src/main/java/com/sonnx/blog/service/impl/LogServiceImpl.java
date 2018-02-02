@@ -83,7 +83,7 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public PageInfo<LogDO> getLogsForPage(int page, int pageSize) {
+    public PageInfo<LogDO> getLogsForPage(int page, int pageSize,LogDOExample logDOExample) {
         LOGGER.debug("Enter getLogs method:page={},pageSize={}", page, pageSize);
         if (page <= 0) {
             page = 1;
@@ -91,8 +91,6 @@ public class LogServiceImpl implements LogService {
         if (pageSize < 1 || pageSize > WebConst.MAX_POSTS) {
             pageSize = 10;
         }
-        LogDOExample logDOExample = new LogDOExample();
-        logDOExample.setOrderByClause("id desc");
         PageHelper.startPage(page, pageSize, true);
         List<LogDO> logDOS = logDao.selectByExample(logDOExample);
         PageInfo<LogDO> pageInfo = new PageInfo(logDOS);

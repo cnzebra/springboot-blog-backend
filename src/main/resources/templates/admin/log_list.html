@@ -11,6 +11,27 @@
                     <div class="col-sm-12">
                         <h4 class="page-title">日志管理</h4>
                     </div>
+                    <form th:action="@{/admin/log/query}" class="form-inline" th:method="get" enctype="multipart/form-data"  id="search-form">
+                        <div class="col-md-12">
+                            <input type="hidden" name="page" value="1"/>
+                            <input type="hidden" name="pageSize" value="15"/>
+                            <div class="form-group col-md-4" style="padding: 0px;margin-right: 5px">
+                                <select id="action" name="action" class="select2 form-control"
+                                        data-placeholder="请选择动作" th:value="${logQueryParam}?${logQueryParam.action}">
+                                    <th:block th:each="action : ${commons.logActions()}">
+                                        <option th:value="${action}" th:text="${action}"></option>
+                                    </th:block>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4" style="padding: 0px;margin-right: 5px">
+                                <input name="data" id="data" type="text" class="form-control" placeholder="请输入关键数据"
+                                       th:value="${logQueryParam}?${logQueryParam.data}"/>
+                            </div>
+                            <div class="form-group col-md-3" style="padding: 0px;margin-right: 5px">
+                                <input type="submit" value="查询" class="btn submit"/>
+                            </div>
+                        </div>
+                    </form>
                     <div class="col-md-12">
                         <table class="table table-striped table-condensed">
                             <thead>
@@ -88,6 +109,24 @@
                         }
                     }
                 });
+            }
+        });
+    }
+
+    function queryLog() {
+        tale.get({
+            url: '/admin/log',
+            data: {
+                action: $("#action").val(),
+                data: $("#data").val()
+            },
+            success: function (result) {
+                if (result && result.success) {
+                    tale.alertOkAndReload('日志删除成功');
+                    location.href = "/admin/log";
+                } else {
+                    tale.alertError(result.msg || '日志删除失败');
+                }
             }
         });
     }

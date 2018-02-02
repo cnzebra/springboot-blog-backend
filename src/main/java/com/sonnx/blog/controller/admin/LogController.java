@@ -33,12 +33,28 @@ public class LogController extends BaseController {
     private LogService logService;
 
     @GetMapping(value = "")
-    public String index(@RequestParam(value = "page", defaultValue = "1") int page,
+    public String index(@RequestParam(value = "action", defaultValue = "") String action,
+                        @RequestParam(value = "data", defaultValue = "") String data,
+                        @RequestParam(value = "page", defaultValue = "1") int page,
                         @RequestParam(value = "limit", defaultValue = "15") int limit, HttpServletRequest request) {
         LogDOExample logDOExample = new LogDOExample();
         logDOExample.setOrderByClause("gmt_create desc");
-        logDOExample.createCriteria();
-        PageInfo<LogDO> logs = logService.getLogsForPage(page, limit);
+        logDOExample.createCriteria().andActionLike("%" + action + "%").andDataLike("%" + data + "%");
+        PageInfo<LogDO> logs = logService.getLogsForPage(page, limit, logDOExample);
+        request.setAttribute("logs", logs);
+        return "admin/log_list";
+    }
+
+    @GetMapping(value = "query")
+    public String index(@RequestParam Integer page,
+                        @RequestParam Integer pageSize,
+                        @RequestParam String action,
+                        @RequestParam String data,
+                        HttpServletRequest request) {
+        LogDOExample logDOExample = new LogDOExample();
+        logDOExample.setOrderByClause("gmt_create desc");
+        logDOExample.createCriteria().andActionLike("%" + action + "%").andDataLike("%" + data + "%");
+        PageInfo<LogDO> logs = logService.getLogsForPage(page, pageSize, logDOExample);
         request.setAttribute("logs", logs);
         return "admin/log_list";
     }

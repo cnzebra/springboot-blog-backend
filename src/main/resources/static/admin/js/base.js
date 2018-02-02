@@ -145,6 +145,24 @@ $.tale.prototype.post = function (options) {
     });
 };
 
+$.tale.prototype.get = function (options) {
+    var self = this;
+    $.ajax({
+        type: 'GET',
+        url: options.url,
+        data: options.data || {},
+        async: options.async || false,
+        dataType: 'json',
+        success: function (result) {
+            self.hideLoading();
+            options.success && options.success(result);
+        },
+        error: function () {
+            //
+        }
+    });
+};
+
 /**
  * 显示动画
  */

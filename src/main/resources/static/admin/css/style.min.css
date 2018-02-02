@@ -3988,5 +3988,10 @@ body.fixed-left .side-menu.left {
 .table-condensed > thead > tr > td,
 .table-condensed > tbody > tr > td,
 .table-condensed > tfoot > tr > td {
-    padding: 5px;
+    padding: 2px;
+    vertical-align: middle;
+}
+.table-condensed > tbody > tr > td > a{
+    padding: 2px;
+    margin: 1px;
 }

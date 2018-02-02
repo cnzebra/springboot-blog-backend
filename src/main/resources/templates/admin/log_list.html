@@ -16,7 +16,8 @@
                             <thead>
                             <tr>
                                 <th class="col-md-1">动作</th>
-                                <th class="col-md-5">数据</th>
+                                <th class="col-md-4">数据</th>
+                                <th class="col-md-1">来源</th>
                                 <th class="col-md-2">IP</th>
                                 <th class="col-md-2">时间</th>
                                 <th class="col-md-1">访问者</th>
@@ -30,12 +31,15 @@
                                     <th:block th:if="${'访问站点' == log.action}">
                                         <td>
                                             <p th:text="${log.url}" style="backgroup-color:white;"></p>
-                                            <p th:text="${log.browser}"></p>
                                         </td>
                                     </th:block>
                                     <th:block th:unless="${'访问站点' == log.action}">
                                         <td th:text="${log.data}"></td>
                                     </th:block>
+
+                                    <td th:text="${log.browser}"></td>
+
+
                                     <th:block th:if="${'0:0:0:0:0:0:0:1' == log.ip}">
                                         <td>
                                             <p>本机</p>

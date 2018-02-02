@@ -15,6 +15,7 @@ import com.sonnx.blog.utils.AbstractUUID;
 import com.sonnx.blog.utils.IPKit;
 import com.sonnx.blog.utils.MapCache;
 import com.sonnx.blog.utils.TaleUtils;
+import eu.bitwalker.useragentutils.UserAgent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class BaseInterceptor implements HandlerInterceptor {
     private static final Logger LOGGE = LoggerFactory.getLogger(BaseInterceptor.class);
-    private static final String USER_AGENT = "user-agent";
+    private static final String USER_AGENT = "User-Agent";
 
     @Resource
     private UserService userService;
@@ -58,12 +59,14 @@ public class BaseInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         String uri = request.getRequestURI();
 
-        LOGGE.info("UserAgent: {}", request.getHeader(USER_AGENT));
+        UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader(USER_AGENT));
+
+        LOGGE.info("UserAgent: {}", userAgent.getBrowser().toString());
         LOGGE.info("用户访问地址: {}, 来路地址: {}", uri, IPKit.getIpAddrByRequest(request));
 
         // 记录用户访问日志
         JSONObject data = new JSONObject();
-        data.put("UserAgent", request.getHeader(USER_AGENT));
+        data.put("UserAgent", userAgent.getBrowser().toString());
         data.put("URL", uri);
 
         //请求拦截处理

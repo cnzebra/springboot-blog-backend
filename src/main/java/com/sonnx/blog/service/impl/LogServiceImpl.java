@@ -76,7 +76,7 @@ public class LogServiceImpl implements LogService {
         }
         LogDOExample logDOExample = new LogDOExample();
         logDOExample.setOrderByClause("id desc");
-        PageHelper.startPage((page - 1) * limit, limit);
+        PageHelper.startPage(page, limit);
         List<LogDO> logDOS = logDao.selectByExample(logDOExample);
         LOGGER.debug("Exit getLogs method");
         return logDOS;
@@ -93,7 +93,7 @@ public class LogServiceImpl implements LogService {
         }
         LogDOExample logDOExample = new LogDOExample();
         logDOExample.setOrderByClause("id desc");
-        PageHelper.startPage((page - 1) * pageSize, pageSize, true);
+        PageHelper.startPage(page, pageSize, true);
         List<LogDO> logDOS = logDao.selectByExample(logDOExample);
         PageInfo<LogDO> pageInfo = new PageInfo(logDOS);
         LOGGER.debug("Exit getLogsForPage method");

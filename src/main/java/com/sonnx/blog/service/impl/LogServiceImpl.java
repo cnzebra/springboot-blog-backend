@@ -99,4 +99,10 @@ public class LogServiceImpl implements LogService {
         LOGGER.debug("Exit getLogsForPage method");
         return pageInfo;
     }
+
+    @Override
+    public Integer deleteById(Long logId) {
+        Integer result=logDao.deleteByPrimaryKey(logId);
+        return result;
+    }
 }

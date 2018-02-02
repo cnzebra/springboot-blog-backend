@@ -43,7 +43,11 @@ public enum LogActions {
     /**
      * 访问站点
      */
-    VISIT_SITE("访问站点");
+    VISIT_SITE("访问站点"),
+    /**
+     * 删除日志
+     */
+    DELETE_LOG("删除日志");
 
     /**
      * action

@@ -44,4 +44,6 @@ public interface LogService {
      * @return
      */
     PageInfo<LogDO> getLogsForPage(int page, int pageSize);
+
+    Integer deleteById(Long logId);
 }

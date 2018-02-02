@@ -63,8 +63,8 @@ public class BaseInterceptor implements HandlerInterceptor {
 
         // 记录用户访问日志
         JSONObject data = new JSONObject();
-        data.put(USER_AGENT, request.getHeader(USER_AGENT));
-        data.put("URL", request.getRequestURL());
+        data.put("UserAgent", request.getHeader(USER_AGENT));
+        data.put("URL", uri);
 
         //请求拦截处理
         UserDO user = TaleUtils.getLoginUser(request);

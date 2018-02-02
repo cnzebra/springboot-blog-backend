@@ -3,7 +3,9 @@ package com.sonnx.blog.controller.admin;
 
 import com.github.pagehelper.PageInfo;
 import com.sonnx.blog.controller.BaseController;
+import com.sonnx.blog.dto.LogActions;
 import com.sonnx.blog.exception.TipException;
+import com.sonnx.blog.modal.bo.RestResponseBo;
 import com.sonnx.blog.modal.entity.LogDO;
 import com.sonnx.blog.modal.entity.LogDOExample;
 import com.sonnx.blog.service.LogService;
@@ -11,9 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +41,18 @@ public class LogController extends BaseController {
         PageInfo<LogDO> logs = logService.getLogsForPage(page, limit);
         request.setAttribute("logs", logs);
         return "admin/log_list";
+    }
+
+    @PostMapping(value = "delete")
+    @ResponseBody
+    public RestResponseBo delete(@RequestParam Long logId, HttpServletRequest request) {
+        Integer result = logService.deleteById(logId);
+        logService.insertLog(LogActions.DELETE_LOG.getAction(), logId + ":" + (result == 1 ? "删除成功" : "删除失败"), 2, request.getRemoteAddr(), this.getUid
+                (request));
+        if (result != 1) {
+            return RestResponseBo.fail(result);
+        }
+        return RestResponseBo.ok();
     }
 
 

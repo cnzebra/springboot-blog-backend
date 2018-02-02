@@ -28,7 +28,7 @@ public interface LogDao {
      * @param id
      * @return
      */
-    int deleteByPrimaryKey(Integer id);
+    Integer deleteByPrimaryKey(Long id);
 
     /**
      * @param record

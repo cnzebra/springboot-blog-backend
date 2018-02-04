@@ -457,9 +457,9 @@
 
     <select id="findReturnArchiveBo" resultMap="archiveBoMap" parameterType="string">
         select
-        from_unixtime(gmt_create,'%Y') as year,
-        from_unixtime(gmt_create,'%m') as month,
-        FROM_UNIXTIME(gmt_create, '%Y年%m月') as date,
+        DATE_FORMAT(gmt_create,'%Y') as year,
+        DATE_FORMAT(gmt_create,'%m') as month,
+        DATE_FORMAT(gmt_create,'%Y年%m月') as date,
         count(*) as count
         from
         t_b_article

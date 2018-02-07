@@ -19,6 +19,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -59,6 +61,18 @@ public class ArticleController extends BaseController {
         request.setAttribute("articles", contentsPaginator);
         return "admin/article_list";
     }
+
+    @GetMapping(value = "list")
+    @ResponseBody
+    public ResponseEntity articleList(@RequestParam(value = "page", defaultValue = "1") int page,
+                                      @RequestParam(value = "limit", defaultValue = "15") int limit, HttpServletRequest request) {
+        ArticleDOExample articleDOExample = new ArticleDOExample();
+        articleDOExample.setOrderByClause("gmt_create desc");
+        articleDOExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType());
+        PageInfo<ArticleDO> contentsPaginator = contentsService.getArticlesWithpage(articleDOExample, page, limit);
+        return new ResponseEntity(contentsPaginator, HttpStatus.OK);
+    }
+
 
     @GetMapping(value = "/publish")
     public String newArticle(HttpServletRequest request) {
@@ -116,7 +130,7 @@ public class ArticleController extends BaseController {
     @ResponseBody
     public RestResponseBo delete(@RequestParam Long articleId, HttpServletRequest request) {
         String result = contentsService.deleteByCid(articleId);
-        logService.insertLog(LogActions.DEL_ARTICLE.getAction(), articleId + "",null, request.getRemoteAddr(), this.getUid
+        logService.insertLog(LogActions.DEL_ARTICLE.getAction(), articleId + "", null, request.getRemoteAddr(), this.getUid
                 (request));
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
             return RestResponseBo.fail(result);

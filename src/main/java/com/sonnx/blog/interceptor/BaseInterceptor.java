@@ -73,7 +73,7 @@ public class BaseInterceptor implements HandlerInterceptor {
         //请求拦截处理
         UserDO user = TaleUtils.getLoginUser(request);
 
-        if (null == user) {
+        /*if (null == user) {
             logService.insertLog(LogActions.VISIT_SITE.getAction(), data.toJSONString(), 10, IPKit.getIpAddrByRequest(request), null);
 
             Long userId = TaleUtils.getCookieUid(request);
@@ -88,7 +88,7 @@ public class BaseInterceptor implements HandlerInterceptor {
         if (uri.startsWith("/admin") && !uri.startsWith("/admin/login") && null == user) {
             response.sendRedirect(request.getContextPath() + "/admin/login");
             return false;
-        }
+        }*/
         //设置get请求的token
         if ("GET".equals(request.getMethod())) {
             String csrfToken = AbstractUUID.uu64();

@@ -34,7 +34,7 @@ public interface ArticleService {
      * @param id id
      * @return ArticleDO
      */
-    ArticleDO getContents(String id);
+    ArticleDO getContents(Long id);
 
     /**
      * 根据主键更新

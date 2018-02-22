@@ -61,7 +61,7 @@ public class CommentServiceImpl implements CommentService {
         if (null == comments.getArticleId()) {
             return "评论文章不能为空";
         }
-        ArticleDO contents = articleService.getContents(String.valueOf(comments.getArticleId()));
+        ArticleDO contents = articleService.getContents(comments.getArticleId());
         if (null == contents) {
             return "不存在的文章";
         }
@@ -126,7 +126,7 @@ public class CommentServiceImpl implements CommentService {
             throw new TipException("主键为空");
         }
         commentDao.deleteByPrimaryKey(commentId);
-        ArticleDO contents = articleService.getContents(articleId + "");
+        ArticleDO contents = articleService.getContents(articleId);
         if (null != contents && contents.getCommentsNum() > 0) {
             ArticleDO temp = new ArticleDO();
             temp.setId(articleId);

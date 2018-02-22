@@ -107,7 +107,7 @@ public class IndexController extends BaseController {
      * @return
      */
     @GetMapping(value = {"article/{id}", "article/{id}.html"})
-    public String getArticle(HttpServletRequest request, @PathVariable String id) {
+    public String getArticle(HttpServletRequest request, @PathVariable Long id) {
         ArticleDO contents = articleService.getContents(id);
         if (null == contents || "draft".equals(contents.getStatus())) {
             return this.render404();
@@ -129,7 +129,7 @@ public class IndexController extends BaseController {
      * @return
      */
     @GetMapping(value = {"article/{id}/preview", "article/{id}.html"})
-    public String articlePreview(HttpServletRequest request, @PathVariable String id) {
+    public String articlePreview(HttpServletRequest request, @PathVariable Long id) {
         ArticleDO contents = articleService.getContents(id);
         if (null == contents) {
             return this.render404();
@@ -315,7 +315,7 @@ public class IndexController extends BaseController {
      * 自定义页面,如关于的页面
      */
     @GetMapping(value = "/{pagename}")
-    public String page(@PathVariable String pagename, HttpServletRequest request) {
+    public String page(@PathVariable Long pagename, HttpServletRequest request) {
         ArticleDO contents = articleService.getContents(pagename);
         if (null == contents) {
             return this.render404();

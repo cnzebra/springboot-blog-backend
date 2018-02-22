@@ -121,24 +121,14 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleDO getContents(String id) {
-        if (StringUtils.isNotBlank(id)) {
-            if (Tools.isNumber(id)) {
-                ArticleDO articleDO = articleDao.selectByPrimaryKey(Long.valueOf(id));
-                if (articleDO != null) {
-                    articleDO.setHits(articleDO.getHits() + 1);
-                    articleDao.updateByPrimaryKey(articleDO);
-                }
-                return articleDO;
-            } else {
-                ArticleDOExample articleDOExample = new ArticleDOExample();
-                articleDOExample.createCriteria().andPathEqualTo(id);
-                List<ArticleDO> articleDOS = articleDao.selectByExampleWithBLOBs(articleDOExample);
-                if (articleDOS.size() != 1) {
-                    throw new TipException("query content by id and return is not one");
-                }
-                return articleDOS.get(0);
+    public ArticleDO getContents(Long id) {
+        if (id != null) {
+            ArticleDO articleDO = articleDao.selectByPrimaryKey(id);
+            if (articleDO != null) {
+                articleDO.setHits(articleDO.getHits() + 1);
+                articleDao.updateByPrimaryKey(articleDO);
             }
+            return articleDO;
         }
         return null;
     }
@@ -183,7 +173,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public String deleteByCid(Long articleId) {
-        ArticleDO contents = this.getContents(articleId + "");
+        ArticleDO contents = this.getContents(articleId);
         if (null != contents) {
             articleDao.deleteByPrimaryKey(articleId);
             articleMetaService.deleteById(articleId, null);

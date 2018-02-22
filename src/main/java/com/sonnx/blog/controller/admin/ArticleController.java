@@ -2,8 +2,6 @@ package com.sonnx.blog.controller.admin;
 
 
 import com.github.pagehelper.PageInfo;
-import com.sonnx.blog.dto.LogActions;
-import com.sonnx.blog.dto.Types;
 import com.sonnx.blog.component.constant.WebConst;
 import com.sonnx.blog.controller.BaseController;
 import com.sonnx.blog.dto.LogActions;
@@ -73,6 +71,17 @@ public class ArticleController extends BaseController {
         return new ResponseEntity(contentsPaginator, HttpStatus.OK);
     }
 
+    @GetMapping(value = {"preview/{id}", "preview/{id}.html"})
+    public ResponseEntity articlePreview(HttpServletRequest request, @PathVariable Long id) {
+        ArticleDO contents = contentsService.getContents(id);
+        if (null == contents) {
+            return new ResponseEntity(null, HttpStatus.OK);
+        }
+        return new ResponseEntity(contents, HttpStatus.OK);
+
+
+    }
+
 
     @GetMapping(value = "/publish")
     public String newArticle(HttpServletRequest request) {
@@ -84,7 +93,7 @@ public class ArticleController extends BaseController {
     }
 
     @GetMapping(value = "/{articleId}")
-    public String editArticle(@PathVariable String articleId, HttpServletRequest request) {
+    public String editArticle(@PathVariable Long articleId, HttpServletRequest request) {
         ArticleDO contents = contentsService.getContents(articleId);
         request.setAttribute("contents", contents);
         List<MetaDO> categories = metasService.getMetas(Types.CATEGORY.getType());

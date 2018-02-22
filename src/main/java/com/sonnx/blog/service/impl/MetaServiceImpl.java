@@ -100,7 +100,7 @@ public class MetaServiceImpl implements MetaService {
             List<ArticleMetaDO> rlist = relationshipService.getRelationshipById(null, metaId);
             if (null != rlist) {
                 for (ArticleMetaDO r : rlist) {
-                    ArticleDO contents = articleService.getContents(String.valueOf(r.getArticleId()));
+                    ArticleDO contents = articleService.getContents(r.getArticleId());
                     if (null != contents) {
                         ArticleDO temp = new ArticleDO();
                         temp.setId(r.getArticleId());

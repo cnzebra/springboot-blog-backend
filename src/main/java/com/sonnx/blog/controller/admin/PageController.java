@@ -54,7 +54,7 @@ public class PageController extends BaseController {
     }
 
     @GetMapping(value = "/{id}")
-    public String editPage(@PathVariable String id, HttpServletRequest request) {
+    public String editPage(@PathVariable Long id, HttpServletRequest request) {
         ArticleDO contents = contentsService.getContents(id);
         request.setAttribute("contents", contents);
         return "admin/page_edit";

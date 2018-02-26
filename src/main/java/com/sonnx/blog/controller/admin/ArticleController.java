@@ -135,12 +135,11 @@ public class ArticleController extends BaseController {
         return RestResponseBo.ok();
     }
 
-    @RequestMapping(value = "/delete")
+    @DeleteMapping(value = "/delete")
     @ResponseBody
-    public RestResponseBo delete(@RequestParam Long articleId, HttpServletRequest request) {
-        String result = contentsService.deleteByCid(articleId);
-        logService.insertLog(LogActions.DEL_ARTICLE.getAction(), articleId + "", null, request.getRemoteAddr(), this.getUid
-                (request));
+    public RestResponseBo delete(@RequestParam Long id, HttpServletRequest request) {
+        String result = contentsService.deleteByCid(id);
+        logService.insertLog(LogActions.DEL_ARTICLE.getAction(), id + "", null, request.getRemoteAddr(), 1L);
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
             return RestResponseBo.fail(result);
         }

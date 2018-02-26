@@ -108,9 +108,9 @@ public class ArticleController extends BaseController {
 
     @PostMapping(value = "/publish")
     @ResponseBody
-    public RestResponseBo publishArticle(ArticleDO contents, HttpServletRequest request) {
-        UserDO users = this.user(request);
-        contents.setAuthorId(users.getId());
+    public RestResponseBo publishArticle(@RequestBody ArticleDO contents, HttpServletRequest request) {
+//        UserDO users = this.user(request);
+//        contents.setAuthorId(users.getId());
         contents.setType(Types.ARTICLE.getType());
         if (StringUtils.isBlank(contents.getCategories())) {
             contents.setCategories("默认分类");
@@ -122,11 +122,11 @@ public class ArticleController extends BaseController {
         return RestResponseBo.ok();
     }
 
-    @PostMapping(value = "/modify")
+    @PutMapping(value = "/modify")
     @ResponseBody
-    public RestResponseBo modifyArticle(ArticleDO contents, HttpServletRequest request) {
-        UserDO users = this.user(request);
-        contents.setAuthorId(users.getId());
+    public RestResponseBo modifyArticle(@RequestBody ArticleDO contents, HttpServletRequest request) {
+//        UserDO users = this.user(request);
+//        contents.setAuthorId(users.getId());
         contents.setType(Types.ARTICLE.getType());
         String result = contentsService.updateArticle(contents);
         if (!WebConst.SUCCESS_RESULT.equals(result)) {

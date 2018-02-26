@@ -10,6 +10,8 @@ import com.sonnx.blog.modal.bo.RestResponseBo;
 import com.sonnx.blog.service.MetaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +39,13 @@ public class CategoryController extends BaseController {
         request.setAttribute("categories", categories);
         request.setAttribute("tags", tags);
         return "admin/category";
+    }
+
+    @GetMapping(value = "list")
+    @ResponseBody
+    public ResponseEntity categories() {
+        List<MetaDto> categories = metasService.getMetaList(Types.CATEGORY.getType(), null, WebConst.MAX_POSTS);
+        return new ResponseEntity(categories, HttpStatus.OK);
     }
 
     @PostMapping(value = "save")

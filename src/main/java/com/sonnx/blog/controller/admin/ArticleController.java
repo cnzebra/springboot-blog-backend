@@ -93,8 +93,8 @@ public class ArticleController extends BaseController {
         title = StringUtils.isBlank(title) ? "" : title;
         criteriaAbstract.andTitleLike("%" + title + "%");
 
-        String tagsList = queryParam.getQueryParam().getTagsList();
-        String categoriesList = queryParam.getQueryParam().getCategoriesList();
+        String tagsList = queryParam.getQueryParam().getTags();
+        String categoriesList = queryParam.getQueryParam().getCategories();
         criteriaAbstract.andTagsLike("%" + tagsList + "%");
         criteriaAbstract.andCategoriesLike("%" + categoriesList + "%");
 

@@ -13,7 +13,7 @@ public class ArticleQueryFormParam {
 
     private String title;
 
-    private String tagsList;
+    private String tags;
 
-    private String categoriesList;
+    private String categories;
 }

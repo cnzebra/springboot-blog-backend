@@ -165,7 +165,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public PageInfo<ArticleDO> getArticlesWithpage(ArticleDOExample commentVoExample, Integer page, Integer limit) {
-        PageHelper.startPage(page, limit);
+        PageHelper.startPage(page, limit, true);
         List<ArticleDO> articleDOS = articleDao.selectByExampleWithBLOBs(commentVoExample);
         return new PageInfo<>(articleDOS);
     }
@@ -189,6 +189,14 @@ public class ArticleServiceImpl implements ArticleService {
         ArticleDOExample example = new ArticleDOExample();
         example.createCriteria().andCategoriesEqualTo(ordinal);
         articleDao.updateByExampleSelective(articleDO, example);
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public int audit(Long articleId, String status) {
+        Date date = new Date();
+        int result = articleDao.audit(articleId, status, date);
+        return result;
     }
 
     @Override

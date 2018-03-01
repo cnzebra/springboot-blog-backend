@@ -8,7 +8,11 @@ import com.sonnx.blog.dto.LogActions;
 import com.sonnx.blog.dto.Types;
 import com.sonnx.blog.exception.TipException;
 import com.sonnx.blog.modal.bo.RestResponseBo;
-import com.sonnx.blog.modal.entity.*;
+import com.sonnx.blog.modal.entity.ArticleDO;
+import com.sonnx.blog.modal.entity.ArticleDOExample;
+import com.sonnx.blog.modal.entity.AttachFileDO;
+import com.sonnx.blog.modal.entity.MetaDO;
+import com.sonnx.blog.param.ArticleQueryParam;
 import com.sonnx.blog.service.ArticleService;
 import com.sonnx.blog.service.AttachFileService;
 import com.sonnx.blog.service.LogService;
@@ -25,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,15 +65,57 @@ public class ArticleController extends BaseController {
         return "admin/article_list";
     }
 
-    @GetMapping(value = "list")
+    @PostMapping(value = "list")
     @ResponseBody
-    public ResponseEntity articleList(@RequestParam(value = "page", defaultValue = "1") int page,
-                                      @RequestParam(value = "limit", defaultValue = "15") int limit, HttpServletRequest request) {
+    public ResponseEntity articleList(@RequestBody ArticleQueryParam queryParam,
+                                      HttpServletRequest request) {
         ArticleDOExample articleDOExample = new ArticleDOExample();
-        articleDOExample.setOrderByClause("gmt_create desc");
-        articleDOExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType());
-        PageInfo<ArticleDO> contentsPaginator = contentsService.getArticlesWithpage(articleDOExample, page, limit);
+
+        // 排序
+        if (StringUtils.isNotBlank(queryParam.getSort())) {
+            articleDOExample.setOrderByClause(queryParam.getSort());
+        } else {
+            articleDOExample.setOrderByClause("gmt_create desc");
+        }
+
+        ArticleDOExample.CriteriaAbstract criteriaAbstract = articleDOExample.createCriteria();
+        criteriaAbstract.andTypeEqualTo(Types.ARTICLE.getType());
+
+
+        // 状态筛选
+        String status = queryParam.getQueryParam().getStatus();
+        if (StringUtils.isNotBlank(status)) {
+            criteriaAbstract.andStatusEqualTo(status);
+        }
+
+        // 表单查询
+        String title = queryParam.getQueryParam().getTitle();
+        title = StringUtils.isBlank(title) ? "" : title;
+        criteriaAbstract.andTitleLike("%" + title + "%");
+
+        String tagsList = queryParam.getQueryParam().getTagsList();
+        String categoriesList = queryParam.getQueryParam().getCategoriesList();
+        criteriaAbstract.andTagsLike("%" + tagsList + "%");
+        criteriaAbstract.andCategoriesLike("%" + categoriesList + "%");
+
+        List<ArticleDOExample.CriteriaAbstract> criteriaAbstracts = new ArrayList();
+        criteriaAbstracts.add(criteriaAbstract);
+
+        articleDOExample.setOredCriteria(criteriaAbstracts);
+
+        PageInfo<ArticleDO> contentsPaginator = contentsService.getArticlesWithpage(articleDOExample, queryParam.getPageNum(), queryParam.getPageSize());
         return new ResponseEntity(contentsPaginator, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "audit")
+    @ResponseBody
+    public RestResponseBo auditArticle(@RequestParam(value = "articleId") Long articleId,
+                                       @RequestParam(value = "status") String status, HttpServletRequest request) {
+        int result = contentsService.audit(articleId, status);
+        if (result == 1) {
+            return RestResponseBo.ok();
+        }
+        return RestResponseBo.fail();
     }
 
     @GetMapping(value = {"preview/{id}", "preview/{id}.html"})

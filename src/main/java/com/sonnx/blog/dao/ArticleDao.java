@@ -6,6 +6,7 @@ import com.sonnx.blog.modal.entity.ArticleDOExample;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -110,4 +111,6 @@ public interface ArticleDao {
      * @return
      */
     List<ArticleDO> findByCatalog(@Param("metaId") Long metaId);
+
+    int audit(@Param("articleId") Long articleId, @Param("status") String status, @Param("modified") Date modified);
 }

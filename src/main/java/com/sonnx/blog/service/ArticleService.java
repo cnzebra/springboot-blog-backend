@@ -97,4 +97,6 @@ public interface ArticleService {
      * @param newCatefory
      */
     void updateCategory(String ordinal, String newCatefory);
+
+    int audit(Long articleId, String status);
 }

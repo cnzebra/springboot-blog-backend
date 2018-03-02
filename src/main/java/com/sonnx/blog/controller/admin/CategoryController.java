@@ -7,6 +7,7 @@ import com.sonnx.blog.controller.BaseController;
 import com.sonnx.blog.dto.MetaDto;
 import com.sonnx.blog.dto.Types;
 import com.sonnx.blog.modal.bo.RestResponseBo;
+import com.sonnx.blog.modal.entity.MetaDO;
 import com.sonnx.blog.service.MetaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,9 +51,9 @@ public class CategoryController extends BaseController {
 
     @PostMapping(value = "save")
     @ResponseBody
-    public RestResponseBo saveCategory(@RequestParam String cname, @RequestParam Long metaId) {
+    public RestResponseBo saveCategory(@RequestBody MetaDO meta) {
         try {
-            metasService.saveMeta(Types.CATEGORY.getType(), cname, metaId);
+            metasService.saveMeta(Types.CATEGORY.getType(), meta.getName(), meta.getId());
         } catch (Exception e) {
             String msg = "分类保存失败";
             LOGGER.error(msg, e);

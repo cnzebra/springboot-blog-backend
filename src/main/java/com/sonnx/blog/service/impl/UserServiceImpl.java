@@ -1,5 +1,6 @@
 package com.sonnx.blog.service.impl;
 
+import com.sonnx.blog.dao.RoleDao;
 import com.sonnx.blog.dao.UserDao;
 import com.sonnx.blog.exception.TipException;
 import com.sonnx.blog.dao.UserDao;
@@ -27,6 +28,8 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserDao userDao;
+    @Resource
+    private RoleDao roleDao;
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
@@ -68,6 +71,9 @@ public class UserServiceImpl implements UserService {
         if (userDOS.size() != 1) {
             throw new TipException("用户名或密码错误");
         }
+        UserDO userDO = userDOS.get(0);
+        List<String> roles = roleDao.findRoleNamesByUserId(userDO.getId());
+        userDO.setRoles(roles);
         return userDOS.get(0);
     }
 
@@ -81,5 +87,23 @@ public class UserServiceImpl implements UserService {
         if (i != 1) {
             throw new TipException("update user by uid and retrun is not one");
         }
+    }
+
+    @Override
+    public UserDO queryUserByToken(String token) {
+        if (StringUtils.isBlank(token)) {
+            throw new TipException("请求非法,无令牌");
+        }
+        UserDOExample example = new UserDOExample();
+        UserDOExample.CriteriaAbstract criteria = example.createCriteria();
+        criteria.andTokenEqualTo(token);
+        List<UserDO> userDOS = userDao.selectByExample(example);
+        if (userDOS.size() == 0) {
+            throw new TipException("请求非法");
+        }
+        UserDO userDO = userDOS.get(0);
+        List<String> roles = roleDao.findRoleNamesByUserId(userDO.getId());
+        userDO.setRoles(roles);
+        return userDOS.get(0);
     }
 }

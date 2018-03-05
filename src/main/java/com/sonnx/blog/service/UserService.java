@@ -41,4 +41,6 @@ public interface UserService {
      * @return
      */
     void updateById(UserDO userDO);
+
+    UserDO queryUserByToken(String token);
 }

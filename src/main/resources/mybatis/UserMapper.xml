@@ -75,7 +75,7 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-        id, login_name, password, email, home_url, screen_name, activated, last_login_time,
+        id, login_name, password,token, email, home_url, screen_name, activated, last_login_time,
         group_name,gmt_create,gmt_modified
     </sql>
     <select id="selectByExample" parameterType="com.sonnx.blog.modal.entity.UserDOExample" resultMap="BaseResultMap">
@@ -200,7 +200,8 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.sonnx.blog.modal.entity.UserDOExample" resultType="java.lang.Integer">
+    <select id="countByExample" parameterType="com.sonnx.blog.modal.entity.UserDOExample"
+            resultType="java.lang.Integer">
         select count(*)
         from t_si_user
         <if test="_parameter != null">

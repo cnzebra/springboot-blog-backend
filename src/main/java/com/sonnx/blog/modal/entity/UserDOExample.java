@@ -756,6 +756,76 @@ public class UserDOExample {
             addCriterion("group_name not between", value1, value2, "groupName");
             return (CriteriaAbstract) this;
         }
+
+        public CriteriaAbstract andTokenIsNull() {
+            addCriterion("token is null");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andTokenIsNotNull() {
+            addCriterion("token is not null");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andTokenEqualTo(String value) {
+            addCriterion("token =", value, "token");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andTokenNotEqualTo(String value) {
+            addCriterion("token <>", value, "token");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andTokenGreaterThan(String value) {
+            addCriterion("token >", value, "token");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andTokenGreaterThanOrEqualTo(String value) {
+            addCriterion("token >=", value, "token");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andTokenLessThan(String value) {
+            addCriterion("token <", value, "token");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andTokenLessThanOrEqualTo(String value) {
+            addCriterion("token <=", value, "token");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andTokenLike(String value) {
+            addCriterion("token like", value, "token");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andTokenNotLike(String value) {
+            addCriterion("token not like", value, "token");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andTokenIn(List<String> values) {
+            addCriterion("token in", values, "token");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andTokenNotIn(List<String> values) {
+            addCriterion("token not in", values, "token");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andTokenBetween(String value1, String value2) {
+            addCriterion("token between", value1, value2, "token");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andTokenNotBetween(String value1, String value2) {
+            addCriterion("token not between", value1, value2, "token");
+            return (CriteriaAbstract) this;
+        }
     }
 
     /**

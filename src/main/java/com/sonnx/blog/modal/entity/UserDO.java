@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author
@@ -21,6 +22,12 @@ public class UserDO extends AbstractEntity {
      * 用户密码
      */
     private String password;
+
+    /**
+     * 用户令牌
+     */
+    private String token;
+
     /**
      * 用户的邮箱
      */
@@ -45,5 +52,10 @@ public class UserDO extends AbstractEntity {
      * 用户组
      */
     private String groupName;
+
+    /**
+     * 用户所属角色
+     */
+    private List<String> roles;
 
 }

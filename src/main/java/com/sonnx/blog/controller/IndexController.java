@@ -5,13 +5,8 @@ import com.sonnx.blog.component.constant.WebConst;
 import com.sonnx.blog.dto.ErrorCode;
 import com.sonnx.blog.dto.MetaDto;
 import com.sonnx.blog.dto.Types;
-import com.sonnx.blog.modal.entity.ArticleDO;
-import com.sonnx.blog.modal.entity.CommentDO;
-import com.sonnx.blog.modal.entity.MetaDO;
-import com.sonnx.blog.service.ArticleService;
-import com.sonnx.blog.service.CommentService;
-import com.sonnx.blog.service.MetaService;
-import com.sonnx.blog.service.SiteService;
+import com.sonnx.blog.modal.entity.*;
+import com.sonnx.blog.service.*;
 import com.sonnx.blog.utils.IPKit;
 import com.sonnx.blog.utils.PatternKit;
 import com.sonnx.blog.utils.TaleUtils;
@@ -36,6 +31,8 @@ import com.sonnx.blog.utils.TaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,41 +66,40 @@ public class IndexController extends BaseController {
     @Resource
     private SiteService siteService;
 
-    /**
-     * 首页
-     *
-     * @return
-     */
-    @GetMapping(value = "/")
-    public String index(HttpServletRequest request, @RequestParam(value = "limit", defaultValue = "12") int limit) {
-        return this.index(request, 1, limit);
-    }
+    @Resource
+    private UserService usersService;
 
     /**
      * 首页分页
      *
-     * @param request request
-     * @param p       第几页
-     * @param limit   每页大小
+     * @param request  request
+     * @param pageNum  第几页
+     * @param pageSize 每页大小
      * @return 主页
      */
-    @GetMapping(value = "page/{p}")
-    public String index(HttpServletRequest request, @PathVariable int p, @RequestParam(value = "limit", defaultValue
-            = "12") int limit) {
-        p = p < 0 || p > WebConst.MAX_PAGE ? 1 : p;
-        PageInfo<ArticleDO> articles = articleService.getContents(p, limit);
-        request.setAttribute("articles", articles);
-        if (p > 1) {
-            this.title(request, "第" + p + "页");
-        }
-        return this.render("index");
+    @GetMapping(value = "articles")
+    @ResponseBody
+    public ResponseEntity articles(HttpServletRequest request, @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                   @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize) {
+        PageInfo<ArticleDO> articles = articleService.getContents(pageNum, pageSize);
+        return new ResponseEntity(articles, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "author")
+    @ResponseBody
+    public ResponseEntity authorInfo(@RequestParam(value = "authorId") Long authorId) {
+        UserDO userDO = usersService.queryUserById(authorId);
+        //将用户密码和token置为空
+        userDO.setPassword(null);
+        userDO.setToken(null);
+        return new ResponseEntity(userDO, HttpStatus.OK);
     }
 
     /**
      * 文章页
      *
-     * @param request 请求
-     * @param articleId     文章主键
+     * @param request   请求
+     * @param articleId 文章主键
      * @return
      */
     @GetMapping(value = {"article/{id}", "article/{id}.html"})
@@ -124,8 +120,8 @@ public class IndexController extends BaseController {
     /**
      * 文章页(预览)
      *
-     * @param request 请求
-     * @param articleId     文章主键
+     * @param request   请求
+     * @param articleId 文章主键
      * @return
      */
     @GetMapping(value = {"article/{id}/preview", "article/{id}.html"})
@@ -294,7 +290,7 @@ public class IndexController extends BaseController {
     public String archives(HttpServletRequest request,
                            @PathVariable(value = "year", required = false) String year,
                            @PathVariable(value = "month", required = false) String month) {
-        List<ArchiveBo> archives = siteService.getArchives(year,month);
+        List<ArchiveBo> archives = siteService.getArchives(year, month);
         request.setAttribute("archives", archives);
         return this.render("archives");
     }

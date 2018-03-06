@@ -50,6 +50,10 @@ public class UserServiceImpl implements UserService {
         if (id != null) {
             userDO = userDao.selectByPrimaryKey(id);
         }
+        if (userDO != null) {
+            List<String> roles = roleDao.findRoleNamesByUserId(userDO.getId());
+            userDO.setRoles(roles);
+        }
         return userDO;
     }
 

@@ -108,12 +108,12 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public PageInfo<ArticleDO> getContents(Integer p, Integer limit) {
+    public PageInfo<ArticleDO> getContents(Integer pageNum, Integer pageSize) {
         LOGGER.debug("Enter getContents method");
         ArticleDOExample example = new ArticleDOExample();
         example.setOrderByClause("gmt_create desc");
         example.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
-        PageHelper.startPage(p, limit);
+        PageHelper.startPage(pageNum, pageSize, true);
         List<ArticleDO> data = articleDao.selectByExampleWithBLOBs(example);
         PageInfo<ArticleDO> pageInfo = new PageInfo<>(data);
         LOGGER.debug("Exit getContents method");

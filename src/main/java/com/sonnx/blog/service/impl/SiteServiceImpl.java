@@ -188,14 +188,15 @@ public class SiteServiceImpl implements SiteService {
     }
 
     @Override
-    public List<ArchiveBo> getArchives(String year, String month) {
+    public List<ArchiveBo> getArchives(String year, String month, String category, String tag) {
         LOGGER.debug("Enter getArchives method");
-        List<ArchiveBo> archives = articleDao.findReturnArchiveBo(year, month);
+        List<ArchiveBo> archives = articleDao.findReturnArchiveBo(year, month, category, tag);
         if (null != archives) {
             archives.forEach(archive -> {
                 ArticleDOExample example = new ArticleDOExample();
                 ArticleDOExample.CriteriaAbstract criteria = example.createCriteria().andTypeEqualTo(Types.ARTICLE
                         .getType()).andStatusEqualTo(Types.PUBLISH.getType());
+                criteria.andCategoriesLike("%" + category + "%").andTagsLike("%" + tag + "%");
                 example.setOrderByClause("gmt_create desc");
                 String date = archive.getDate();
                 Date sd = DateKit.dateFormat(date, "yyyy年MM月");

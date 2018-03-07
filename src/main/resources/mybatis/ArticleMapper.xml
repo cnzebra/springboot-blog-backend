@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="com.sonnx.blog.modal.entity.ArticleDO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="outline" jdbcType="VARCHAR" property="outline"/>
         <result column="cover" jdbcType="VARCHAR" property="cover"/>
         <result column="path" jdbcType="VARCHAR" property="path"/>
         <result column="author_id" jdbcType="BIGINT" property="authorId"/>
@@ -83,7 +84,7 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-        id, title, cover,path, author_id, type, status, tags, categories, hits,
+        id,outline, title, cover,path, author_id, type, status, tags, categories, hits,
         comments_num, allow_comment, allow_ping, allow_feed,gmt_create,gmt_modified
     </sql>
     <sql id="Blob_Column_List">
@@ -147,12 +148,12 @@
         </if>
     </delete>
     <insert id="insert" parameterType="com.sonnx.blog.modal.entity.ArticleDO" useGeneratedKeys="true" keyProperty="id">
-        insert into t_b_article (id, title,cover, path,author_id,
+        insert into t_b_article (id,outline, title,cover, path,author_id,
         type, status, tags,
         categories, hits, comments_num,
         allow_comment, allow_ping, allow_feed,
         content,gmt_create,gmt_modified)
-        values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{cover},#{path,jdbcType=VARCHAR},#{authorId,jdbcType=BIGINT},
+        values (#{id,jdbcType=BIGINT},#{outline,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{cover},#{path,jdbcType=VARCHAR},#{authorId,jdbcType=BIGINT},
         #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR},
         #{categories,jdbcType=VARCHAR}, #{hits,jdbcType=INTEGER}, #{commentsNum,jdbcType=INTEGER},
         #{allowComment,jdbcType=BIT}, #{allowPing,jdbcType=BIT}, #{allowFeed,jdbcType=BIT},
@@ -167,6 +168,9 @@
             </if>
             <if test="title != null">
                 title,
+            </if>
+            <if test="outline != null">
+                outline,
             </if>
             <if test="path != null">
                 path,
@@ -217,6 +221,9 @@
             </if>
             <if test="title != null">
                 #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="outline != null">
+                #{outline,jdbcType=VARCHAR},
             </if>
             <if test="path != null">
                 #{path,jdbcType=VARCHAR},
@@ -275,6 +282,9 @@
             <if test="record.title != null">
                 title = #{record.title,jdbcType=VARCHAR},
             </if>
+            <if test="record.outline != null">
+                outline = #{record.outline,jdbcType=VARCHAR},
+            </if>
             <if test="record.path != null">
                 path = #{record.path,jdbcType=VARCHAR},
             </if>
@@ -323,6 +333,7 @@
         update t_b_article
         set
         title = #{record.title,jdbcType=VARCHAR},
+        outline = #{record.outline,jdbcType=VARCHAR},
         slug = #{record.slug,jdbcType=VARCHAR},
         author_id = #{record.authorId,jdbcType=BIGINT},
         type = #{record.type,jdbcType=VARCHAR},
@@ -344,6 +355,7 @@
         update t_b_article
         set
         title = #{record.title,jdbcType=VARCHAR},
+        outline = #{record.outline,jdbcType=VARCHAR},
         path = #{record.path,jdbcType=VARCHAR},
         author_id = #{record.authorId,jdbcType=BIGINT},
         type = #{record.type,jdbcType=VARCHAR},
@@ -365,6 +377,9 @@
         <set>
             <if test="title != null">
                 title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="outline != null">
+                outline = #{outline,jdbcType=VARCHAR},
             </if>
             <if test="cover !=null">
                 cover=#{cover,jdbcType=VARCHAR},
@@ -413,7 +428,9 @@
     </update>
     <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sonnx.blog.modal.entity.ArticleDO">
         update t_b_article
-        set title = #{title,jdbcType=VARCHAR},
+        set
+        title = #{title,jdbcType=VARCHAR},
+        outline = #{outline,jdbcType=VARCHAR},
         path = #{path,jdbcType=VARCHAR},
         author_id = #{authorId,jdbcType=BIGINT},
         type = #{type,jdbcType=VARCHAR},
@@ -431,7 +448,9 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.sonnx.blog.modal.entity.ArticleDO">
         update t_b_article
-        set title = #{title,jdbcType=VARCHAR},
+        set
+        title = #{title,jdbcType=VARCHAR},
+        outline = #{outline,jdbcType=VARCHAR},
         path = #{path,jdbcType=VARCHAR},
         author_id = #{authorId,jdbcType=BIGINT},
         type = #{type,jdbcType=VARCHAR},
@@ -476,6 +495,8 @@
         <if test="arg0!=null and arg1!=null">
             and DATE_FORMAT(gmt_create,'%Y')=#{arg0} and DATE_FORMAT(gmt_create,'%m')=#{arg1}
         </if>
+        and categories like concat('%',#{arg2},'%')
+        and tags like concat('%',#{arg3},'%')
         group by date
         order by date desc
     </select>

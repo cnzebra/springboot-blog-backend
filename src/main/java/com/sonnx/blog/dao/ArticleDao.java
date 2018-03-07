@@ -104,7 +104,7 @@ public interface ArticleDao {
     /**
      * @return
      */
-    List<ArchiveBo> findReturnArchiveBo(String year,String month);
+    List<ArchiveBo> findReturnArchiveBo(String year,String month,String category,String tag);
 
     /**
      * @param metaId

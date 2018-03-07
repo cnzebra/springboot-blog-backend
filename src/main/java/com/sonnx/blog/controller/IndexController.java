@@ -5,29 +5,18 @@ import com.sonnx.blog.component.constant.WebConst;
 import com.sonnx.blog.dto.ErrorCode;
 import com.sonnx.blog.dto.MetaDto;
 import com.sonnx.blog.dto.Types;
-import com.sonnx.blog.modal.entity.*;
-import com.sonnx.blog.service.*;
-import com.sonnx.blog.utils.IPKit;
-import com.sonnx.blog.utils.PatternKit;
-import com.sonnx.blog.utils.TaleUtils;
-import com.vdurmont.emoji.EmojiParser;
-import com.sonnx.blog.component.constant.WebConst;
-import com.sonnx.blog.dto.ErrorCode;
-import com.sonnx.blog.dto.MetaDto;
-import com.sonnx.blog.dto.Types;
 import com.sonnx.blog.modal.bo.ArchiveBo;
 import com.sonnx.blog.modal.bo.CommentBo;
 import com.sonnx.blog.modal.bo.RestResponseBo;
 import com.sonnx.blog.modal.entity.ArticleDO;
 import com.sonnx.blog.modal.entity.CommentDO;
 import com.sonnx.blog.modal.entity.MetaDO;
-import com.sonnx.blog.service.ArticleService;
-import com.sonnx.blog.service.CommentService;
-import com.sonnx.blog.service.MetaService;
-import com.sonnx.blog.service.SiteService;
+import com.sonnx.blog.modal.entity.UserDO;
+import com.sonnx.blog.service.*;
 import com.sonnx.blog.utils.IPKit;
 import com.sonnx.blog.utils.PatternKit;
 import com.sonnx.blog.utils.TaleUtils;
+import com.vdurmont.emoji.EmojiParser;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -249,6 +238,19 @@ public class IndexController extends BaseController {
         }
     }
 
+    @GetMapping(value = "categories")
+    @ResponseBody
+    public ResponseEntity categories() {
+        List<MetaDto> categories = metaService.getMetaList(Types.CATEGORY.getType(), null, WebConst.MAX_POSTS);
+        return new ResponseEntity(categories, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "list")
+    @ResponseBody
+    public ResponseEntity tags() {
+        List<MetaDto> tags = metaService.getMetaList(Types.TAG.getType(), null, WebConst.MAX_POSTS);
+        return new ResponseEntity(tags, HttpStatus.OK);
+    }
 
     /**
      * 分类页
@@ -290,8 +292,10 @@ public class IndexController extends BaseController {
     @ResponseBody
     public ResponseEntity archives(HttpServletRequest request,
                                    @PathVariable(value = "year", required = false) String year,
-                                   @PathVariable(value = "month", required = false) String month) {
-        List<ArchiveBo> archives = siteService.getArchives(year, month);
+                                   @PathVariable(value = "month", required = false) String month,
+                                   @RequestParam(value = "category", defaultValue = "") String category,
+                                   @RequestParam(value = "tag", defaultValue = "") String tag) {
+        List<ArchiveBo> archives = siteService.getArchives(year, month, category, tag);
         return new ResponseEntity(archives, HttpStatus.OK);
     }
 

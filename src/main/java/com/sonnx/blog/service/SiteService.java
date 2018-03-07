@@ -67,7 +67,7 @@ public interface SiteService {
      *
      * @return
      */
-    List<ArchiveBo> getArchives(String year,String month);
+    List<ArchiveBo> getArchives(String year, String month, String category, String tag);
 
     /**
      * 获取分类/标签列表

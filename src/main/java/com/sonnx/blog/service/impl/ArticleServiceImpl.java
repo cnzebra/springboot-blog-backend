@@ -66,6 +66,13 @@ public class ArticleServiceImpl implements ArticleService {
         if (titleLength > WebConst.MAX_TITLE_COUNT) {
             return "文章标题过长";
         }
+        if (StringUtils.isBlank(contents.getOutline())) {
+            if (contents.getContent().length() > 128) {
+                contents.setOutline(contents.getContent().substring(0, 128));
+            } else {
+                contents.setOutline(contents.getContent());
+            }
+        }
         int contentLength = contents.getContent().length();
         if (contentLength > WebConst.MAX_TEXT_COUNT) {
             return "文章内容过长";

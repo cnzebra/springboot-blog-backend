@@ -15,6 +15,11 @@ public class ArticleDO extends AbstractEntity {
      * 内容标题
      */
     private String title;
+
+    /**
+     * 文章概要
+     */
+    private String outline;
     /**
      * 封面URL
      */

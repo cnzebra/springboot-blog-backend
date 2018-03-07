@@ -409,7 +409,7 @@ public final class Commons {
     }
 
     public List<ArchiveBo> archives() {
-        List<ArchiveBo> archives = siteService.getArchives(null, null);
+        List<ArchiveBo> archives = siteService.getArchives(null, null, null, null);
         return archives;
     }
 

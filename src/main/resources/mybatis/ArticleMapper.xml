@@ -474,7 +474,7 @@
         where
         type = 'post' and status = 'publish'
         <if test="arg0!=null and arg1!=null">
-            and from_unixtime(gmt_create,'%Y')=#{arg0} and from_unixtime(gmt_create,'%m')=#{arg1}
+            and DATE_FORMAT(gmt_create,'%Y')=#{arg0} and DATE_FORMAT(gmt_create,'%m')=#{arg1}
         </if>
         group by date
         order by date desc

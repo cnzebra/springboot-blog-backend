@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -306,52 +307,52 @@ public class ArticleDOExample {
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtCreateEqualTo(Integer value) {
+        public CriteriaAbstract andGmtCreateEqualTo(Date value) {
             addCriterion("gmt_create =", value, "gmtCreate");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtCreateNotEqualTo(Integer value) {
+        public CriteriaAbstract andGmtCreateNotEqualTo(Date value) {
             addCriterion("gmt_create <>", value, "gmtCreate");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtCreateGreaterThan(Integer value) {
+        public CriteriaAbstract andGmtCreateGreaterThan(Date value) {
             addCriterion("gmt_create >", value, "gmt_create");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtCreateGreaterThanOrEqualTo(Integer value) {
+        public CriteriaAbstract andGmtCreateGreaterThanOrEqualTo(Date value) {
             addCriterion("gmt_create >=", value, "gmtCreate");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtCreateLessThan(Integer value) {
+        public CriteriaAbstract andGmtCreateLessThan(Date value) {
             addCriterion("gmt_create <", value, "gmtCreate");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtCreateLessThanOrEqualTo(Integer value) {
+        public CriteriaAbstract andGmtCreateLessThanOrEqualTo(Date value) {
             addCriterion("gmt_create <=", value, "gmtCreate");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtCreateIn(List<Integer> values) {
+        public CriteriaAbstract andGmtCreateIn(List<Date> values) {
             addCriterion("gmt_create in", values, "gmtCreate");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtCreateNotIn(List<Integer> values) {
+        public CriteriaAbstract andGmtCreateNotIn(List<Date> values) {
             addCriterion("gmt_create not in", values, "gmtCreate");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtCreateBetween(Integer value1, Integer value2) {
+        public CriteriaAbstract andGmtCreateBetween(Date value1, Date value2) {
             addCriterion("gmt_create between", value1, value2, "gmtCreate");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtCreateNotBetween(Integer value1, Integer value2) {
+        public CriteriaAbstract andGmtCreateNotBetween(Date value1, Date value2) {
             addCriterion("gmt_create not between", value1, value2, "gmtCreate");
             return (CriteriaAbstract) this;
         }
@@ -366,52 +367,52 @@ public class ArticleDOExample {
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtModifiedEqualTo(Integer value) {
+        public CriteriaAbstract andGmtModifiedEqualTo(Date value) {
             addCriterion("gmt_modified =", value, "gmtModified");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtModifiedNotEqualTo(Integer value) {
+        public CriteriaAbstract andGmtModifiedNotEqualTo(Date value) {
             addCriterion("gmt_modified <>", value, "gmtModified");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtModifiedGreaterThan(Integer value) {
+        public CriteriaAbstract andGmtModifiedGreaterThan(Date value) {
             addCriterion("gmt_modified >", value, "gmtModified");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtModifiedGreaterThanOrEqualTo(Integer value) {
+        public CriteriaAbstract andGmtModifiedGreaterThanOrEqualTo(Date value) {
             addCriterion("gmt_modified >=", value, "gmtModified");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtModifiedLessThan(Integer value) {
+        public CriteriaAbstract andGmtModifiedLessThan(Date value) {
             addCriterion("gmt_modified <", value, "gmtModified");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtModifiedLessThanOrEqualTo(Integer value) {
+        public CriteriaAbstract andGmtModifiedLessThanOrEqualTo(Date value) {
             addCriterion("gmt_modified <=", value, "gmtModified");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtModifiedIn(List<Integer> values) {
+        public CriteriaAbstract andGmtModifiedIn(List<Date> values) {
             addCriterion("gmt_modified in", values, "gmtModified");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtModifiedNotIn(List<Integer> values) {
+        public CriteriaAbstract andGmtModifiedNotIn(List<Date> values) {
             addCriterion("gmt_modified not in", values, "gmtModified");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtModifiedBetween(Integer value1, Integer value2) {
+        public CriteriaAbstract andGmtModifiedBetween(Date value1, Date value2) {
             addCriterion("gmt_modified between", value1, value2, "gmtModified");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andGmtModifiedNotBetween(Integer value1, Integer value2) {
+        public CriteriaAbstract andGmtModifiedNotBetween(Date value1, Date value2) {
             addCriterion("gmt_modified not between", value1, value2, "gmtModified");
             return (CriteriaAbstract) this;
         }
@@ -426,52 +427,52 @@ public class ArticleDOExample {
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdEqualTo(Integer value) {
+        public CriteriaAbstract andAuthorIdEqualTo(Long value) {
             addCriterion("author_id =", value, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdNotEqualTo(Integer value) {
+        public CriteriaAbstract andAuthorIdNotEqualTo(Long value) {
             addCriterion("author_id <>", value, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdGreaterThan(Integer value) {
+        public CriteriaAbstract andAuthorIdGreaterThan(Long value) {
             addCriterion("author_id >", value, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdGreaterThanOrEqualTo(Integer value) {
+        public CriteriaAbstract andAuthorIdGreaterThanOrEqualTo(Long value) {
             addCriterion("author_id >=", value, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdLessThan(Integer value) {
+        public CriteriaAbstract andAuthorIdLessThan(Long value) {
             addCriterion("author_id <", value, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdLessThanOrEqualTo(Integer value) {
+        public CriteriaAbstract andAuthorIdLessThanOrEqualTo(Long value) {
             addCriterion("author_id <=", value, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdIn(List<Integer> values) {
+        public CriteriaAbstract andAuthorIdIn(List<Long> values) {
             addCriterion("author_id in", values, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdNotIn(List<Integer> values) {
+        public CriteriaAbstract andAuthorIdNotIn(List<Long> values) {
             addCriterion("author_id not in", values, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdBetween(Integer value1, Integer value2) {
+        public CriteriaAbstract andAuthorIdBetween(Long value1, Long value2) {
             addCriterion("author_id between", value1, value2, "authorId");
             return (CriteriaAbstract) this;
         }
 
-        public CriteriaAbstract andAuthorIdNotBetween(Integer value1, Integer value2) {
+        public CriteriaAbstract andAuthorIdNotBetween(Long value1, Long value2) {
             addCriterion("author_id not between", value1, value2, "authorId");
             return (CriteriaAbstract) this;
         }

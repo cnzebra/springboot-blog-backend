@@ -199,9 +199,8 @@ public class SiteServiceImpl implements SiteService {
                 example.setOrderByClause("gmt_create desc");
                 String date = archive.getDate();
                 Date sd = DateKit.dateFormat(date, "yyyy年MM月");
-                int start = DateKit.getUnixTimeByDate(sd);
-                int end = DateKit.getUnixTimeByDate(DateKit.dateAdd(DateKit.INTERVAL_MONTH, sd, 1)) - 1;
-                criteria.andGmtCreateGreaterThan(start);
+                Date end = DateKit.dateAdd(DateKit.INTERVAL_MONTH, sd, 1);
+                criteria.andGmtCreateGreaterThan(sd);
                 criteria.andGmtCreateLessThan(end);
                 List<ArticleDO> contentss = articleDao.selectByExample(example);
                 archive.setArticles(contentss);

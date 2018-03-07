@@ -287,12 +287,12 @@ public class IndexController extends BaseController {
      * @return
      */
     @GetMapping(value = {"archives", "archives/{year}/{month}"})
-    public String archives(HttpServletRequest request,
-                           @PathVariable(value = "year", required = false) String year,
-                           @PathVariable(value = "month", required = false) String month) {
+    @ResponseBody
+    public ResponseEntity archives(HttpServletRequest request,
+                                   @PathVariable(value = "year", required = false) String year,
+                                   @PathVariable(value = "month", required = false) String month) {
         List<ArchiveBo> archives = siteService.getArchives(year, month);
-        request.setAttribute("archives", archives);
-        return this.render("archives");
+        return new ResponseEntity(archives, HttpStatus.OK);
     }
 
     /**

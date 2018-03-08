@@ -66,7 +66,7 @@ public class CommentServiceImpl implements CommentService {
             return "不存在的文章";
         }
         comments.setOwnerId(contents.getAuthorId());
-        comments.setStatus("approval");
+        comments.setStatus("approved");
         comments.setGmtCreate(new Date());
         commentDao.insertSelective(comments);
 

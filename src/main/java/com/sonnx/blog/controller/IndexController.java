@@ -161,40 +161,29 @@ public class IndexController extends BaseController {
     /**
      * 评论操作
      */
-    @PostMapping(value = "comment")
+    @PostMapping(value = "article/{articleId}/comment")
     @ResponseBody
     public RestResponseBo comment(HttpServletRequest request, HttpServletResponse response,
-                                  @RequestParam Long articleId, @RequestParam Long commentId,
-                                  @RequestParam String author, @RequestParam String email,
-                                  @RequestParam String siteUrl, @RequestParam String text, @RequestParam String csrfToken) {
+                                  @PathVariable(value = "articleId") Long articleId,
+                                  @RequestBody CommentDO commentDO) {
 
-        String ref = request.getHeader("Referer");
-        if (StringUtils.isBlank(ref) || StringUtils.isBlank(csrfToken)) {
-            return RestResponseBo.fail(ErrorCode.BAD_REQUEST);
-        }
-
-        String token = cache.hget(Types.CSRF_TOKEN.getType(), csrfToken);
-        if (StringUtils.isBlank(token)) {
-            return RestResponseBo.fail(ErrorCode.BAD_REQUEST);
-        }
-
-        if (null == articleId || StringUtils.isBlank(text)) {
+        if (null == articleId || StringUtils.isBlank(commentDO.getContent())) {
             return RestResponseBo.fail("请输入完整后评论");
         }
 
-        if (StringUtils.isNotBlank(author) && author.length() > 50) {
+        if (StringUtils.isNotBlank(commentDO.getAuthor()) && commentDO.getAuthor().length() > 50) {
             return RestResponseBo.fail("姓名过长");
         }
 
-        if (StringUtils.isNotBlank(email) && !TaleUtils.isEmail(email)) {
+        if (StringUtils.isNotBlank(commentDO.getEmail()) && !TaleUtils.isEmail(commentDO.getEmail())) {
             return RestResponseBo.fail("请输入正确的邮箱格式");
         }
 
-        if (StringUtils.isNotBlank(siteUrl) && !PatternKit.isURL(siteUrl)) {
+        if (StringUtils.isNotBlank(commentDO.getSiteUrl()) && !PatternKit.isURL(commentDO.getSiteUrl())) {
             return RestResponseBo.fail("请输入正确的URL格式");
         }
 
-        if (text.length() > 200) {
+        if (commentDO.getContent().length() > 200) {
             return RestResponseBo.fail("请输入200个字符以内的评论");
         }
 
@@ -204,27 +193,15 @@ public class IndexController extends BaseController {
             return RestResponseBo.fail("您发表评论太快了，请过会再试");
         }
 
-        author = TaleUtils.cleanXSS(author);
-        text = TaleUtils.cleanXSS(text);
+        commentDO.setAuthor(TaleUtils.cleanXSS(commentDO.getAuthor()));
+        commentDO.setContent(TaleUtils.cleanXSS(commentDO.getContent()));
 
-        author = EmojiParser.parseToAliases(author);
-        text = EmojiParser.parseToAliases(text);
+//        author = EmojiParser.parseToAliases(commentDO.getAuthor());
+        commentDO.setContent(EmojiParser.parseToAliases(commentDO.getContent()));
 
-        CommentDO comments = new CommentDO();
-        comments.setAuthor(author);
-        comments.setArticleId(articleId);
-        comments.setIp(request.getRemoteAddr());
-        comments.setSiteUrl(siteUrl);
-        comments.setContent(text);
-        comments.setEmail(email);
-        comments.setParent(commentId);
+        commentDO.setIp(request.getRemoteAddr());
         try {
-            String result = commentService.insertComment(comments);
-            cookie("tale_remember_author", URLEncoder.encode(author, "UTF-8"), 7 * 24 * 60 * 60, response);
-            cookie("tale_remember_mail", URLEncoder.encode(email, "UTF-8"), 7 * 24 * 60 * 60, response);
-            if (StringUtils.isNotBlank(siteUrl)) {
-                cookie("tale_remember_url", URLEncoder.encode(siteUrl, "UTF-8"), 7 * 24 * 60 * 60, response);
-            }
+            String result = commentService.insertComment(commentDO);
             // 设置对每个文章1分钟可以评论一次
             cache.hset(Types.COMMENTS_FREQUENCY.getType(), val, 1, 60);
             if (!WebConst.SUCCESS_RESULT.equals(result)) {
@@ -311,27 +288,18 @@ public class IndexController extends BaseController {
         return new ResponseEntity(links, HttpStatus.OK);
     }
 
-    /**
-     * 自定义页面,如关于的页面
-     */
-    @GetMapping(value = "/{pagename}")
-    public String page(@PathVariable Long pagename, HttpServletRequest request) {
-        ArticleDO contents = articleService.getContents(pagename);
+    @GetMapping(value = "/article/{articleId}/comments")
+    @ResponseBody
+    public ResponseEntity page(@PathVariable(value = "articleId") Long articleId,
+                               @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                               @RequestParam(value = "pageSize", defaultValue = "6") Integer pageSize,
+                               HttpServletRequest request) {
+        ArticleDO contents = articleService.getContents(articleId);
         if (null == contents) {
-            return this.render404();
+            return new ResponseEntity(RestResponseBo.fail(), HttpStatus.OK);
         }
-        if (contents.getAllowComment()) {
-            String cp = request.getParameter("cp");
-            if (StringUtils.isBlank(cp)) {
-                cp = "1";
-            }
-            PageInfo<CommentBo> commentsPaginator = commentService.getComments(contents.getId(), Integer.parseInt
-                    (cp), 6);
-            request.setAttribute("comments", commentsPaginator);
-        }
-        request.setAttribute("article", contents);
-        updateArticleHit(contents.getId(), contents.getHits());
-        return this.render("page");
+        PageInfo<CommentBo> commentsPaginator = commentService.getComments(articleId, pageNum, pageSize);
+        return new ResponseEntity(commentsPaginator, HttpStatus.OK);
     }
 
 

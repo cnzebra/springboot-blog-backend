@@ -66,7 +66,7 @@ public class CommentServiceImpl implements CommentService {
             return "不存在的文章";
         }
         comments.setOwnerId(contents.getAuthorId());
-        comments.setStatus("not_audit");
+        comments.setStatus("approval");
         comments.setGmtCreate(new Date());
         commentDao.insertSelective(comments);
 
@@ -84,7 +84,9 @@ public class CommentServiceImpl implements CommentService {
         if (null != articleId) {
             PageHelper.startPage(page, limit);
             CommentDOExample commentDOExample = new CommentDOExample();
-            commentDOExample.createCriteria().andIdEqualTo(articleId).andParentEqualTo(0).andStatusIsNotNull()
+            commentDOExample.createCriteria()
+                    .andArticleIdEqualTo(articleId)
+                    .andParentEqualTo(0)
                     .andStatusEqualTo("approved");
             commentDOExample.setOrderByClause("id desc");
             List<CommentDO> parents = commentDao.selectByExampleWithBLOBs(commentDOExample);

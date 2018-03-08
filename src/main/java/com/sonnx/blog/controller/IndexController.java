@@ -245,7 +245,7 @@ public class IndexController extends BaseController {
         return new ResponseEntity(categories, HttpStatus.OK);
     }
 
-    @GetMapping(value = "list")
+    @GetMapping(value = "tags")
     @ResponseBody
     public ResponseEntity tags() {
         List<MetaDto> tags = metaService.getMetaList(Types.TAG.getType(), null, WebConst.MAX_POSTS);
@@ -305,10 +305,10 @@ public class IndexController extends BaseController {
      * @return
      */
     @GetMapping(value = "links")
-    public String links(HttpServletRequest request) {
+    @ResponseBody
+    public ResponseEntity links(HttpServletRequest request) {
         List<MetaDO> links = metaService.getMetas(Types.LINK.getType());
-        request.setAttribute("links", links);
-        return this.render("links");
+        return new ResponseEntity(links, HttpStatus.OK);
     }
 
     /**

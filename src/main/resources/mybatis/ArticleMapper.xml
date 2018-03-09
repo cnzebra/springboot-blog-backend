@@ -14,6 +14,8 @@
         <result column="categories" jdbcType="VARCHAR" property="categories"/>
         <result column="hits" jdbcType="INTEGER" property="hits"/>
         <result column="comments_num" jdbcType="INTEGER" property="commentsNum"/>
+        <result column="likes" jdbcType="INTEGER" property="likes"/>
+        <result column="dislikes" jdbcType="INTEGER" property="dislikes"/>
         <result column="allow_comment" jdbcType="BIT" property="allowComment"/>
         <result column="allow_ping" jdbcType="BIT" property="allowPing"/>
         <result column="allow_feed" jdbcType="BIT" property="allowFeed"/>
@@ -85,7 +87,7 @@
     </sql>
     <sql id="Base_Column_List">
         id,outline, title, cover,path, author_id, type, status, tags, categories, hits,
-        comments_num, allow_comment, allow_ping, allow_feed,gmt_create,gmt_modified
+        comments_num,likes,dislikes, allow_comment, allow_ping, allow_feed,gmt_create,gmt_modified
     </sql>
     <sql id="Blob_Column_List">
         content
@@ -150,12 +152,12 @@
     <insert id="insert" parameterType="com.sonnx.blog.modal.entity.ArticleDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_b_article (id,outline, title,cover, path,author_id,
         type, status, tags,
-        categories, hits, comments_num,
+        categories, hits, comments_num,likes,dislikes,
         allow_comment, allow_ping, allow_feed,
         content,gmt_create,gmt_modified)
         values (#{id,jdbcType=BIGINT},#{outline,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{cover},#{path,jdbcType=VARCHAR},#{authorId,jdbcType=BIGINT},
         #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR},
-        #{categories,jdbcType=VARCHAR}, #{hits,jdbcType=INTEGER}, #{commentsNum,jdbcType=INTEGER},
+        #{categories,jdbcType=VARCHAR}, #{hits,jdbcType=INTEGER}, #{commentsNum,jdbcType=INTEGER},#{likes,jdbcType=INTEGER},#{dislikes,jdbcType=INTEGER},
         #{allowComment,jdbcType=BIT}, #{allowPing,jdbcType=BIT}, #{allowFeed,jdbcType=BIT},
         #{content,jdbcType=LONGVARCHAR},#{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
     </insert>
@@ -195,6 +197,12 @@
             </if>
             <if test="commentsNum != null">
                 comments_num,
+            </if>
+            <if test="likes != null">
+                likes,
+            </if>
+            <if test="dislikes != null">
+                dislikes,
             </if>
             <if test="allowComment != null">
                 allow_comment,
@@ -248,6 +256,12 @@
             </if>
             <if test="commentsNum != null">
                 #{commentsNum,jdbcType=INTEGER},
+            </if>
+            <if test="likes != null">
+                #{likes,jdbcType=INTEGER},
+            </if>
+            <if test="dislikes != null">
+                #{dislikes,jdbcType=INTEGER},
             </if>
             <if test="allowComment != null">
                 #{allowComment,jdbcType=BIT},
@@ -309,6 +323,12 @@
             <if test="record.commentsNum != null">
                 comments_num = #{record.commentsNum,jdbcType=INTEGER},
             </if>
+            <if test="record.likes != null">
+                likes = #{record.likes,jdbcType=INTEGER},
+            </if>
+            <if test="record.commentsNum != null">
+                dislikes = #{record.dislikes,jdbcType=INTEGER},
+            </if>
             <if test="record.allowComment != null">
                 allow_comment = #{record.allowComment,jdbcType=BIT},
             </if>
@@ -342,6 +362,8 @@
         categories = #{record.categories,jdbcType=VARCHAR},
         hits = #{record.hits,jdbcType=INTEGER},
         comments_num = #{record.commentsNum,jdbcType=INTEGER},
+        likes = #{record.likes,jdbcType=INTEGER},
+        dislikes = #{record.dislikes,jdbcType=INTEGER},
         allow_comment = #{record.allowComment,jdbcType=BIT},
         allow_ping = #{record.allowPing,jdbcType=BIT},
         allow_feed = #{record.allowFeed,jdbcType=BIT},
@@ -364,6 +386,8 @@
         categories = #{record.categories,jdbcType=VARCHAR},
         hits = #{record.hits,jdbcType=INTEGER},
         comments_num = #{record.commentsNum,jdbcType=INTEGER},
+        likes = #{record.likes,jdbcType=INTEGER},
+        dislikes = #{record.dislikes,jdbcType=INTEGER},
         allow_comment = #{record.allowComment,jdbcType=BIT},
         allow_ping = #{record.allowPing,jdbcType=BIT},
         allow_feed = #{record.allowFeed,jdbcType=BIT},
@@ -408,6 +432,12 @@
             <if test="commentsNum != null">
                 comments_num = #{commentsNum,jdbcType=INTEGER},
             </if>
+            <if test="likes != null">
+                likes = #{likes,jdbcType=INTEGER},
+            </if>
+            <if test="dislikes != null">
+                dislikes = #{dislikes,jdbcType=INTEGER},
+            </if>
             <if test="allowComment != null">
                 allow_comment = #{allowComment,jdbcType=BIT},
             </if>
@@ -439,6 +469,8 @@
         categories = #{categories,jdbcType=VARCHAR},
         hits = #{hits,jdbcType=INTEGER},
         comments_num = #{commentsNum,jdbcType=INTEGER},
+        likes = #{likes,jdbcType=INTEGER},
+        dislikes = #{dislikes,jdbcType=INTEGER},
         allow_comment = #{allowComment,jdbcType=BIT},
         allow_ping = #{allowPing,jdbcType=BIT},
         allow_feed = #{allowFeed,jdbcType=BIT},
@@ -459,6 +491,8 @@
         categories = #{categories,jdbcType=VARCHAR},
         hits = #{hits,jdbcType=INTEGER},
         comments_num = #{commentsNum,jdbcType=INTEGER},
+        likes = #{likes,jdbcType=INTEGER},
+        dislikes = #{dislikes,jdbcType=INTEGER},
         allow_comment = #{allowComment,jdbcType=BIT},
         allow_ping = #{allowPing,jdbcType=BIT},
         allow_feed = #{allowFeed,jdbcType=BIT},
@@ -508,4 +542,23 @@
         where b.meta_id = #{metaId} and a.status = 'publish' and a.type = 'post'
         order by a.gmt_create desc
     </select>
+
+    <update id="updateStatistics" parameterType="com.sonnx.blog.param.ArticleStatistics">
+        update t_b_article
+        <set>
+            <if test="hits!=null">
+                hits=#{hits},
+            </if>
+            <if test="commentsNum!=null">
+                comments_num=#{commentsNum},
+            </if>
+            <if test="likes!=null">
+                likes=#{likes},
+            </if>
+            <if test="dislikes!=null">
+                dislikes=#{dislikes}
+            </if>
+        </set>
+        where id=#{articleId}
+    </update>
 </mapper>

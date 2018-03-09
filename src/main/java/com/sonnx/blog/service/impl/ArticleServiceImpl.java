@@ -7,6 +7,7 @@ import com.sonnx.blog.dao.ArticleDao;
 import com.sonnx.blog.dao.MetaDao;
 import com.sonnx.blog.dto.Types;
 import com.sonnx.blog.exception.TipException;
+import com.sonnx.blog.param.ArticleStatistics;
 import com.vdurmont.emoji.EmojiParser;
 import com.sonnx.blog.component.constant.WebConst;
 import com.sonnx.blog.dao.ArticleDao;
@@ -204,6 +205,12 @@ public class ArticleServiceImpl implements ArticleService {
         Date date = new Date();
         int result = articleDao.audit(articleId, status, date);
         return result;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public int updateStatistics(ArticleStatistics statistics) {
+        return articleDao.updateStatistics(statistics);
     }
 
     @Override

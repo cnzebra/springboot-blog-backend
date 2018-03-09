@@ -3,6 +3,7 @@ package com.sonnx.blog.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sonnx.blog.component.constant.WebConst;
+import com.sonnx.blog.dao.ArticleDao;
 import com.sonnx.blog.dao.CommentDao;
 import com.sonnx.blog.exception.TipException;
 import com.sonnx.blog.component.constant.WebConst;
@@ -13,6 +14,7 @@ import com.sonnx.blog.modal.entity.ArticleDO;
 import com.sonnx.blog.modal.entity.CommentDO;
 import com.sonnx.blog.modal.entity.CommentDOExample;
 import com.sonnx.blog.modal.entity.UserDO;
+import com.sonnx.blog.param.ArticleStatistics;
 import com.sonnx.blog.service.ArticleService;
 import com.sonnx.blog.service.CommentService;
 import com.sonnx.blog.utils.TaleUtils;
@@ -21,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -40,6 +43,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Resource
     private ArticleService articleService;
+
+    @Resource
+    private ArticleDao articleDao;
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
@@ -75,10 +81,10 @@ public class CommentServiceImpl implements CommentService {
         commentDao.insertSelective(comments);
 
         if ("comment".equals(comments.getType())) {
-            ArticleDO temp = new ArticleDO();
-            temp.setId(contents.getId());
-            temp.setCommentsNum(contents.getCommentsNum() + 1);
-            articleService.updateContentByCid(temp);
+            ArticleStatistics statistics = new ArticleStatistics();
+            statistics.setArticleId(contents.getId());
+            statistics.setCommentsNum(contents.getCommentsNum() + 1);
+            articleDao.updateStatistics(statistics);
         }
         return WebConst.SUCCESS_RESULT;
     }

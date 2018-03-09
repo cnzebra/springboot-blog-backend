@@ -3,6 +3,7 @@ package com.sonnx.blog.dao;
 import com.sonnx.blog.modal.bo.ArchiveBo;
 import com.sonnx.blog.modal.entity.ArticleDO;
 import com.sonnx.blog.modal.entity.ArticleDOExample;
+import com.sonnx.blog.param.ArticleStatistics;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -104,7 +105,7 @@ public interface ArticleDao {
     /**
      * @return
      */
-    List<ArchiveBo> findReturnArchiveBo(String year,String month,String category,String tag);
+    List<ArchiveBo> findReturnArchiveBo(String year, String month, String category, String tag);
 
     /**
      * @param metaId
@@ -113,4 +114,6 @@ public interface ArticleDao {
     List<ArticleDO> findByCatalog(@Param("metaId") Long metaId);
 
     int audit(@Param("articleId") Long articleId, @Param("status") String status, @Param("modified") Date modified);
+
+    Integer updateStatistics(ArticleStatistics statistics);
 }

@@ -3,6 +3,7 @@ package com.sonnx.blog.service;
 import com.sonnx.blog.modal.entity.ArticleDO;
 import com.sonnx.blog.modal.entity.ArticleDOExample;
 import com.github.pagehelper.PageInfo;
+import com.sonnx.blog.param.ArticleStatistics;
 
 /**
  * @author Administrator
@@ -99,4 +100,7 @@ public interface ArticleService {
     void updateCategory(String ordinal, String newCatefory);
 
     int audit(Long articleId, String status);
+
+
+    int updateStatistics(ArticleStatistics statistics);
 }

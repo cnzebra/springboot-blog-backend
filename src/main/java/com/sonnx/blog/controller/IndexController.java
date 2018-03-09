@@ -12,6 +12,7 @@ import com.sonnx.blog.modal.entity.ArticleDO;
 import com.sonnx.blog.modal.entity.CommentDO;
 import com.sonnx.blog.modal.entity.MetaDO;
 import com.sonnx.blog.modal.entity.UserDO;
+import com.sonnx.blog.param.ArticleStatistics;
 import com.sonnx.blog.service.*;
 import com.sonnx.blog.utils.IPKit;
 import com.sonnx.blog.utils.PatternKit;
@@ -384,19 +385,12 @@ public class IndexController extends BaseController {
         return this.render("page-category");
     }
 
-    /**
-     * 设置cookie
-     *
-     * @param name
-     * @param value
-     * @param maxAge
-     * @param response
-     */
-    private void cookie(String name, String value, int maxAge, HttpServletResponse response) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setMaxAge(maxAge);
-        cookie.setSecure(false);
-        response.addCookie(cookie);
+    @PutMapping("article/statistics")
+    @ResponseBody
+    public ResponseEntity updateArticleStatistics(@RequestBody ArticleStatistics statistics) {
+        int result = articleService.updateStatistics(statistics);
+
+        return new ResponseEntity(RestResponseBo.ok(result), HttpStatus.OK);
     }
 
 }

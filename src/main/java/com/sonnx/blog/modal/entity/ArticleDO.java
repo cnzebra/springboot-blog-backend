@@ -56,6 +56,16 @@ public class ArticleDO extends AbstractEntity {
      * 内容所属评论数
      */
     private Integer commentsNum;
+
+    /**
+     * 喜欢,点赞数
+     */
+    private Integer likes;
+
+    /**
+     * 反对
+     */
+    private Integer dislikes;
     /**
      * 是否允许评论
      */

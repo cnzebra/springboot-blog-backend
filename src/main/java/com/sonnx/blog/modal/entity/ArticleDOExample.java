@@ -877,6 +877,127 @@ public class ArticleDOExample {
             return (CriteriaAbstract) this;
         }
 
+        public CriteriaAbstract andLikesIsNull() {
+            addCriterion("likes is null");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andLikesIsNotNull() {
+            addCriterion("likes is not null");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andLikesEqualTo(Integer value) {
+            addCriterion("likes =", value, "likes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andLikesNotEqualTo(Integer value) {
+            addCriterion("likes <>", value, "likes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andLikesGreaterThan(Integer value) {
+            addCriterion("likes >", value, "likes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andLikesGreaterThanOrEqualTo(Integer value) {
+            addCriterion("likes >=", value, "likes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andLikesLessThan(Integer value) {
+            addCriterion("likes <", value, "likes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andLikesLessThanOrEqualTo(Integer value) {
+            addCriterion("likes <=", value, "likes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andLikesIn(List<Integer> values) {
+            addCriterion("likes in", values, "likes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andLikesNotIn(List<Integer> values) {
+            addCriterion("likes not in", values, "likes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andLikesBetween(Integer value1, Integer value2) {
+            addCriterion("likes between", value1, value2, "likes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andLikesNotBetween(Integer value1, Integer value2) {
+            addCriterion("likes not between", value1, value2, "likes");
+            return (CriteriaAbstract) this;
+        }
+
+
+        public CriteriaAbstract andDislikesIsNull() {
+            addCriterion("dislikes is null");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andDislikesIsNotNull() {
+            addCriterion("dislikes is not null");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andDislikesEqualTo(Integer value) {
+            addCriterion("dislikes =", value, "dislikes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andDislikesNotEqualTo(Integer value) {
+            addCriterion("dislikes <>", value, "dislikes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andDislikesGreaterThan(Integer value) {
+            addCriterion("dislikes >", value, "dislikes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andDislikesGreaterThanOrEqualTo(Integer value) {
+            addCriterion("dislikes >=", value, "dislikes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andDislikesLessThan(Integer value) {
+            addCriterion("dislikes <", value, "dislikes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andDislikesLessThanOrEqualTo(Integer value) {
+            addCriterion("dislikes <=", value, "dislikes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andDislikesIn(List<Integer> values) {
+            addCriterion("dislikes in", values, "dislikes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andDislikesNotIn(List<Integer> values) {
+            addCriterion("dislikes not in", values, "dislikes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andDislikesBetween(Integer value1, Integer value2) {
+            addCriterion("dislikes between", value1, value2, "dislikes");
+            return (CriteriaAbstract) this;
+        }
+
+        public CriteriaAbstract andDislikesNotBetween(Integer value1, Integer value2) {
+            addCriterion("dislikes not between", value1, value2, "dislikes");
+            return (CriteriaAbstract) this;
+        }
+
         public CriteriaAbstract andAllowCommentIsNull() {
             addCriterion("allow_comment is null");
             return (CriteriaAbstract) this;

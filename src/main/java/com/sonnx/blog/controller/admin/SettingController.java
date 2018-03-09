@@ -76,7 +76,7 @@ public class SettingController extends BaseController {
             if (StringUtils.isNotBlank(siteTheme)) {
                 BaseController.THEME = "themes/" + siteTheme;
             }
-            logService.insertLog(LogActions.SYS_SETTING.getAction(), GsonUtils.toJsonString(querys),null, request
+            logService.insertLog(LogActions.SYS_SETTING.getAction(), GsonUtils.toJsonString(querys), null, request
                     .getRemoteAddr(), this.getUid(request));
             return RestResponseBo.ok();
         } catch (Exception e) {
@@ -100,7 +100,7 @@ public class SettingController extends BaseController {
         }
         try {
             BackResponseBo backResponse = siteService.backup(bkType, bkPath, "yyyyMMddHHmm");
-            logService.insertLog(LogActions.SYS_BACKUP.getAction(), null, null,request.getRemoteAddr(), this.getUid
+            logService.insertLog(LogActions.SYS_BACKUP.getAction(), null, null, request.getRemoteAddr(), this.getUid
                     (request));
             return RestResponseBo.ok(backResponse);
         } catch (Exception e) {

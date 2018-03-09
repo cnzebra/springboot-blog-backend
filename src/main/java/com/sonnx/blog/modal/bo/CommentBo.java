@@ -24,7 +24,6 @@ public class CommentBo extends CommentDO {
         setAuthor(comments.getAuthor());
         setEmail(comments.getEmail());
         setId(comments.getId());
-        setAuthorId(comments.getAuthorId());
         setSiteUrl(comments.getSiteUrl());
         setGmtCreate(comments.getGmtCreate());
         setAgent(comments.getAgent());

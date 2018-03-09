@@ -141,7 +141,7 @@ public class IndexController extends BaseController {
                 cp = "1";
             }
             request.setAttribute("cp", cp);
-            PageInfo<CommentBo> commentsPaginator = commentService.getComments(contents.getId(), Integer.parseInt
+            PageInfo<CommentDO> commentsPaginator = commentService.getComments(contents.getId(), Integer.parseInt
                     (cp), 6);
             request.setAttribute("comments", commentsPaginator);
         }
@@ -171,10 +171,6 @@ public class IndexController extends BaseController {
             return RestResponseBo.fail("请输入完整后评论");
         }
 
-        if (StringUtils.isNotBlank(commentDO.getAuthor()) && commentDO.getAuthor().length() > 50) {
-            return RestResponseBo.fail("姓名过长");
-        }
-
         if (StringUtils.isNotBlank(commentDO.getEmail()) && !TaleUtils.isEmail(commentDO.getEmail())) {
             return RestResponseBo.fail("请输入正确的邮箱格式");
         }
@@ -193,9 +189,6 @@ public class IndexController extends BaseController {
             return RestResponseBo.fail("您发表评论太快了，请过会再试");
         }
 
-        commentDO.setAuthor(TaleUtils.cleanXSS(commentDO.getAuthor()));
-        commentDO.setContent(TaleUtils.cleanXSS(commentDO.getContent()));
-
 //        author = EmojiParser.parseToAliases(commentDO.getAuthor());
         commentDO.setContent(EmojiParser.parseToAliases(commentDO.getContent()));
 
@@ -203,7 +196,7 @@ public class IndexController extends BaseController {
         try {
             String result = commentService.insertComment(commentDO);
             // 设置对每个文章1分钟可以评论一次
-            cache.hset(Types.COMMENTS_FREQUENCY.getType(), val, 1, 60);
+            cache.hset(Types.COMMENTS_FREQUENCY.getType(), val, 1, 5);
             if (!WebConst.SUCCESS_RESULT.equals(result)) {
                 return RestResponseBo.fail(result);
             }
@@ -298,7 +291,7 @@ public class IndexController extends BaseController {
         if (null == contents) {
             return new ResponseEntity(RestResponseBo.fail(), HttpStatus.OK);
         }
-        PageInfo<CommentBo> commentsPaginator = commentService.getComments(articleId, pageNum, pageSize);
+        PageInfo<CommentDO> commentsPaginator = commentService.getComments(articleId, pageNum, pageSize);
         return new ResponseEntity(commentsPaginator, HttpStatus.OK);
     }
 

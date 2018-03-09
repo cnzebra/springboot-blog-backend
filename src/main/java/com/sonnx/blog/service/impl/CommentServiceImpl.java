@@ -12,6 +12,7 @@ import com.sonnx.blog.modal.bo.CommentBo;
 import com.sonnx.blog.modal.entity.ArticleDO;
 import com.sonnx.blog.modal.entity.CommentDO;
 import com.sonnx.blog.modal.entity.CommentDOExample;
+import com.sonnx.blog.modal.entity.UserDO;
 import com.sonnx.blog.service.ArticleService;
 import com.sonnx.blog.service.CommentService;
 import com.sonnx.blog.utils.TaleUtils;
@@ -46,8 +47,11 @@ public class CommentServiceImpl implements CommentService {
         if (null == comments) {
             return "评论对象为空";
         }
-        if (StringUtils.isBlank(comments.getAuthor())) {
-            comments.setAuthor("热心网友");
+        if (comments.getAuthor() == null) {
+            UserDO userDO = new UserDO();
+            userDO.setId(0L);
+            userDO.setScreenName("热心网友");
+            comments.setAuthor(userDO);
         }
         if (StringUtils.isNotBlank(comments.getEmail()) && !TaleUtils.isEmail(comments.getEmail())) {
             return "请输入正确的邮箱格式";
@@ -70,16 +74,17 @@ public class CommentServiceImpl implements CommentService {
         comments.setGmtCreate(new Date());
         commentDao.insertSelective(comments);
 
-        ArticleDO temp = new ArticleDO();
-        temp.setId(contents.getId());
-        temp.setCommentsNum(contents.getCommentsNum() + 1);
-        articleService.updateContentByCid(temp);
-
+        if ("comment".equals(comments.getType())) {
+            ArticleDO temp = new ArticleDO();
+            temp.setId(contents.getId());
+            temp.setCommentsNum(contents.getCommentsNum() + 1);
+            articleService.updateContentByCid(temp);
+        }
         return WebConst.SUCCESS_RESULT;
     }
 
     @Override
-    public PageInfo<CommentBo> getComments(Long articleId, int page, int limit) {
+    public PageInfo<CommentDO> getComments(Long articleId, int page, int limit) {
 
         if (null != articleId) {
             PageHelper.startPage(page, limit);
@@ -87,22 +92,41 @@ public class CommentServiceImpl implements CommentService {
             commentDOExample.createCriteria()
                     .andArticleIdEqualTo(articleId)
                     .andParentEqualTo(0)
-                    .andStatusEqualTo("approved");
-            commentDOExample.setOrderByClause("id desc");
+                    .andStatusEqualTo("approved")
+                    .andTypeEqualTo("comment");
+            commentDOExample.setOrderByClause("gmt_create asc");
             List<CommentDO> parents = commentDao.selectByExampleWithBLOBs(commentDOExample);
             PageInfo<CommentDO> commentPaginator = new PageInfo<>(parents);
-            PageInfo<CommentBo> returnBo = copyPageInfo(commentPaginator);
-            if (parents.size() != 0) {
-                List<CommentBo> comments = new ArrayList<>(parents.size());
-                parents.forEach(parent -> {
-                    CommentBo comment = new CommentBo(parent);
-                    comments.add(comment);
-                });
-                returnBo.setList(comments);
-            }
-            return returnBo;
+
+            //查询出该文章所有回复列表
+            CommentDOExample replyDOExample = new CommentDOExample();
+            replyDOExample.createCriteria()
+                    .andArticleIdEqualTo(articleId)
+                    .andStatusEqualTo("approved")
+                    .andTypeEqualTo("reply");
+            commentDOExample.setOrderByClause("gmt_create asc");
+            List<CommentDO> replyList = commentDao.selectByExampleWithBLOBs(replyDOExample);
+
+            commentPaginator.getList().forEach(parent -> {
+                this.setChildren(parent, replyList);
+            });
+
+            return commentPaginator;
         }
         return null;
+    }
+
+    private void setChildren(CommentDO parent, List<CommentDO> children) {
+        for (CommentDO c : children) {
+            if (c.getParent() == parent.getId()) {
+                //匹配到直接父子关系
+                if (parent.getChildren() == null) {
+                    parent.setChildren(new ArrayList());
+                }
+                this.setChildren(c, children);
+                parent.getChildren().add(c);
+            }
+        }
     }
 
     @Override

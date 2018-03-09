@@ -83,7 +83,7 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public PageInfo<LogDO> getLogsForPage(int page, int pageSize,LogDOExample logDOExample) {
+    public PageInfo<LogDO> getLogsForPage(int page, int pageSize, LogDOExample logDOExample) {
         LOGGER.debug("Enter getLogs method:page={},pageSize={}", page, pageSize);
         if (page <= 0) {
             page = 1;
@@ -100,7 +100,7 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public Integer deleteById(Long logId) {
-        Integer result=logDao.deleteByPrimaryKey(logId);
+        Integer result = logDao.deleteByPrimaryKey(logId);
         return result;
     }
 }

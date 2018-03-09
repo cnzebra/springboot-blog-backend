@@ -94,7 +94,7 @@ public class IndexController extends BaseController {
             temp.setScreenName(screenName);
             temp.setEmail(email);
             userService.updateById(temp);
-            logService.insertLog(LogActions.UP_INFO.getAction(), GsonUtils.toJsonString(temp), null,request.getRemoteAddr
+            logService.insertLog(LogActions.UP_INFO.getAction(), GsonUtils.toJsonString(temp), null, request.getRemoteAddr
                     (), this.getUid(request));
 
             //更新session中的数据
@@ -131,7 +131,7 @@ public class IndexController extends BaseController {
             String pwd = TaleUtils.md5encode(users.getLoginName() + password);
             temp.setPassword(pwd);
             userService.updateById(temp);
-            logService.insertLog(LogActions.UP_PWD.getAction(), null,null, request.getRemoteAddr(), this.getUid(request));
+            logService.insertLog(LogActions.UP_PWD.getAction(), null, null, request.getRemoteAddr(), this.getUid(request));
 
             //更新session中的数据
             UserDO original = (UserDO) session.getAttribute(WebConst.LOGIN_SESSION_KEY);

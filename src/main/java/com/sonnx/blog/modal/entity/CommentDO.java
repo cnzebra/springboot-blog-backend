@@ -4,6 +4,9 @@ import com.sonnx.blog.modal.common.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author
  */
@@ -18,11 +21,7 @@ public class CommentDO extends AbstractEntity {
     /**
      * 评论作者
      */
-    private String author;
-    /**
-     * 评论所属用户id
-     */
-    private Long authorId;
+    private UserDO author;
     /**
      * 评论所属内容作者id
      */
@@ -59,5 +58,11 @@ public class CommentDO extends AbstractEntity {
      * 评论内容
      */
     private String content;
+
+
+    /**
+     * 子元素
+     */
+    private List<CommentDO> children;
 
 }

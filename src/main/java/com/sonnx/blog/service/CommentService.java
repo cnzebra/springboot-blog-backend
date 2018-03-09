@@ -27,7 +27,7 @@ public interface CommentService {
      * @param limit
      * @return CommentBo
      */
-    PageInfo<CommentBo> getComments(Long articleId, int page, int limit);
+    PageInfo<CommentDO> getComments(Long articleId, int page, int limit);
 
     /**
      * 获取文章下的评论

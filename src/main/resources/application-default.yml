@@ -1,12 +1,12 @@
 server:
-  port: 8888
-  context-path: /blog
+  port: 8080
+  context-path: /sonnxblog
 # db config
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://47.96.28.236:3306/sonnx-pro?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true
+    url: jdbc:mysql://localhost:3306/sonnx-dev?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true
     username: aikafka
     password: 123456
     tomcat:
@@ -32,4 +32,3 @@ pagehelper:
   params: count=countSql
 logging:
   level: debug
-

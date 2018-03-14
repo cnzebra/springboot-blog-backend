@@ -29,9 +29,9 @@ public class ArticleDO extends AbstractEntity {
      */
     private String path;
     /**
-     * 内容所属用户id
+     * 评论作者
      */
-    private Long authorId;
+    private UserDO author;
     /**
      * 内容类别
      */

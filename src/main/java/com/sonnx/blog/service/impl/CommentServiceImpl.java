@@ -75,7 +75,7 @@ public class CommentServiceImpl implements CommentService {
         if (null == contents) {
             return "不存在的文章";
         }
-        comments.setOwnerId(contents.getAuthorId());
+        comments.setOwnerId(contents.getAuthor().getId());
         comments.setStatus("approved");
         comments.setGmtCreate(new Date());
         commentDao.insertSelective(comments);

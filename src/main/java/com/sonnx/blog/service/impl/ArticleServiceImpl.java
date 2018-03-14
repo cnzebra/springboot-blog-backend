@@ -78,7 +78,7 @@ public class ArticleServiceImpl implements ArticleService {
         if (contentLength > WebConst.MAX_TEXT_COUNT) {
             return "文章内容过长";
         }
-        if (null == contents.getAuthorId()) {
+        if (null == contents.getAuthor() || contents.getAuthor().getId() == null) {
             return "请登录后发布文章";
         }
         if (StringUtils.isNotBlank(contents.getPath())) {
@@ -233,7 +233,7 @@ public class ArticleServiceImpl implements ArticleService {
         if (contentLength > WebConst.MAX_TEXT_COUNT) {
             return "文章内容过长";
         }
-        if (null == contents.getAuthorId()) {
+        if (null == contents.getAuthor() || contents.getAuthor().getId() == null) {
             return "请登录后发布文章";
         }
         if (StringUtils.isBlank(contents.getPath())) {

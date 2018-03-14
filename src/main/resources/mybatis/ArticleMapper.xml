@@ -7,7 +7,6 @@
         <result column="outline" jdbcType="VARCHAR" property="outline"/>
         <result column="cover" jdbcType="VARCHAR" property="cover"/>
         <result column="path" jdbcType="VARCHAR" property="path"/>
-        <result column="author_id" jdbcType="BIGINT" property="authorId"/>
         <result column="type" jdbcType="VARCHAR" property="type"/>
         <result column="status" jdbcType="VARCHAR" property="status"/>
         <result column="tags" jdbcType="VARCHAR" property="tags"/>
@@ -21,6 +20,14 @@
         <result column="allow_feed" jdbcType="BIT" property="allowFeed"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+
+        <association property="author" javaType="com.sonnx.blog.modal.entity.UserDO">
+            <id property="id" column="b_author_id"/>
+            <result property="loginName" column="b_login_name"/>
+            <result property="email" column="b_email"/>
+            <result property="screenName" column="b_screen_name"/>
+            <result property="lastLoginTime" column="b_last_login_time"/>
+        </association>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sonnx.blog.modal.entity.ArticleDO">
         <result column="content" jdbcType="LONGVARCHAR" property="content"/>
@@ -86,11 +93,16 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-        id,outline, title, cover,path, author_id, type, status, tags, categories, hits,
-        comments_num,likes,dislikes, allow_comment, allow_ping, allow_feed,gmt_create,gmt_modified
+        a.id,a.outline, a.title, a.cover,a.path, a.type, a.status, a.tags, a.categories, a.hits,
+        a.comments_num,a.likes,a.dislikes, a.allow_comment, a.allow_ping, a.allow_feed,a.gmt_create,a.gmt_modified,
+        b.id b_author_id,
+        b.login_name b_login_name,
+        b.email b_email,
+        b.screen_name b_screen_name,
+        b.last_login_time b_last_login_time
     </sql>
     <sql id="Blob_Column_List">
-        content
+        a.content
     </sql>
     <select id="selectByExampleWithBLOBs" parameterType="com.sonnx.blog.modal.entity.ArticleDOExample"
             resultMap="ResultMapWithBLOBs">
@@ -101,7 +113,7 @@
         <include refid="Base_Column_List"/>
         ,
         <include refid="Blob_Column_List"/>
-        from t_b_article
+        from t_b_article a join t_si_user b on a.author_id=b.id
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -115,7 +127,7 @@
             distinct
         </if>
         <include refid="Base_Column_List"/>
-        from t_b_article
+        from t_b_article a join t_si_user b on a.author_id=b.id
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -155,7 +167,7 @@
         categories, hits, comments_num,likes,dislikes,
         allow_comment, allow_ping, allow_feed,
         content,gmt_create,gmt_modified)
-        values (#{id,jdbcType=BIGINT},#{outline,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{cover},#{path,jdbcType=VARCHAR},#{authorId,jdbcType=BIGINT},
+        values (#{id,jdbcType=BIGINT},#{outline,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{cover},#{path,jdbcType=VARCHAR},#{author.id,jdbcType=BIGINT},
         #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR},
         #{categories,jdbcType=VARCHAR}, #{hits,jdbcType=INTEGER}, #{commentsNum,jdbcType=INTEGER},#{likes,jdbcType=INTEGER},#{dislikes,jdbcType=INTEGER},
         #{allowComment,jdbcType=BIT}, #{allowPing,jdbcType=BIT}, #{allowFeed,jdbcType=BIT},
@@ -177,7 +189,7 @@
             <if test="path != null">
                 path,
             </if>
-            <if test="authorId != null">
+            <if test="author != null">
                 author_id,
             </if>
             <if test="type != null">
@@ -236,8 +248,8 @@
             <if test="path != null">
                 #{path,jdbcType=VARCHAR},
             </if>
-            <if test="authorId != null">
-                #{authorId,jdbcType=BIGINT},
+            <if test="author != null">
+                #{author.id,jdbcType=BIGINT},
             </if>
             <if test="type != null">
                 #{type,jdbcType=VARCHAR},
@@ -302,8 +314,8 @@
             <if test="record.path != null">
                 path = #{record.path,jdbcType=VARCHAR},
             </if>
-            <if test="record.authorId != null">
-                author_id = #{record.authorId,jdbcType=BIGINT},
+            <if test="record.author != null">
+                author_id = #{record.author.id,jdbcType=BIGINT},
             </if>
             <if test="record.type != null">
                 type = #{record.type,jdbcType=VARCHAR},
@@ -355,7 +367,7 @@
         title = #{record.title,jdbcType=VARCHAR},
         outline = #{record.outline,jdbcType=VARCHAR},
         slug = #{record.slug,jdbcType=VARCHAR},
-        author_id = #{record.authorId,jdbcType=BIGINT},
+        author_id = #{record.author.id,jdbcType=BIGINT},
         type = #{record.type,jdbcType=VARCHAR},
         status = #{record.status,jdbcType=VARCHAR},
         tags = #{record.tags,jdbcType=VARCHAR},
@@ -379,7 +391,7 @@
         title = #{record.title,jdbcType=VARCHAR},
         outline = #{record.outline,jdbcType=VARCHAR},
         path = #{record.path,jdbcType=VARCHAR},
-        author_id = #{record.authorId,jdbcType=BIGINT},
+        author_id = #{record.author.id,jdbcType=BIGINT},
         type = #{record.type,jdbcType=VARCHAR},
         status = #{record.status,jdbcType=VARCHAR},
         tags = #{record.tags,jdbcType=VARCHAR},
@@ -411,8 +423,8 @@
             <if test="path != null">
                 path = #{path,jdbcType=VARCHAR},
             </if>
-            <if test="authorId != null">
-                author_id = #{authorId,jdbcType=BIGINT},
+            <if test="author != null">
+                author_id = #{author.id,jdbcType=BIGINT},
             </if>
             <if test="type != null">
                 type = #{type,jdbcType=VARCHAR},
@@ -462,7 +474,7 @@
         title = #{title,jdbcType=VARCHAR},
         outline = #{outline,jdbcType=VARCHAR},
         path = #{path,jdbcType=VARCHAR},
-        author_id = #{authorId,jdbcType=BIGINT},
+        author_id = #{author.id,jdbcType=BIGINT},
         type = #{type,jdbcType=VARCHAR},
         status = #{status,jdbcType=VARCHAR},
         tags = #{tags,jdbcType=VARCHAR},
@@ -484,7 +496,7 @@
         title = #{title,jdbcType=VARCHAR},
         outline = #{outline,jdbcType=VARCHAR},
         path = #{path,jdbcType=VARCHAR},
-        author_id = #{authorId,jdbcType=BIGINT},
+        author_id = #{author.id,jdbcType=BIGINT},
         type = #{type,jdbcType=VARCHAR},
         status = #{status,jdbcType=VARCHAR},
         tags = #{tags,jdbcType=VARCHAR},

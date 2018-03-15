@@ -15,7 +15,7 @@ public interface UserService {
      * @return 主键
      */
 
-    Long insertUser(UserDO userDO);
+    UserDO insertUser(UserDO userDO);
 
     /**
      * 通过uid查找对象
@@ -28,11 +28,9 @@ public interface UserService {
     /**
      * 用戶登录
      *
-     * @param loginName
-     * @param password
      * @return
      */
-    UserDO login(String loginName, String password);
+    UserDO login(UserDO userDO);
 
     /**
      * 根据主键更新user对象
@@ -43,4 +41,6 @@ public interface UserService {
     void updateById(UserDO userDO);
 
     UserDO queryUserByToken(String token);
+
+    void logout(String token);
 }

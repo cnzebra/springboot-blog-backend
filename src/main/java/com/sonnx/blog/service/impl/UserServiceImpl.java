@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public Long insertUser(UserDO userDO) {
+    public UserDO insertUser(UserDO userDO) {
         if (!StringUtils.equals(userDO.getPassword(), userDO.getConfirmPassword())) {
             throw new TipException("两次输入密码不相同,请重新输入");
         }
@@ -59,7 +59,9 @@ public class UserServiceImpl implements UserService {
             userDO.setGmtCreate(date);
             userDao.insertSelective(userDO);
         }
-        return userDO.getId();
+        userDO.setPassword(null);
+        userDO.setConfirmPassword(null);
+        return userDO;
     }
 
     @Override
@@ -76,27 +78,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDO login(String loginName, String password) {
-        if (StringUtils.isBlank(loginName) || StringUtils.isBlank(password)) {
+    @Transactional(rollbackFor = {Exception.class})
+    public UserDO login(UserDO user) {
+        if (StringUtils.isBlank(user.getLoginName()) || StringUtils.isBlank(user.getPassword())) {
             throw new TipException("用户名和密码不能为空");
         }
         UserDOExample example = new UserDOExample();
         UserDOExample.CriteriaAbstract criteria = example.createCriteria();
-        criteria.andLoginNameEqualTo(loginName);
-        Integer count = userDao.countByExample(example);
-        if (count < 1) {
+        criteria.andLoginNameEqualTo(user.getLoginName());
+        List<UserDO> userDOS = userDao.selectByExample(example);
+
+        if (userDOS == null || userDOS.size() == 0) {
             throw new TipException("不存在该用户");
         }
-        String pwd = TaleUtils.md5encode(loginName + password);
-        criteria.andPasswordEqualTo(pwd);
-        List<UserDO> userDOS = userDao.selectByExample(example);
-        if (userDOS.size() != 1) {
+        if (userDOS.size() > 1) {
+            throw new TipException("系统数据异常");
+        }
+
+        String pwd = TaleUtils.md5encode(user.getLoginName() + user.getPassword());
+
+        if (!StringUtils.equals(userDOS.get(0).getPassword(), pwd)) {
             throw new TipException("用户名或密码错误");
         }
+        //账号密码正确
         UserDO userDO = userDOS.get(0);
+        userDO.setLoginStatus(1);
+
+        int count = userDao.updateByPrimaryKeySelective(userDO);
+        if (count != 1) {
+            throw new TipException("登录失败");
+        }
+
         List<String> roles = roleDao.findRoleNamesByUserId(userDO.getId());
         userDO.setRoles(roles);
-        return userDOS.get(0);
+        userDO.setPassword(null);
+        return userDO;
     }
 
     @Override
@@ -127,5 +143,27 @@ public class UserServiceImpl implements UserService {
         List<String> roles = roleDao.findRoleNamesByUserId(userDO.getId());
         userDO.setRoles(roles);
         return userDOS.get(0);
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public void logout(String token) {
+        if (StringUtils.isBlank(token)) {
+            throw new TipException("请求非法,无令牌");
+        }
+        UserDOExample example = new UserDOExample();
+        UserDOExample.CriteriaAbstract criteria = example.createCriteria();
+        criteria.andTokenEqualTo(token);
+        List<UserDO> userDOS = userDao.selectByExample(example);
+        if (userDOS.size() == 0) {
+            throw new TipException("请求非法");
+        }
+        UserDO userDO = userDOS.get(0);
+        userDO.setLoginStatus(0);
+
+        int count = userDao.updateByPrimaryKeySelective(userDO);
+        if (count != 1) {
+            throw new TipException("退出失败");
+        }
     }
 }

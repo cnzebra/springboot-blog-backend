@@ -19,7 +19,7 @@
             <id property="id" column="b_author_id"/>
             <result property="loginName" column="b_login_name"/>
             <result property="email" column="b_email"/>
-            <result property="screenName" column="b_screen_name"/>
+            <result property="nickname" column="b_nickname"/>
             <result property="lastLoginTime" column="b_last_login_time"/>
         </association>
     </resultMap>
@@ -92,7 +92,7 @@
         b.id b_author_id,
         b.login_name b_login_name,
         b.email b_email,
-        b.screen_name b_screen_name,
+        b.nickname b_nickname,
         b.last_login_time b_last_login_time
     </sql>
     <sql id="Blob_Column_List">

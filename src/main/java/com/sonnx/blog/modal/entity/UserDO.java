@@ -46,6 +46,10 @@ public class UserDO extends AbstractEntity {
      */
     private String nickname;
     /**
+     * 1:在线;0:离线
+     */
+    private Integer loginStatus;
+    /**
      * 最后活动时间
      */
     private Integer activated;

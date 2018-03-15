@@ -58,7 +58,7 @@ public class AuthController extends BaseController {
 
         Integer errorCount = cache.get("login_error_count");
         try {
-            UserDO user = usersService.login(loginForm.getString("loginName"), loginForm.getString("password"));
+            UserDO user = usersService.login(null);
             request.getSession().setAttribute(WebConst.LOGIN_SESSION_KEY, user);
             if (StringUtils.isNotBlank(loginForm.getString("rememberMe"))) {
                 TaleUtils.setCookie(response, user.getId());
@@ -101,7 +101,6 @@ public class AuthController extends BaseController {
     /**
      * 注销
      *
-     * @param session
      * @param response
      */
     @RequestMapping("/logout")

@@ -155,7 +155,7 @@ CREATE TABLE `t_users` (
   `password` varchar(64) DEFAULT NULL,
   `email` varchar(200) DEFAULT NULL,
   `home_url` varchar(200) DEFAULT NULL,
-  `screen_name` varchar(32) DEFAULT NULL,
+  `nickname` varchar(32) DEFAULT NULL,
   `gmtCreate` int(10) unsigned DEFAULT '0',
   `activated` int(10) unsigned DEFAULT '0' ,
   `logged` int(10) unsigned DEFAULT '0',
@@ -165,6 +165,6 @@ CREATE TABLE `t_users` (
   UNIQUE KEY `mail` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `t_users` (`uid`, `username`, `password`, `email`, `home_url`, `screen_name`, `gmtCreate`, `activated`, `logged`, `group_name`)
+INSERT INTO `t_users` (`uid`, `username`, `password`, `email`, `home_url`, `nickname`, `gmtCreate`, `activated`, `logged`, `group_name`)
 VALUES
 	(1, 'admin', 'a66abb5684c45962d887564f08346e8d', '1034683568@qq.com', NULL, 'admin', 1490756162, 0, 0, 'visitor');

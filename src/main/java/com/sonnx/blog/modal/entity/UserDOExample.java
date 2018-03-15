@@ -438,72 +438,72 @@ public class UserDOExample {
         }
 
         public CriteriaAbstract andScreenNameIsNull() {
-            addCriterion("screen_name is null");
+            addCriterion("nickname is null");
             return (CriteriaAbstract) this;
         }
 
         public CriteriaAbstract andScreenNameIsNotNull() {
-            addCriterion("screen_name is not null");
+            addCriterion("nickname is not null");
             return (CriteriaAbstract) this;
         }
 
         public CriteriaAbstract andScreenNameEqualTo(String value) {
-            addCriterion("screen_name =", value, "screenName");
+            addCriterion("nickname =", value, "nickname");
             return (CriteriaAbstract) this;
         }
 
         public CriteriaAbstract andScreenNameNotEqualTo(String value) {
-            addCriterion("screen_name <>", value, "screenName");
+            addCriterion("nickname <>", value, "nickname");
             return (CriteriaAbstract) this;
         }
 
         public CriteriaAbstract andScreenNameGreaterThan(String value) {
-            addCriterion("screen_name >", value, "screenName");
+            addCriterion("nickname >", value, "nickname");
             return (CriteriaAbstract) this;
         }
 
         public CriteriaAbstract andScreenNameGreaterThanOrEqualTo(String value) {
-            addCriterion("screen_name >=", value, "screenName");
+            addCriterion("nickname >=", value, "nickname");
             return (CriteriaAbstract) this;
         }
 
         public CriteriaAbstract andScreenNameLessThan(String value) {
-            addCriterion("screen_name <", value, "screenName");
+            addCriterion("nickname <", value, "nickname");
             return (CriteriaAbstract) this;
         }
 
         public CriteriaAbstract andScreenNameLessThanOrEqualTo(String value) {
-            addCriterion("screen_name <=", value, "screenName");
+            addCriterion("nickname <=", value, "nickname");
             return (CriteriaAbstract) this;
         }
 
         public CriteriaAbstract andScreenNameLike(String value) {
-            addCriterion("screen_name like", value, "screenName");
+            addCriterion("nickname like", value, "nickname");
             return (CriteriaAbstract) this;
         }
 
         public CriteriaAbstract andScreenNameNotLike(String value) {
-            addCriterion("screen_name not like", value, "screenName");
+            addCriterion("nickname not like", value, "nickname");
             return (CriteriaAbstract) this;
         }
 
         public CriteriaAbstract andScreenNameIn(List<String> values) {
-            addCriterion("screen_name in", values, "screenName");
+            addCriterion("nickname in", values, "nickname");
             return (CriteriaAbstract) this;
         }
 
         public CriteriaAbstract andScreenNameNotIn(List<String> values) {
-            addCriterion("screen_name not in", values, "screenName");
+            addCriterion("nickname not in", values, "nickname");
             return (CriteriaAbstract) this;
         }
 
         public CriteriaAbstract andScreenNameBetween(String value1, String value2) {
-            addCriterion("screen_name between", value1, value2, "screenName");
+            addCriterion("nickname between", value1, value2, "nickname");
             return (CriteriaAbstract) this;
         }
 
         public CriteriaAbstract andScreenNameNotBetween(String value1, String value2) {
-            addCriterion("screen_name not between", value1, value2, "screenName");
+            addCriterion("nickname not between", value1, value2, "nickname");
             return (CriteriaAbstract) this;
         }
 

@@ -61,12 +61,6 @@ public interface UserDao {
      */
     int updateByExampleSelective(@Param("record") UserDO record, @Param("example") UserDOExample example);
 
-    /**
-     * @param record
-     * @param example
-     * @return
-     */
-    int updateByExample(@Param("record") UserDO record, @Param("example") UserDOExample example);
 
     /**
      * @param record
@@ -74,9 +68,4 @@ public interface UserDao {
      */
     int updateByPrimaryKeySelective(UserDO record);
 
-    /**
-     * @param record
-     * @return
-     */
-    int updateByPrimaryKey(UserDO record);
 }

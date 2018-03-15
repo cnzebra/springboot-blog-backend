@@ -8,6 +8,7 @@
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="home_url" jdbcType="VARCHAR" property="homeUrl"/>
         <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+        <result column="login_status" jdbcType="INTEGER" property="loginStatus"/>
         <result column="activated" jdbcType="INTEGER" property="activated"/>
         <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime"/>
         <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
@@ -75,7 +76,7 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-        id, login_name, password,token, email, home_url, nickname, activated, last_login_time,
+        id, login_name, password,token, email, home_url, nickname, login_status,activated, last_login_time,
         group_name,gmt_create,gmt_modified
     </sql>
     <select id="selectByExample" parameterType="com.sonnx.blog.modal.entity.UserDOExample" resultMap="BaseResultMap">
@@ -118,11 +119,11 @@
     </delete>
     <insert id="insert" parameterType="com.sonnx.blog.modal.entity.UserDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_si_user (id, login_name, password,
-        email, home_url, nickname,
+        email, home_url, nickname,login_status
         activated, last_login_time,
         group_name,gmt_create,gmt_modified)
         values (#{id,jdbcType=BIGINT}, #{loginName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
-        #{email,jdbcType=VARCHAR}, #{homeUrl,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR},
+        #{email,jdbcType=VARCHAR}, #{homeUrl,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR},#{loginStatus,jdbcType=INTEGER},
         #{activated,jdbcType=INTEGER}, #{lastLoginTime,jdbcType=TIMESTAMP},
         #{groupName,jdbcType=VARCHAR},#{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
     </insert>
@@ -150,6 +151,9 @@
             </if>
             <if test="nickname != null">
                 nickname,
+            </if>
+            <if test="loginStatus != null">
+                login_status,
             </if>
             <if test="activated != null">
                 activated,
@@ -188,6 +192,9 @@
             </if>
             <if test="nickname != null">
                 #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="loginStatus != null">
+                login_status = #{loginStatus,jdbcType=INTEGER},
             </if>
             <if test="activated != null">
                 #{activated,jdbcType=INTEGER},
@@ -232,6 +239,9 @@
             <if test="record.nickname != null">
                 nickname = #{record.nickname,jdbcType=VARCHAR},
             </if>
+            <if test="record.loginStatus != null">
+                login_status = #{record.loginStatus,jdbcType=INTEGER},
+            </if>
             <if test="record.activated != null">
                 activated = #{record.activated,jdbcType=INTEGER},
             </if>
@@ -245,22 +255,6 @@
                 gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
             </if>
         </set>
-        <if test="_parameter != null">
-            <include refid="Update_By_Example_Where_Clause"/>
-        </if>
-    </update>
-    <update id="updateByExample" parameterType="map">
-        update t_si_user
-        set
-        login_name = #{record.loginName,jdbcType=VARCHAR},
-        password = #{record.password,jdbcType=VARCHAR},
-        email = #{record.email,jdbcType=VARCHAR},
-        home_url = #{record.homeUrl,jdbcType=VARCHAR},
-        nickname = #{record.nickname,jdbcType=VARCHAR},
-        activated = #{record.activated,jdbcType=INTEGER},
-        last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
-        group_name = #{record.groupName,jdbcType=VARCHAR},
-        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
@@ -283,6 +277,9 @@
             <if test="nickname != null">
                 nickname = #{nickname,jdbcType=VARCHAR},
             </if>
+            <if test="loginStatus != null">
+                login_status = #{loginStatus,jdbcType=INTEGER},
+            </if>
             <if test="activated != null">
                 activated = #{activated,jdbcType=INTEGER},
             </if>
@@ -296,20 +293,6 @@
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where id = #{id,jdbcType=BIGINT}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.sonnx.blog.modal.entity.UserDO">
-        update t_si_user
-        set
-        login_name = #{loginName,jdbcType=VARCHAR},
-        password = #{password,jdbcType=VARCHAR},
-        email = #{email,jdbcType=VARCHAR},
-        home_url = #{homeUrl,jdbcType=VARCHAR},
-        nickname = #{nickname,jdbcType=VARCHAR},
-        activated = #{activated,jdbcType=INTEGER},
-        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
-        group_name = #{groupName,jdbcType=VARCHAR},
-        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=BIGINT}
     </update>
 </mapper>

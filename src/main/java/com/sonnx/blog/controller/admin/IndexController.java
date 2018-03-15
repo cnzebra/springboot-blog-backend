@@ -85,13 +85,13 @@ public class IndexController extends BaseController {
      */
     @PostMapping(value = "/profile")
     @ResponseBody
-    public RestResponseBo saveProfile(@RequestParam String screenName, @RequestParam String email, HttpServletRequest
+    public RestResponseBo saveProfile(@RequestParam String nickname, @RequestParam String email, HttpServletRequest
             request, HttpSession session) {
         UserDO users = this.user(request);
-        if (StringUtils.isNotBlank(screenName) && StringUtils.isNotBlank(email)) {
+        if (StringUtils.isNotBlank(nickname) && StringUtils.isNotBlank(email)) {
             UserDO temp = new UserDO();
             temp.setId(users.getId());
-            temp.setNickname(screenName);
+            temp.setNickname(nickname);
             temp.setEmail(email);
             userService.updateById(temp);
             logService.insertLog(LogActions.UP_INFO.getAction(), GsonUtils.toJsonString(temp), null, request.getRemoteAddr
@@ -99,7 +99,7 @@ public class IndexController extends BaseController {
 
             //更新session中的数据
             UserDO original = (UserDO) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
-            original.setNickname(screenName);
+            original.setNickname(nickname);
             original.setEmail(email);
             session.setAttribute(WebConst.LOGIN_SESSION_KEY, original);
         }

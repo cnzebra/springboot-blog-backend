@@ -34,16 +34,16 @@
                         <foreach collection="criteria.criteria" item="criterion">
                             <choose>
                                 <when test="criterion.noValue">
-                                    and ${criterion.condition}
+                                    and a.${criterion.condition}
                                 </when>
                                 <when test="criterion.singleValue">
-                                    and ${criterion.condition} #{criterion.value}
+                                    and a.${criterion.condition} #{criterion.value}
                                 </when>
                                 <when test="criterion.betweenValue">
-                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                    and a.${criterion.condition} #{criterion.value} and a.#{criterion.secondValue}
                                 </when>
                                 <when test="criterion.listValue">
-                                    and ${criterion.condition}
+                                    and a.${criterion.condition}
                                     <foreach close=")" collection="criterion.value" item="listItem" open="("
                                              separator=",">
                                         #{listItem}
@@ -64,16 +64,16 @@
                         <foreach collection="criteria.criteria" item="criterion">
                             <choose>
                                 <when test="criterion.noValue">
-                                    and ${criterion.condition}
+                                    and a.${criterion.condition}
                                 </when>
                                 <when test="criterion.singleValue">
-                                    and ${criterion.condition} #{criterion.value}
+                                    and a.${criterion.condition} #{criterion.value}
                                 </when>
                                 <when test="criterion.betweenValue">
-                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                    and a.${criterion.condition} #{criterion.value} and a.#{criterion.secondValue}
                                 </when>
                                 <when test="criterion.listValue">
-                                    and ${criterion.condition}
+                                    and a.${criterion.condition}
                                     <foreach close=")" collection="criterion.value" item="listItem" open="("
                                              separator=",">
                                         #{listItem}
@@ -112,7 +112,7 @@
             <include refid="Example_Where_Clause"/>
         </if>
         <if test="orderByClause != null">
-            order by ${orderByClause}
+            order by a.${orderByClause}
         </if>
     </select>
     <select id="selectByExample" parameterType="com.sonnx.blog.modal.entity.CommentDOExample" resultMap="BaseResultMap">
@@ -121,12 +121,12 @@
             distinct
         </if>
         <include refid="Base_Column_List"/>
-        from t_b_comment
+        from t_b_comment a join t_si_user b on a.author_id=b.id
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
         <if test="orderByClause != null">
-            order by ${orderByClause}
+            order by a.${orderByClause}
         </if>
         <if test="limit != null">
             <if test="offset != null">
@@ -142,15 +142,15 @@
         <include refid="Base_Column_List"/>
         ,
         <include refid="Blob_Column_List"/>
-        from t_b_comment
-        where id = #{id,jdbcType=BIGINT}
+        from t_b_comment a join t_si_user b on a.author_id=b.id
+        where a.id = #{id,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from t_b_comment
         where id = #{id,jdbcType=BIGINT}
     </delete>
     <delete id="deleteByExample" parameterType="com.sonnx.blog.modal.entity.CommentDOExample">
-        delete from t_b_comment
+        delete from t_b_comment a
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>

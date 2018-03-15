@@ -8,6 +8,7 @@ import com.sonnx.blog.exception.TipException;
 import com.sonnx.blog.modal.entity.UserDO;
 import com.sonnx.blog.modal.entity.UserDOExample;
 import com.sonnx.blog.service.UserService;
+import com.sonnx.blog.utils.AbstractUUID;
 import com.sonnx.blog.utils.TaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,11 +36,27 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public Long insertUser(UserDO userDO) {
-        Integer uid = null;
-        if (StringUtils.isNotBlank(userDO.getLoginName()) && StringUtils.isNotBlank(userDO.getEmail())) {
+        if (!StringUtils.equals(userDO.getPassword(), userDO.getConfirmPassword())) {
+            throw new TipException("两次输入密码不相同,请重新输入");
+        }
+        //查询登录名是否重复
+        UserDOExample userDOExample = new UserDOExample();
+        userDOExample.createCriteria().andLoginNameEqualTo(userDO.getLoginName());
+        int count = userDao.countByExample(userDOExample);
+
+        if (count > 0) {
+            throw new TipException("该账号已存在,换个账号试试");
+        }
+        if (StringUtils.isNotBlank(userDO.getLoginName()) && StringUtils.isNotBlank(userDO.getPassword())) {
 //            用户密码加密
             String encodePwd = TaleUtils.md5encode(userDO.getLoginName() + userDO.getPassword());
             userDO.setPassword(encodePwd);
+            //生成token
+            String token = AbstractUUID.uu32();
+            userDO.setToken(token);
+            //设置时间
+            Date date = new Date();
+            userDO.setGmtCreate(date);
             userDao.insertSelective(userDO);
         }
         return userDO.getId();

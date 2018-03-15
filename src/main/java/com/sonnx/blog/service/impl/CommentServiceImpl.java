@@ -56,7 +56,7 @@ public class CommentServiceImpl implements CommentService {
         if (comments.getAuthor() == null) {
             UserDO userDO = new UserDO();
             userDO.setId(0L);
-            userDO.setScreenName("热心网友");
+            userDO.setNickname("热心网友");
             comments.setAuthor(userDO);
         }
         if (StringUtils.isNotBlank(comments.getEmail()) && !TaleUtils.isEmail(comments.getEmail())) {

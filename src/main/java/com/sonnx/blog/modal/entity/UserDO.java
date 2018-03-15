@@ -24,6 +24,11 @@ public class UserDO extends AbstractEntity {
     private String password;
 
     /**
+     * 用户密码
+     */
+    private String confirmPassword;
+
+    /**
      * 用户令牌
      */
     private String token;
@@ -39,7 +44,7 @@ public class UserDO extends AbstractEntity {
     /**
      * 用户显示的名称
      */
-    private String screenName;
+    private String nickname;
     /**
      * 最后活动时间
      */

@@ -91,7 +91,7 @@ public class IndexController extends BaseController {
         if (StringUtils.isNotBlank(screenName) && StringUtils.isNotBlank(email)) {
             UserDO temp = new UserDO();
             temp.setId(users.getId());
-            temp.setScreenName(screenName);
+            temp.setNickname(screenName);
             temp.setEmail(email);
             userService.updateById(temp);
             logService.insertLog(LogActions.UP_INFO.getAction(), GsonUtils.toJsonString(temp), null, request.getRemoteAddr
@@ -99,7 +99,7 @@ public class IndexController extends BaseController {
 
             //更新session中的数据
             UserDO original = (UserDO) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
-            original.setScreenName(screenName);
+            original.setNickname(screenName);
             original.setEmail(email);
             session.setAttribute(WebConst.LOGIN_SESSION_KEY, original);
         }

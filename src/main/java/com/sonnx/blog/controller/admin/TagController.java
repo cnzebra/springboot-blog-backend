@@ -31,11 +31,11 @@ public class TagController extends BaseController {
     @Resource
     private MetaService metasService;
 
-    @GetMapping(value = "list")
+    @GetMapping(value = "list.token")
     @ResponseBody
     public ResponseEntity tags() {
         List<MetaDto> tags = metasService.getMetaList(Types.TAG.getType(), null, WebConst.MAX_POSTS);
-        return new ResponseEntity(tags, HttpStatus.OK);
+        return new ResponseEntity(RestResponseBo.ok(tags), HttpStatus.OK);
     }
 
     @PostMapping(value = "save")

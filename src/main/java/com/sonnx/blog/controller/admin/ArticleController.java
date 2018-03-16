@@ -65,49 +65,57 @@ public class ArticleController extends BaseController {
         return "admin/article_list";
     }
 
-    @PostMapping(value = "list")
+    @PostMapping(value = "list.token")
     @ResponseBody
     public ResponseEntity articleList(@RequestBody ArticleQueryParam queryParam,
                                       HttpServletRequest request) {
-        ArticleDOExample articleDOExample = new ArticleDOExample();
+        try {
+            ArticleDOExample articleDOExample = new ArticleDOExample();
 
-        // 排序
-        if (StringUtils.isNotBlank(queryParam.getSort())) {
-            articleDOExample.setOrderByClause(queryParam.getSort());
-        } else {
-            articleDOExample.setOrderByClause("gmt_create desc");
+            // 排序
+            if (StringUtils.isNotBlank(queryParam.getSort())) {
+                articleDOExample.setOrderByClause(queryParam.getSort());
+            } else {
+                articleDOExample.setOrderByClause("gmt_create desc");
+            }
+
+            ArticleDOExample.CriteriaAbstract criteriaAbstract = articleDOExample.createCriteria();
+            criteriaAbstract.andTypeEqualTo(Types.ARTICLE.getType());
+
+
+            // 状态筛选
+            String status = queryParam.getQueryParam().getStatus();
+            if (StringUtils.isNotBlank(status)) {
+                criteriaAbstract.andStatusEqualTo(status);
+            }
+
+            // 表单查询
+            String title = queryParam.getQueryParam().getTitle();
+            title = StringUtils.isBlank(title) ? "" : title;
+            criteriaAbstract.andTitleLike("%" + title + "%");
+
+            String tagsList = queryParam.getQueryParam().getTags();
+            String categoriesList = queryParam.getQueryParam().getCategories();
+            criteriaAbstract.andTagsLike("%" + tagsList + "%");
+            criteriaAbstract.andCategoriesLike("%" + categoriesList + "%");
+
+            List<ArticleDOExample.CriteriaAbstract> criteriaAbstracts = new ArrayList();
+            criteriaAbstracts.add(criteriaAbstract);
+
+            articleDOExample.setOredCriteria(criteriaAbstracts);
+
+            PageInfo<ArticleDO> contentsPaginator = contentsService.getArticlesWithpage(articleDOExample, queryParam.getPageNum(), queryParam.getPageSize());
+            return new ResponseEntity(RestResponseBo.ok(contentsPaginator), HttpStatus.OK);
+        } catch (TipException e) {
+            LOGGER.error("异常:{}", e.getMessage(), e);
+            return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("异常:{}", e.getMessage(), e);
+            return new ResponseEntity(RestResponseBo.fail("内部错误"), HttpStatus.OK);
         }
-
-        ArticleDOExample.CriteriaAbstract criteriaAbstract = articleDOExample.createCriteria();
-        criteriaAbstract.andTypeEqualTo(Types.ARTICLE.getType());
-
-
-        // 状态筛选
-        String status = queryParam.getQueryParam().getStatus();
-        if (StringUtils.isNotBlank(status)) {
-            criteriaAbstract.andStatusEqualTo(status);
-        }
-
-        // 表单查询
-        String title = queryParam.getQueryParam().getTitle();
-        title = StringUtils.isBlank(title) ? "" : title;
-        criteriaAbstract.andTitleLike("%" + title + "%");
-
-        String tagsList = queryParam.getQueryParam().getTags();
-        String categoriesList = queryParam.getQueryParam().getCategories();
-        criteriaAbstract.andTagsLike("%" + tagsList + "%");
-        criteriaAbstract.andCategoriesLike("%" + categoriesList + "%");
-
-        List<ArticleDOExample.CriteriaAbstract> criteriaAbstracts = new ArrayList();
-        criteriaAbstracts.add(criteriaAbstract);
-
-        articleDOExample.setOredCriteria(criteriaAbstracts);
-
-        PageInfo<ArticleDO> contentsPaginator = contentsService.getArticlesWithpage(articleDOExample, queryParam.getPageNum(), queryParam.getPageSize());
-        return new ResponseEntity(contentsPaginator, HttpStatus.OK);
     }
 
-    @PutMapping(value = "audit")
+    @PutMapping(value = "audit.token")
     @ResponseBody
     public RestResponseBo auditArticle(@RequestParam(value = "articleId") Long articleId,
                                        @RequestParam(value = "status") String status, HttpServletRequest request) {
@@ -118,78 +126,53 @@ public class ArticleController extends BaseController {
         return RestResponseBo.fail();
     }
 
-    @GetMapping(value = {"preview/{id}", "preview/{id}.html"})
+    @GetMapping(value = {"preview/{id}.token", "preview/{id}.open"})
     public ResponseEntity articlePreview(HttpServletRequest request, @PathVariable Long id) {
         ArticleDO contents = contentsService.getContents(id);
         if (null == contents) {
-            return new ResponseEntity(null, HttpStatus.OK);
+            return new ResponseEntity(RestResponseBo.fail(), HttpStatus.OK);
         }
-        return new ResponseEntity(contents, HttpStatus.OK);
+        return new ResponseEntity(RestResponseBo.ok(contents), HttpStatus.OK);
 
 
     }
 
 
-    @GetMapping(value = "/publish")
-    public String newArticle(HttpServletRequest request) {
-        List<MetaDO> categories = metasService.getMetas(Types.CATEGORY.getType());
-        request.setAttribute("categories", categories);
-        PageInfo<AttachFileDO> attachPaginator = attachService.getAttachs(1, 12);
-        request.setAttribute("attachs", attachPaginator);
-        return "admin/article_edit";
-    }
-
-    @GetMapping(value = "/{articleId}")
-    public String editArticle(@PathVariable Long articleId, HttpServletRequest request) {
-        ArticleDO contents = contentsService.getContents(articleId);
-        request.setAttribute("contents", contents);
-        List<MetaDO> categories = metasService.getMetas(Types.CATEGORY.getType());
-        request.setAttribute("categories", categories);
-        request.setAttribute("active", "article");
-
-        PageInfo<AttachFileDO> attachPaginator = attachService.getAttachs(1, 12);
-        request.setAttribute("attachs", attachPaginator);
-
-        return "admin/article_edit";
-    }
-
-    @PostMapping(value = "/publish")
+    @PostMapping(value = "/publish.token")
     @ResponseBody
-    public RestResponseBo publishArticle(@RequestBody ArticleDO contents, HttpServletRequest request) {
-//        UserDO users = this.user(request);
-//        contents.setAuthorId(users.getId());
+    public ResponseEntity publishArticle(@RequestBody ArticleDO contents, HttpServletRequest request) {
         contents.setType(Types.ARTICLE.getType());
         if (StringUtils.isBlank(contents.getCategories())) {
             contents.setCategories("默认分类");
         }
         String result = contentsService.publish(contents);
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
-            return RestResponseBo.fail(result);
+            return new ResponseEntity(RestResponseBo.fail(result), HttpStatus.OK);
         }
-        return RestResponseBo.ok();
+        return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/modify")
+    @PutMapping(value = "/modify.token")
     @ResponseBody
-    public RestResponseBo modifyArticle(@RequestBody ArticleDO contents, HttpServletRequest request) {
+    public ResponseEntity modifyArticle(@RequestBody ArticleDO contents, HttpServletRequest request) {
 //        UserDO users = this.user(request);
 //        contents.setAuthorId(users.getId());
         contents.setType(Types.ARTICLE.getType());
         String result = contentsService.updateArticle(contents);
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
-            return RestResponseBo.fail(result);
+            return new ResponseEntity(RestResponseBo.fail(result), HttpStatus.OK);
         }
-        return RestResponseBo.ok();
+        return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/delete")
+    @DeleteMapping(value = "/delete.token")
     @ResponseBody
-    public RestResponseBo delete(@RequestParam Long id, HttpServletRequest request) {
+    public ResponseEntity delete(@RequestParam Long id, HttpServletRequest request) {
         String result = contentsService.deleteByCid(id);
         logService.insertLog(LogActions.DEL_ARTICLE.getAction(), id + "", null, request.getRemoteAddr(), 1L);
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
-            return RestResponseBo.fail(result);
+            return new ResponseEntity(RestResponseBo.fail(result), HttpStatus.OK);
         }
-        return RestResponseBo.ok();
+        return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
     }
 }

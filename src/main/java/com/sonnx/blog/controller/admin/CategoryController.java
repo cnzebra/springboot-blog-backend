@@ -42,11 +42,11 @@ public class CategoryController extends BaseController {
         return "admin/category";
     }
 
-    @GetMapping(value = "list")
+    @GetMapping(value = "list.token")
     @ResponseBody
     public ResponseEntity categories() {
         List<MetaDto> categories = metasService.getMetaList(Types.CATEGORY.getType(), null, WebConst.MAX_POSTS);
-        return new ResponseEntity(categories, HttpStatus.OK);
+        return new ResponseEntity(RestResponseBo.ok(categories), HttpStatus.OK);
     }
 
     @PostMapping(value = "save")

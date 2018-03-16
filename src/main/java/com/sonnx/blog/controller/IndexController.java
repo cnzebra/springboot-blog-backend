@@ -68,7 +68,7 @@ public class IndexController extends BaseController {
     public ResponseEntity articles(HttpServletRequest request, @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                    @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize) {
         PageInfo<ArticleDO> articles = articleService.getContents(pageNum, pageSize);
-        return new ResponseEntity(articles, HttpStatus.OK);
+        return new ResponseEntity(RestResponseBo.ok(articles), HttpStatus.OK);
     }
 
     @GetMapping(value = "author")
@@ -78,81 +78,7 @@ public class IndexController extends BaseController {
         //将用户密码和token置为空
         userDO.setPassword(null);
         userDO.setToken(null);
-        return new ResponseEntity(userDO, HttpStatus.OK);
-    }
-
-    /**
-     * 文章页
-     *
-     * @param request   请求
-     * @param articleId 文章主键
-     * @return
-     */
-    @GetMapping(value = {"article/{id}", "article/{id}.html"})
-    public String getArticle(HttpServletRequest request, @PathVariable Long id) {
-        ArticleDO contents = articleService.getContents(id);
-        if (null == contents || "draft".equals(contents.getStatus())) {
-            return this.render404();
-        }
-        request.setAttribute("article", contents);
-        request.setAttribute("is_post", true);
-        completeArticle(request, contents);
-        updateArticleHit(contents.getId(), contents.getHits());
-        return this.render("post");
-
-
-    }
-
-    /**
-     * 文章页(预览)
-     *
-     * @param request   请求
-     * @param articleId 文章主键
-     * @return
-     */
-    @GetMapping(value = {"article/{id}/preview", "article/{id}.html"})
-    public String articlePreview(HttpServletRequest request, @PathVariable Long id) {
-        ArticleDO contents = articleService.getContents(id);
-        if (null == contents) {
-            return this.render404();
-        }
-        request.setAttribute("article", contents);
-        request.setAttribute("is_post", true);
-        completeArticle(request, contents);
-        updateArticleHit(contents.getId(), contents.getHits());
-        return this.render("post");
-
-
-    }
-
-    /**
-     * 抽取公共方法
-     *
-     * @param request
-     * @param contents
-     */
-    private void completeArticle(HttpServletRequest request, ArticleDO contents) {
-        if (contents.getAllowComment()) {
-            String cp = request.getParameter("cp");
-            if (StringUtils.isBlank(cp)) {
-                cp = "1";
-            }
-            request.setAttribute("cp", cp);
-            PageInfo<CommentDO> commentsPaginator = commentService.getComments(contents.getId(), Integer.parseInt
-                    (cp), 6);
-            request.setAttribute("comments", commentsPaginator);
-        }
-    }
-
-    /**
-     * 注销
-     *
-     * @param session
-     * @param response
-     */
-    @RequestMapping("logout")
-    public void logout(HttpSession session, HttpServletResponse response) {
-        TaleUtils.logout(session, response);
+        return new ResponseEntity(RestResponseBo.ok(userDO), HttpStatus.OK);
     }
 
     /**
@@ -160,33 +86,32 @@ public class IndexController extends BaseController {
      */
     @PostMapping(value = "article/{articleId}/comment")
     @ResponseBody
-    public RestResponseBo comment(HttpServletRequest request, HttpServletResponse response,
+    public ResponseEntity comment(HttpServletRequest request, HttpServletResponse response,
                                   @PathVariable(value = "articleId") Long articleId,
                                   @RequestBody CommentDO commentDO) {
 
         if (null == articleId || StringUtils.isBlank(commentDO.getContent())) {
-            return RestResponseBo.fail("请输入完整后评论");
+            return new ResponseEntity(RestResponseBo.fail("请输入完整后评论"), HttpStatus.OK);
         }
 
         if (StringUtils.isNotBlank(commentDO.getEmail()) && !TaleUtils.isEmail(commentDO.getEmail())) {
-            return RestResponseBo.fail("请输入正确的邮箱格式");
+            return new ResponseEntity(RestResponseBo.fail("请输入正确的邮箱格式"), HttpStatus.OK);
         }
 
         if (StringUtils.isNotBlank(commentDO.getSiteUrl()) && !PatternKit.isURL(commentDO.getSiteUrl())) {
-            return RestResponseBo.fail("请输入正确的URL格式");
+            return new ResponseEntity(RestResponseBo.fail("请输入正确的URL格式"), HttpStatus.OK);
         }
 
         if (commentDO.getContent().length() > 200) {
-            return RestResponseBo.fail("请输入200个字符以内的评论");
+            return new ResponseEntity(RestResponseBo.fail("请输入200个字符以内的评论"), HttpStatus.OK);
         }
 
         String val = IPKit.getIpAddrByRequest(request) + ":" + articleId;
         Integer count = cache.hget(Types.COMMENTS_FREQUENCY.getType(), val);
         if (null != count && count > 0) {
-            return RestResponseBo.fail("您发表评论太快了，请过会再试");
+            return new ResponseEntity(RestResponseBo.fail("您发表评论太快了，请过会再试"), HttpStatus.OK);
         }
 
-//        author = EmojiParser.parseToAliases(commentDO.getAuthor());
         commentDO.setContent(EmojiParser.parseToAliases(commentDO.getContent()));
 
         commentDO.setIp(request.getRemoteAddr());
@@ -195,13 +120,13 @@ public class IndexController extends BaseController {
             // 设置对每个文章1分钟可以评论一次
             cache.hset(Types.COMMENTS_FREQUENCY.getType(), val, 1, 5);
             if (!WebConst.SUCCESS_RESULT.equals(result)) {
-                return RestResponseBo.fail(result);
+                return new ResponseEntity(RestResponseBo.fail(result), HttpStatus.OK);
             }
-            return RestResponseBo.ok();
+            return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
         } catch (Exception e) {
             String msg = "评论发布失败";
             LOGGER.error(msg, e);
-            return RestResponseBo.fail(msg);
+            return new ResponseEntity(RestResponseBo.fail(msg), HttpStatus.OK);
         }
     }
 
@@ -263,7 +188,7 @@ public class IndexController extends BaseController {
                                    @RequestParam(value = "category", defaultValue = "") String category,
                                    @RequestParam(value = "tag", defaultValue = "") String tag) {
         List<ArchiveBo> archives = siteService.getArchives(year, month, category, tag);
-        return new ResponseEntity(archives, HttpStatus.OK);
+        return new ResponseEntity(RestResponseBo.ok(archives), HttpStatus.OK);
     }
 
     /**
@@ -275,7 +200,7 @@ public class IndexController extends BaseController {
     @ResponseBody
     public ResponseEntity links(HttpServletRequest request) {
         List<MetaDO> links = metaService.getMetas(Types.LINK.getType());
-        return new ResponseEntity(links, HttpStatus.OK);
+        return new ResponseEntity(RestResponseBo.ok(links), HttpStatus.OK);
     }
 
     @GetMapping(value = "/article/{articleId}/comments")
@@ -289,7 +214,7 @@ public class IndexController extends BaseController {
             return new ResponseEntity(RestResponseBo.fail(), HttpStatus.OK);
         }
         PageInfo<CommentDO> commentsPaginator = commentService.getComments(articleId, pageNum, pageSize);
-        return new ResponseEntity(commentsPaginator, HttpStatus.OK);
+        return new ResponseEntity(RestResponseBo.ok(commentsPaginator), HttpStatus.OK);
     }
 
 

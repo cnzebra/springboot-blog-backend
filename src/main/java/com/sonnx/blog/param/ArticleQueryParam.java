@@ -6,9 +6,9 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ArticleQueryParam {
-    private Integer pageNum;
+    private Integer pageNum = 1;
 
-    private Integer pageSize;
+    private Integer pageSize = 12;
 
     private String sort;
 

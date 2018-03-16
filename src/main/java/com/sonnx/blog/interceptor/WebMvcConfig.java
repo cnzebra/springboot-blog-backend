@@ -19,9 +19,14 @@ import javax.annotation.Resource;
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Resource
     private BaseInterceptor baseInterceptor;
+    @Resource
+    private TokenInterceptor tokenInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        // 拦截携带token的请求
+        // 拦截器的执行顺序和这里配置的顺序相同
+        registry.addInterceptor(tokenInterceptor).addPathPatterns("/**/*.token");
         registry.addInterceptor(baseInterceptor);
     }
 

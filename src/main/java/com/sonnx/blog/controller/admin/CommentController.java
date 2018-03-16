@@ -9,6 +9,8 @@ import com.sonnx.blog.modal.entity.UserDO;
 import com.sonnx.blog.service.CommentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,17 +30,6 @@ public class CommentController extends BaseController {
     @Resource
     private CommentService commentsService;
 
-    @GetMapping(value = "")
-    public String index(@RequestParam(value = "page", defaultValue = "1") int page,
-                        @RequestParam(value = "limit", defaultValue = "15") int limit, HttpServletRequest request) {
-        UserDO users = this.user(request);
-        CommentDOExample commentDOExample = new CommentDOExample();
-        commentDOExample.setOrderByClause("id desc");
-        commentDOExample.createCriteria().andAuthorIdNotEqualTo(users.getId());
-        PageInfo<CommentDO> commentsPaginator = commentsService.getCommentsWithPage(commentDOExample, page, limit);
-        request.setAttribute("comments", commentsPaginator);
-        return "admin/comment_list";
-    }
 
     /**
      * 删除一条评论
@@ -46,26 +37,26 @@ public class CommentController extends BaseController {
      * @param commentId
      * @return
      */
-    @PostMapping(value = "delete")
+    @PostMapping(value = "delete.token")
     @ResponseBody
-    public RestResponseBo delete(@RequestParam Long commentId) {
+    public ResponseEntity delete(@RequestParam Long commentId) {
         try {
             CommentDO comments = commentsService.getCommentById(commentId);
             if (null == comments) {
-                return RestResponseBo.fail("不存在该评论");
+                return new ResponseEntity(RestResponseBo.fail("不存在该评论"), HttpStatus.OK);
             }
             commentsService.delete(commentId, comments.getArticleId());
         } catch (Exception e) {
             String msg = "评论删除失败";
             LOGGER.error(msg, e);
-            return RestResponseBo.fail(msg);
+            return new ResponseEntity(RestResponseBo.fail(msg), HttpStatus.OK);
         }
-        return RestResponseBo.ok();
+        return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
     }
 
     @PostMapping(value = "status")
     @ResponseBody
-    public RestResponseBo delete(@RequestParam Long commentId, @RequestParam String status) {
+    public ResponseEntity delete(@RequestParam Long commentId, @RequestParam String status) {
         try {
             CommentDO comments = commentsService.getCommentById(commentId);
             if (comments != null) {
@@ -73,13 +64,14 @@ public class CommentController extends BaseController {
                 comments.setStatus(status);
                 commentsService.update(comments);
             } else {
-                return RestResponseBo.fail("操作失败");
+                return new ResponseEntity(RestResponseBo.fail("操作失败"), HttpStatus.OK);
             }
         } catch (Exception e) {
             String msg = "操作失败";
-            return RestResponseBo.fail(msg);
+            return new ResponseEntity(RestResponseBo.fail(msg), HttpStatus.OK);
         }
-        return RestResponseBo.ok();
+        return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
+
     }
 
 }

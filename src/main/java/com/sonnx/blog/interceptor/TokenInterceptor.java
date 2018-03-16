@@ -10,6 +10,7 @@ import com.sonnx.blog.modal.entity.UserDO;
 import com.sonnx.blog.service.LogService;
 import com.sonnx.blog.service.OptionService;
 import com.sonnx.blog.service.UserService;
+import com.sonnx.blog.thread.UserThreadLocal;
 import com.sonnx.blog.utils.AbstractUUID;
 import com.sonnx.blog.utils.IPKit;
 import com.sonnx.blog.utils.MapCache;
@@ -63,15 +64,12 @@ public class TokenInterceptor implements HandlerInterceptor {
         String token = request.getHeader("token");
         UserDO userDO = userService.queryUserByToken(token);
         if (userDO == null) {
+            this.responseData(response, RestResponseBo.fail(403, "禁止访问"));
             return false;
         }
-        List<String> roles = userDO.getRoles();
-        if (roles.contains("admin")) {
-            //如果是admin 直接放过
-            return true;
-        }
-        this.responseData(response, RestResponseBo.fail(403, "禁止访问"));
-        return false;
+        // 放入本地线程,便于service 和controller访问
+        UserThreadLocal.set(userDO);
+        return true;
     }
 
     @Override

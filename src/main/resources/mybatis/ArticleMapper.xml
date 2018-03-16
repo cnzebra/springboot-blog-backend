@@ -34,7 +34,7 @@
     </resultMap>
     <sql id="Example_Where_Clause">
         <where>
-            <foreach collection="oredCriteria" item="criteria" separator="or">
+            <foreach collection="article.oredCriteria" item="criteria" separator="or">
                 <if test="criteria.valid">
                     <trim prefix="(" prefixOverrides="and" suffix=")">
                         <foreach collection="criteria.criteria" item="criterion">
@@ -92,6 +92,36 @@
             </foreach>
         </where>
     </sql>
+
+    <sql id="Example_Where_Clause_Of_User">
+        <foreach collection="user.oredCriteria" item="criteria" separator="or">
+            <if test="criteria.valid">
+                <trim prefix="(" prefixOverrides="and" suffix=")">
+                    <foreach collection="criteria.criteria" item="criterion">
+                        <choose>
+                            <when test="criterion.noValue">
+                                and b.${criterion.condition}
+                            </when>
+                            <when test="criterion.singleValue">
+                                and b.${criterion.condition} #{criterion.value}
+                            </when>
+                            <when test="criterion.betweenValue">
+                                and b.${criterion.condition} #{criterion.value} and a.#{criterion.secondValue}
+                            </when>
+                            <when test="criterion.listValue">
+                                and b.${criterion.condition}
+                                <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                         separator=",">
+                                    #{listItem}
+                                </foreach>
+                            </when>
+                        </choose>
+                    </foreach>
+                </trim>
+            </if>
+        </foreach>
+    </sql>
+
     <sql id="Base_Column_List">
         a.id,a.outline, a.title, a.cover,a.path, a.type, a.status, a.tags, a.categories, a.hits,
         a.comments_num,a.likes,a.dislikes, a.allow_comment, a.allow_ping, a.allow_feed,a.gmt_create,a.gmt_modified,
@@ -104,42 +134,46 @@
     <sql id="Blob_Column_List">
         a.content
     </sql>
-    <select id="selectByExampleWithBLOBs" parameterType="com.sonnx.blog.modal.entity.ArticleDOExample"
+    <select id="selectByExampleWithBLOBs"
             resultMap="ResultMapWithBLOBs">
         select
-        <if test="distinct">
+        <if test="article.distinct">
             distinct
         </if>
         <include refid="Base_Column_List"/>
         ,
         <include refid="Blob_Column_List"/>
         from t_b_article a join t_si_user b on a.author_id=b.id
-        <if test="_parameter != null">
+        <if test="article != null">
             <include refid="Example_Where_Clause"/>
         </if>
-        <if test="orderByClause != null">
-            order by ${orderByClause}
+        <if test="user != null">
+            and
+            <include refid="Example_Where_Clause_Of_User"/>
+        </if>
+        <if test="article.orderByClause != null">
+            order by a.${article.orderByClause}
         </if>
     </select>
     <select id="selectByExample" parameterType="com.sonnx.blog.modal.entity.ArticleDOExample" resultMap="BaseResultMap">
         select
-        <if test="distinct">
+        <if test="article.distinct">
             distinct
         </if>
         <include refid="Base_Column_List"/>
         from t_b_article a join t_si_user b on a.author_id=b.id
-        <if test="_parameter != null">
+        <if test="article != null">
             <include refid="Example_Where_Clause"/>
         </if>
-        <if test="orderByClause != null">
-            order by a.${orderByClause}
+        <if test="article.orderByClause != null">
+            order by a.${article.orderByClause}
         </if>
-        <if test="limit != null">
-            <if test="offset != null">
-                limit ${offset}, ${limit}
+        <if test="article.limit != null">
+            <if test="article.offset != null">
+                limit ${article.offset}, ${article.limit}
             </if>
-            <if test="offset == null">
-                limit ${limit}
+            <if test="article.offset == null">
+                limit ${article.limit}
             </if>
         </if>
     </select>
@@ -297,8 +331,8 @@
     </insert>
     <select id="countByExample" parameterType="com.sonnx.blog.modal.entity.ArticleDOExample"
             resultType="java.lang.Integer">
-        select count(*) from t_b_article
-        <if test="_parameter != null">
+        select count(*) from t_b_article a
+        <if test="article != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </select>

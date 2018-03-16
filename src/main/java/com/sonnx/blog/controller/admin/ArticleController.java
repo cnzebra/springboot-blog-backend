@@ -3,20 +3,16 @@ package com.sonnx.blog.controller.admin;
 
 import com.github.pagehelper.PageInfo;
 import com.sonnx.blog.component.constant.WebConst;
+import com.sonnx.blog.constant.ParamsConstant;
 import com.sonnx.blog.controller.BaseController;
 import com.sonnx.blog.dto.LogActions;
 import com.sonnx.blog.dto.Types;
 import com.sonnx.blog.exception.TipException;
 import com.sonnx.blog.modal.bo.RestResponseBo;
-import com.sonnx.blog.modal.entity.ArticleDO;
-import com.sonnx.blog.modal.entity.ArticleDOExample;
-import com.sonnx.blog.modal.entity.AttachFileDO;
-import com.sonnx.blog.modal.entity.MetaDO;
+import com.sonnx.blog.modal.entity.*;
 import com.sonnx.blog.param.ArticleQueryParam;
-import com.sonnx.blog.service.ArticleService;
-import com.sonnx.blog.service.AttachFileService;
-import com.sonnx.blog.service.LogService;
-import com.sonnx.blog.service.MetaService;
+import com.sonnx.blog.service.*;
+import com.sonnx.blog.thread.UserThreadLocal;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,26 +46,22 @@ public class ArticleController extends BaseController {
     private MetaService metasService;
     @Autowired
     private AttachFileService attachService;
+    @Autowired
+    private UserService userService;
 
     @Resource
     private LogService logService;
 
-    @GetMapping(value = "")
-    public String index(@RequestParam(value = "page", defaultValue = "1") int page,
-                        @RequestParam(value = "limit", defaultValue = "15") int limit, HttpServletRequest request) {
-        ArticleDOExample articleDOExample = new ArticleDOExample();
-        articleDOExample.setOrderByClause("gmt_create desc");
-        articleDOExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType());
-        PageInfo<ArticleDO> contentsPaginator = contentsService.getArticlesWithpage(articleDOExample, page, limit);
-        request.setAttribute("articles", contentsPaginator);
-        return "admin/article_list";
-    }
 
     @PostMapping(value = "list.token")
     @ResponseBody
     public ResponseEntity articleList(@RequestBody ArticleQueryParam queryParam,
                                       HttpServletRequest request) {
         try {
+            String token = request.getHeader(ParamsConstant.HEADER_TOKEN);
+            UserDOExample userDOExample = new UserDOExample();
+            userDOExample.createCriteria().andTokenEqualTo(token);
+
             ArticleDOExample articleDOExample = new ArticleDOExample();
 
             // 排序
@@ -80,6 +72,7 @@ public class ArticleController extends BaseController {
             }
 
             ArticleDOExample.CriteriaAbstract criteriaAbstract = articleDOExample.createCriteria();
+
             criteriaAbstract.andTypeEqualTo(Types.ARTICLE.getType());
 
 
@@ -104,7 +97,7 @@ public class ArticleController extends BaseController {
 
             articleDOExample.setOredCriteria(criteriaAbstracts);
 
-            PageInfo<ArticleDO> contentsPaginator = contentsService.getArticlesWithpage(articleDOExample, queryParam.getPageNum(), queryParam.getPageSize());
+            PageInfo<ArticleDO> contentsPaginator = contentsService.getArticlesWithpage(articleDOExample, userDOExample, queryParam.getPageNum(), queryParam.getPageSize());
             return new ResponseEntity(RestResponseBo.ok(contentsPaginator), HttpStatus.OK);
         } catch (TipException e) {
             LOGGER.error("异常:{}", e.getMessage(), e);
@@ -126,15 +119,22 @@ public class ArticleController extends BaseController {
         return RestResponseBo.fail();
     }
 
-    @GetMapping(value = {"preview/{id}.token", "preview/{id}.open"})
+    @GetMapping(value = {"preview/{id}.token"})
     public ResponseEntity articlePreview(HttpServletRequest request, @PathVariable Long id) {
         ArticleDO contents = contentsService.getContents(id);
         if (null == contents) {
             return new ResponseEntity(RestResponseBo.fail(), HttpStatus.OK);
         }
         return new ResponseEntity(RestResponseBo.ok(contents), HttpStatus.OK);
+    }
 
-
+    @GetMapping(value = {"detail/{path}.open"})
+    public ResponseEntity articleDetail(HttpServletRequest request, @PathVariable String path) {
+        ArticleDO contents = contentsService.getDetail(path);
+        if (null == contents) {
+            return new ResponseEntity(RestResponseBo.fail(), HttpStatus.OK);
+        }
+        return new ResponseEntity(RestResponseBo.ok(contents), HttpStatus.OK);
     }
 
 
@@ -155,8 +155,6 @@ public class ArticleController extends BaseController {
     @PutMapping(value = "/modify.token")
     @ResponseBody
     public ResponseEntity modifyArticle(@RequestBody ArticleDO contents, HttpServletRequest request) {
-//        UserDO users = this.user(request);
-//        contents.setAuthorId(users.getId());
         contents.setType(Types.ARTICLE.getType());
         String result = contentsService.updateArticle(contents);
         if (!WebConst.SUCCESS_RESULT.equals(result)) {

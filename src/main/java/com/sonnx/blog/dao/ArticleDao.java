@@ -3,6 +3,8 @@ package com.sonnx.blog.dao;
 import com.sonnx.blog.modal.bo.ArchiveBo;
 import com.sonnx.blog.modal.entity.ArticleDO;
 import com.sonnx.blog.modal.entity.ArticleDOExample;
+import com.sonnx.blog.modal.entity.UserDO;
+import com.sonnx.blog.modal.entity.UserDOExample;
 import com.sonnx.blog.param.ArticleStatistics;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -19,7 +21,7 @@ public interface ArticleDao {
      * @param example
      * @return
      */
-    Integer countByExample(ArticleDOExample example);
+    Integer countByExample(@Param("article") ArticleDOExample example);
 
     /**
      * @param example
@@ -49,13 +51,13 @@ public interface ArticleDao {
      * @param example
      * @return
      */
-    List<ArticleDO> selectByExampleWithBLOBs(ArticleDOExample example);
+    List<ArticleDO> selectByExampleWithBLOBs(@Param("article") ArticleDOExample example, @Param("user") UserDOExample userDOExample);
 
     /**
      * @param example
      * @return
      */
-    List<ArticleDO> selectByExample(ArticleDOExample example);
+    List<ArticleDO> selectByExample(@Param("article") ArticleDOExample example);
 
     /**
      * @param articleId

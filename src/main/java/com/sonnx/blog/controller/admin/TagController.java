@@ -38,6 +38,13 @@ public class TagController extends BaseController {
         return new ResponseEntity(RestResponseBo.ok(tags), HttpStatus.OK);
     }
 
+    @GetMapping(value = "list.open")
+    @ResponseBody
+    public ResponseEntity tagList() {
+        List<MetaDto> tags = metasService.getMetaList(Types.TAG.getType(), null, WebConst.MAX_POSTS);
+        return new ResponseEntity(RestResponseBo.ok(tags), HttpStatus.OK);
+    }
+
     @PostMapping(value = "save")
     @ResponseBody
     public RestResponseBo saveTag(@RequestBody MetaDO meta) {

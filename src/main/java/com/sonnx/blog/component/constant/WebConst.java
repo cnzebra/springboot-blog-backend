@@ -56,9 +56,4 @@ public class WebConst {
     @Autowired
     private OptionService optionService;
 
-    @PostConstruct
-    public void initConfig() {
-        List<OptionDO> optionDOList = optionService.getOptions();
-        optionDOList.forEach(optionVo -> initConfig.put(optionVo.getName(),optionVo.getValue()));
-    }
 }

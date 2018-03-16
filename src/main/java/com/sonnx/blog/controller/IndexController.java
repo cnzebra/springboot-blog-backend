@@ -218,28 +218,6 @@ public class IndexController extends BaseController {
     }
 
 
-    /**
-     * 搜索页
-     *
-     * @param keyword
-     * @return
-     */
-    @GetMapping(value = "search/{keyword}")
-    public String search(HttpServletRequest request, @PathVariable String keyword, @RequestParam(value = "limit",
-            defaultValue = "12") int limit) {
-        return this.search(request, keyword, 1, limit);
-    }
-
-    @GetMapping(value = "search/{keyword}/{page}")
-    public String search(HttpServletRequest request, @PathVariable String keyword, @PathVariable int page,
-                         @RequestParam(value = "limit", defaultValue = "12") int limit) {
-        page = page < 0 || page > WebConst.MAX_PAGE ? 1 : page;
-        PageInfo<ArticleDO> articles = articleService.getArticles(keyword, page, limit);
-        request.setAttribute("articles", articles);
-        request.setAttribute("type", "搜索");
-        request.setAttribute("keyword", keyword);
-        return this.render("page-category");
-    }
 
     /**
      * 更新文章的点击率

@@ -3,6 +3,7 @@ package com.sonnx.blog.service;
 import com.sonnx.blog.modal.entity.ArticleDO;
 import com.sonnx.blog.modal.entity.ArticleDOExample;
 import com.github.pagehelper.PageInfo;
+import com.sonnx.blog.modal.entity.UserDOExample;
 import com.sonnx.blog.param.ArticleStatistics;
 
 /**
@@ -56,23 +57,12 @@ public interface ArticleService {
     PageInfo<ArticleDO> getArticles(Long metaId, int page, int limit);
 
     /**
-     * 搜索、分页
-     *
-     * @param keyword keyword
-     * @param page    page
-     * @param limit   limit
-     * @return ArticleDO
-     */
-    PageInfo<ArticleDO> getArticles(String keyword, Integer page, Integer limit);
-
-
-    /**
      * @param commentVoExample
      * @param page
      * @param limit
      * @return
      */
-    PageInfo<ArticleDO> getArticlesWithpage(ArticleDOExample commentVoExample, Integer page, Integer limit);
+    PageInfo<ArticleDO> getArticlesWithpage(ArticleDOExample commentVoExample, UserDOExample userDOExample, Integer page, Integer limit);
 
     /**
      * 根据文章id删除
@@ -103,4 +93,6 @@ public interface ArticleService {
 
 
     int updateStatistics(ArticleStatistics statistics);
+
+    ArticleDO getDetail(String path);
 }

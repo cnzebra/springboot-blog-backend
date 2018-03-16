@@ -3,11 +3,15 @@ package com.sonnx.blog.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sonnx.blog.component.constant.WebConst;
-import com.sonnx.blog.dao.ArticleDao;
-import com.sonnx.blog.dao.MetaDao;
+import com.sonnx.blog.dao.*;
 import com.sonnx.blog.dto.Types;
 import com.sonnx.blog.exception.TipException;
+import com.sonnx.blog.modal.entity.UserDO;
+import com.sonnx.blog.modal.entity.UserDOExample;
 import com.sonnx.blog.param.ArticleStatistics;
+import com.sonnx.blog.service.UserService;
+import com.sonnx.blog.thread.UserThreadLocal;
+import com.sonnx.blog.utils.AbstractUUID;
 import com.vdurmont.emoji.EmojiParser;
 import com.sonnx.blog.component.constant.WebConst;
 import com.sonnx.blog.dao.ArticleDao;
@@ -50,6 +54,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Resource
     private MetaService metasService;
+    @Resource
+    private UserService userService;
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
@@ -78,9 +84,6 @@ public class ArticleServiceImpl implements ArticleService {
         if (contentLength > WebConst.MAX_TEXT_COUNT) {
             return "文章内容过长";
         }
-        if (null == contents.getAuthor() || contents.getAuthor().getId() == null) {
-            return "请登录后发布文章";
-        }
         if (StringUtils.isNotBlank(contents.getPath())) {
             if (contents.getPath().length() < 5) {
                 return "路径太短了";
@@ -95,7 +98,7 @@ public class ArticleServiceImpl implements ArticleService {
                 return "该路径已经存在，请重新输入";
             }
         } else {
-            contents.setPath(null);
+            contents.setPath(AbstractUUID.uu32());
         }
 
         contents.setContent(EmojiParser.parseToAliases(contents.getContent()));
@@ -108,6 +111,11 @@ public class ArticleServiceImpl implements ArticleService {
 
         String tags = contents.getTags();
         String categories = contents.getCategories();
+
+
+        //设置用户
+        contents.setAuthor(UserThreadLocal.get());
+
         articleDao.insert(contents);
         Long articleId = contents.getId();
         metasService.saveMetas(articleId, tags, Types.TAG.getType());
@@ -122,7 +130,7 @@ public class ArticleServiceImpl implements ArticleService {
         example.setOrderByClause("gmt_create desc");
         example.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
         PageHelper.startPage(pageNum, pageSize, true);
-        List<ArticleDO> data = articleDao.selectByExampleWithBLOBs(example);
+        List<ArticleDO> data = articleDao.selectByExampleWithBLOBs(example, null);
         PageInfo<ArticleDO> pageInfo = new PageInfo<>(data);
         LOGGER.debug("Exit getContents method");
         return pageInfo;
@@ -158,23 +166,11 @@ public class ArticleServiceImpl implements ArticleService {
         return paginator;
     }
 
-    @Override
-    public PageInfo<ArticleDO> getArticles(String keyword, Integer page, Integer limit) {
-        PageHelper.startPage(page, limit);
-        ArticleDOExample articleDOExample = new ArticleDOExample();
-        ArticleDOExample.CriteriaAbstract criteria = articleDOExample.createCriteria();
-        criteria.andTypeEqualTo(Types.ARTICLE.getType());
-        criteria.andStatusEqualTo(Types.PUBLISH.getType());
-        criteria.andTitleLike("%" + keyword + "%");
-        articleDOExample.setOrderByClause("gmt_create desc");
-        List<ArticleDO> articleDOS = articleDao.selectByExampleWithBLOBs(articleDOExample);
-        return new PageInfo<>(articleDOS);
-    }
 
     @Override
-    public PageInfo<ArticleDO> getArticlesWithpage(ArticleDOExample commentVoExample, Integer page, Integer limit) {
+    public PageInfo<ArticleDO> getArticlesWithpage(ArticleDOExample commentVoExample, UserDOExample userDOExample, Integer page, Integer limit) {
         PageHelper.startPage(page, limit, true);
-        List<ArticleDO> articleDOS = articleDao.selectByExampleWithBLOBs(commentVoExample);
+        List<ArticleDO> articleDOS = articleDao.selectByExampleWithBLOBs(commentVoExample, userDOExample);
         return new PageInfo<>(articleDOS);
     }
 
@@ -211,6 +207,18 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional(rollbackFor = {Exception.class})
     public int updateStatistics(ArticleStatistics statistics) {
         return articleDao.updateStatistics(statistics);
+    }
+
+    @Override
+    public ArticleDO getDetail(String path) {
+        ArticleDOExample articleDOExample = new ArticleDOExample();
+        articleDOExample.createCriteria().andPathEqualTo(path);
+
+        List<ArticleDO> articleDOS = articleDao.selectByExampleWithBLOBs(articleDOExample, null);
+        if (articleDOS.size() > 1) {
+            throw new TipException("文章路径重复");
+        }
+        return articleDOS.get(0);
     }
 
     @Override

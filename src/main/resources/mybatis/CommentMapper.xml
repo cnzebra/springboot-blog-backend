@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sonnx.blog.dao.CommentDao">
-    <resultMap id="BaseResultMap" type="com.sonnx.blog.modal.entity.CommentDO">
+<mapper namespace="com.mfx.blog.dao.CommentDao">
+    <resultMap id="BaseResultMap" type="com.mfx.blog.modal.entity.CommentDO">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="article_id" jdbcType="BIGINT" property="articleId"/>
         <result column="owner_id" jdbcType="BIGINT" property="ownerId"/>
@@ -15,7 +15,7 @@
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
 
-        <association property="author" javaType="com.sonnx.blog.modal.entity.UserDO">
+        <association property="author" javaType="com.mfx.blog.modal.entity.UserDO">
             <id property="id" column="b_author_id"/>
             <result property="loginName" column="b_login_name"/>
             <result property="email" column="b_email"/>
@@ -23,7 +23,7 @@
             <result property="lastLoginTime" column="b_last_login_time"/>
         </association>
     </resultMap>
-    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sonnx.blog.modal.entity.CommentDO">
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.mfx.blog.modal.entity.CommentDO">
         <result column="content" jdbcType="LONGVARCHAR" property="content"/>
     </resultMap>
     <sql id="Example_Where_Clause">
@@ -98,7 +98,7 @@
     <sql id="Blob_Column_List">
         a.content
     </sql>
-    <select id="selectByExampleWithBLOBs" parameterType="com.sonnx.blog.modal.entity.CommentDOExample"
+    <select id="selectByExampleWithBLOBs" parameterType="com.mfx.blog.modal.entity.CommentDOExample"
             resultMap="ResultMapWithBLOBs">
         select
         <if test="distinct">
@@ -115,7 +115,7 @@
             order by a.${orderByClause}
         </if>
     </select>
-    <select id="selectByExample" parameterType="com.sonnx.blog.modal.entity.CommentDOExample" resultMap="BaseResultMap">
+    <select id="selectByExample" parameterType="com.mfx.blog.modal.entity.CommentDOExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
@@ -149,13 +149,13 @@
         delete from t_b_comment
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.sonnx.blog.modal.entity.CommentDOExample">
+    <delete id="deleteByExample" parameterType="com.mfx.blog.modal.entity.CommentDOExample">
         delete from t_b_comment a
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.sonnx.blog.modal.entity.CommentDO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.mfx.blog.modal.entity.CommentDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_b_comment (id, article_id,
         author_id, owner_id,
         email, site_url, ip, agent,
@@ -167,7 +167,7 @@
         #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{parent,jdbcType=BIGINT},
         #{content,jdbcType=LONGVARCHAR},#{gmtCreate,jdbcType=TIMESTAMP},#{gmtModified,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.sonnx.blog.modal.entity.CommentDO" useGeneratedKeys="true"
+    <insert id="insertSelective" parameterType="com.mfx.blog.modal.entity.CommentDO" useGeneratedKeys="true"
             keyProperty="id">
         insert into t_b_comment
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -259,7 +259,7 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.sonnx.blog.modal.entity.CommentDOExample"
+    <select id="countByExample" parameterType="com.mfx.blog.modal.entity.CommentDOExample"
             resultType="java.lang.Integer">
         select count(*) from t_b_comment
         <if test="_parameter != null">
@@ -350,7 +350,7 @@
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.sonnx.blog.modal.entity.CommentDO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.mfx.blog.modal.entity.CommentDO">
         update t_b_comment
         <set>
             <if test="id != null">
@@ -392,7 +392,7 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sonnx.blog.modal.entity.CommentDO">
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.mfx.blog.modal.entity.CommentDO">
         update t_b_comment
         set article_id = #{articleId,jdbcType=BIGINT},
         author_id = #{author.id,jdbcType=BIGINT},
@@ -408,7 +408,7 @@
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.sonnx.blog.modal.entity.CommentDO">
+    <update id="updateByPrimaryKey" parameterType="com.mfx.blog.modal.entity.CommentDO">
         update t_b_comment
         set article_id = #{articleId,jdbcType=BIGINT},
         author_id = #{author.id,jdbcType=BIGINT},

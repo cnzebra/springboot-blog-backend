@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sonnx.blog.dao.RoleDao">
-    <resultMap id="BaseResultMap" type="com.sonnx.blog.modal.entity.RoleDO">
+<mapper namespace="com.mfx.blog.dao.RoleDao">
+    <resultMap id="BaseResultMap" type="com.mfx.blog.modal.entity.RoleDO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
     </resultMap>
@@ -68,7 +68,7 @@
     <sql id="Base_Column_List">
         id, name,description
     </sql>
-    <select id="selectByExample" parameterType="com.sonnx.blog.modal.entity.RoleDOExample" resultMap="BaseResultMap">
+    <select id="selectByExample" parameterType="com.mfx.blog.modal.entity.RoleDOExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
@@ -100,17 +100,17 @@
         delete from t_si_role
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.sonnx.blog.modal.entity.RoleDOExample">
+    <delete id="deleteByExample" parameterType="com.mfx.blog.modal.entity.RoleDOExample">
         delete from t_si_role
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.sonnx.blog.modal.entity.RoleDO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.mfx.blog.modal.entity.RoleDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_si_role (id, name, description)
         values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="com.sonnx.blog.modal.entity.RoleDO" useGeneratedKeys="true"
+    <insert id="insertSelective" parameterType="com.mfx.blog.modal.entity.RoleDO" useGeneratedKeys="true"
             keyProperty="id">
         insert into t_si_role
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -136,7 +136,7 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.sonnx.blog.modal.entity.RoleDOExample"
+    <select id="countByExample" parameterType="com.mfx.blog.modal.entity.RoleDOExample"
             resultType="java.lang.Integer">
         select count(*)
         from t_si_role
@@ -165,7 +165,7 @@
         description = #{record.description,jdbcType=VARCHAR}
         <include refid="Update_By_Example_Where_Clause"/>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.sonnx.blog.modal.entity.RoleDO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.mfx.blog.modal.entity.RoleDO">
         update t_si_role
         <set>
             <if test="name != null">
@@ -177,7 +177,7 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.sonnx.blog.modal.entity.RoleDO">
+    <update id="updateByPrimaryKey" parameterType="com.mfx.blog.modal.entity.RoleDO">
         update t_si_role
         set
         name = #{name,jdbcType=VARCHAR},

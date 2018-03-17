@@ -3,13 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.sonnx.blog</groupId>
-    <artifactId>sonnx-blog</artifactId>
+    <groupId>com.mfx.blog</groupId>
+    <artifactId>mfx</artifactId>
     <version>1.0.0.0</version>
     <packaging>jar</packaging>
 
-    <name>sonnx-blog</name>
-    <description>sonnx-blog</description>
+    <name>mfx-blog</name>
+    <description>mfx-blog</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

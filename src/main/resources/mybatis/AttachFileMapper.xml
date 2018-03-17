@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sonnx.blog.dao.AttachFileDao">
-    <resultMap id="BaseResultMap" type="com.sonnx.blog.modal.entity.AttachFileDO">
+<mapper namespace="com.mfx.blog.dao.AttachFileDao">
+    <resultMap id="BaseResultMap" type="com.mfx.blog.modal.entity.AttachFileDO">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="file_name" jdbcType="VARCHAR" property="fileName"/>
         <result column="file_type" jdbcType="VARCHAR" property="fileType"/>
@@ -73,7 +73,7 @@
     <sql id="Base_Column_List">
         id, file_name, file_type, file_key, author_id, gmt_create,gmt_modified
     </sql>
-    <select id="selectByExample" parameterType="com.sonnx.blog.modal.entity.AttachFileDOExample" resultMap="BaseResultMap">
+    <select id="selectByExample" parameterType="com.mfx.blog.modal.entity.AttachFileDOExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
@@ -105,13 +105,13 @@
         delete from t_b_attach_file
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.sonnx.blog.modal.entity.AttachFileDOExample">
+    <delete id="deleteByExample" parameterType="com.mfx.blog.modal.entity.AttachFileDOExample">
         delete from t_b_attach_file
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.sonnx.blog.modal.entity.AttachFileDO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.mfx.blog.modal.entity.AttachFileDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_b_attach_file (id, file_name, file_type,
         file_key, author_id, gmt_create,gmt_modified
         )
@@ -120,7 +120,7 @@
         #{gmtModified,jdbcType=TIMESTAMP}
         )
     </insert>
-    <insert id="insertSelective" parameterType="com.sonnx.blog.modal.entity.AttachFileDO" useGeneratedKeys="true"
+    <insert id="insertSelective" parameterType="com.mfx.blog.modal.entity.AttachFileDO" useGeneratedKeys="true"
             keyProperty="id">
         insert into t_b_attach_file
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -170,7 +170,7 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.sonnx.blog.modal.entity.AttachFileDOExample" resultType="java.lang.Integer">
+    <select id="countByExample" parameterType="com.mfx.blog.modal.entity.AttachFileDOExample" resultType="java.lang.Integer">
         select count(*) from t_b_attach_file
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
@@ -214,7 +214,7 @@
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.sonnx.blog.modal.entity.AttachFileDO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.mfx.blog.modal.entity.AttachFileDO">
         update t_b_attach_file
         <set>
             <if test="fileName != null">
@@ -235,7 +235,7 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.sonnx.blog.modal.entity.AttachFileDO">
+    <update id="updateByPrimaryKey" parameterType="com.mfx.blog.modal.entity.AttachFileDO">
         update t_b_attach_file
         set file_name = #{fileName,jdbcType=VARCHAR},
         file_type = #{fileType,jdbcType=VARCHAR},

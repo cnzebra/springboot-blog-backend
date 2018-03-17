@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sonnx.blog.dao.FeedbackDao">
+<mapper namespace="com.mfx.blog.dao.FeedbackDao">
 
-    <resultMap id="BaseResultMap" type="com.sonnx.blog.modal.entity.FeedbackDO">
+    <resultMap id="BaseResultMap" type="com.mfx.blog.modal.entity.FeedbackDO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="type" jdbcType="VARCHAR" property="type"/>
         <result column="content" jdbcType="VARCHAR" property="content"/>
@@ -74,7 +74,7 @@
     <sql id="Base_Column_List">
         id, type, content, name ,email, gmt_create,gmt_modified
     </sql>
-    <select id="selectByExample" parameterType="com.sonnx.blog.modal.entity.FeedbackDOExample" resultMap="BaseResultMap">
+    <select id="selectByExample" parameterType="com.mfx.blog.modal.entity.FeedbackDOExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
@@ -106,13 +106,13 @@
         delete from t_b_feedback
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.sonnx.blog.modal.entity.FeedbackDOExample">
+    <delete id="deleteByExample" parameterType="com.mfx.blog.modal.entity.FeedbackDOExample">
         delete from t_b_feedback
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.sonnx.blog.modal.entity.FeedbackDO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.mfx.blog.modal.entity.FeedbackDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_b_feedback (id, type, content,name,
         email, gmt_create,gmt_modified
         )
@@ -120,7 +120,7 @@
         #{email,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
         )
     </insert>
-    <insert id="insertSelective" parameterType="com.sonnx.blog.modal.entity.FeedbackDO" useGeneratedKeys="true"
+    <insert id="insertSelective" parameterType="com.mfx.blog.modal.entity.FeedbackDO" useGeneratedKeys="true"
             keyProperty="id">
         insert into t_b_feedback
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -170,7 +170,7 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.sonnx.blog.modal.entity.FeedbackDOExample" resultType="java.lang.Integer">
+    <select id="countByExample" parameterType="com.mfx.blog.modal.entity.FeedbackDOExample" resultType="java.lang.Integer">
         select count(*) from t_b_feedback
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
@@ -214,7 +214,7 @@
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.sonnx.blog.modal.entity.FeedbackDO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.mfx.blog.modal.entity.FeedbackDO">
         update t_b_feedback
         <set>
             <if test="type != null">
@@ -235,7 +235,7 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.sonnx.blog.modal.entity.FeedbackDO">
+    <update id="updateByPrimaryKey" parameterType="com.mfx.blog.modal.entity.FeedbackDO">
         update t_b_feedback
         set type = #{type,jdbcType=VARCHAR},
         content = #{content,jdbcType=VARCHAR},

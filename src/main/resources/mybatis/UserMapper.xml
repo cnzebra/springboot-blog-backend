@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sonnx.blog.dao.UserDao">
-    <resultMap id="BaseResultMap" type="com.sonnx.blog.modal.entity.UserDO">
+<mapper namespace="com.mfx.blog.dao.UserDao">
+    <resultMap id="BaseResultMap" type="com.mfx.blog.modal.entity.UserDO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
@@ -79,7 +79,7 @@
         id, login_name, password,token, email, home_url, nickname, login_status,activated, last_login_time,
         group_name,gmt_create,gmt_modified
     </sql>
-    <select id="selectByExample" parameterType="com.sonnx.blog.modal.entity.UserDOExample" resultMap="BaseResultMap">
+    <select id="selectByExample" parameterType="com.mfx.blog.modal.entity.UserDOExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
@@ -111,13 +111,13 @@
         delete from t_si_user
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.sonnx.blog.modal.entity.UserDOExample">
+    <delete id="deleteByExample" parameterType="com.mfx.blog.modal.entity.UserDOExample">
         delete from t_si_user
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.sonnx.blog.modal.entity.UserDO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.mfx.blog.modal.entity.UserDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_si_user (id, login_name, password,
         email, home_url, nickname,login_status
         activated, last_login_time,
@@ -127,7 +127,7 @@
         #{activated,jdbcType=INTEGER}, #{lastLoginTime,jdbcType=TIMESTAMP},
         #{groupName,jdbcType=VARCHAR},#{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.sonnx.blog.modal.entity.UserDO" useGeneratedKeys="true"
+    <insert id="insertSelective" parameterType="com.mfx.blog.modal.entity.UserDO" useGeneratedKeys="true"
             keyProperty="id">
         insert into t_si_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -213,13 +213,19 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.sonnx.blog.modal.entity.UserDOExample"
+    <select id="countByExample" parameterType="com.mfx.blog.modal.entity.UserDOExample"
             resultType="java.lang.Integer">
         select count(*)
         from t_si_user
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
+    </select>
+    <select id="countByEmail" resultType="java.lang.Integer">
+        select count(1) from t_si_user where email=#{email}
+    </select>
+    <select id="countByEmailExceptSelf" resultType="java.lang.Integer">
+        select count(1) from t_si_user where email=#{email} and id!=#{id}
     </select>
     <update id="updateByExampleSelective" parameterType="map">
         update t_si_user
@@ -259,7 +265,7 @@
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.sonnx.blog.modal.entity.UserDO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.mfx.blog.modal.entity.UserDO">
         update t_si_user
         <set>
             <if test="loginName != null">

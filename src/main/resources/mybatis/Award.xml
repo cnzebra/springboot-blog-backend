@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sonnx.blog.dao.AwardDao">
+<mapper namespace="com.mfx.blog.dao.AwardDao">
 
-    <resultMap id="BaseResultMap" type="com.sonnx.blog.modal.entity.AwardDO">
+    <resultMap id="BaseResultMap" type="com.mfx.blog.modal.entity.AwardDO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
@@ -74,7 +74,7 @@
     <sql id="Base_Column_List">
         id, nickname, remark, money ,account, gmt_create,gmt_modified
     </sql>
-    <select id="selectByExample" parameterType="com.sonnx.blog.modal.entity.AwardDOExample" resultMap="BaseResultMap">
+    <select id="selectByExample" parameterType="com.mfx.blog.modal.entity.AwardDOExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
@@ -106,13 +106,13 @@
         delete from t_b_award
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.sonnx.blog.modal.entity.AwardDOExample">
+    <delete id="deleteByExample" parameterType="com.mfx.blog.modal.entity.AwardDOExample">
         delete from t_b_award
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.sonnx.blog.modal.entity.AwardDO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.mfx.blog.modal.entity.AwardDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_b_award (id, nickname, remark,money,
         account, gmt_create,gmt_modified
         )
@@ -120,7 +120,7 @@
         #{account,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
         )
     </insert>
-    <insert id="insertSelective" parameterType="com.sonnx.blog.modal.entity.AwardDO" useGeneratedKeys="true"
+    <insert id="insertSelective" parameterType="com.mfx.blog.modal.entity.AwardDO" useGeneratedKeys="true"
             keyProperty="id">
         insert into t_b_award
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -170,7 +170,7 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.sonnx.blog.modal.entity.AwardDOExample" resultType="java.lang.Integer">
+    <select id="countByExample" parameterType="com.mfx.blog.modal.entity.AwardDOExample" resultType="java.lang.Integer">
         select count(*) from t_b_award
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
@@ -214,7 +214,7 @@
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.sonnx.blog.modal.entity.AwardDO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.mfx.blog.modal.entity.AwardDO">
         update t_b_award
         <set>
             <if test="nickname != null">
@@ -235,7 +235,7 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.sonnx.blog.modal.entity.AwardDO">
+    <update id="updateByPrimaryKey" parameterType="com.mfx.blog.modal.entity.AwardDO">
         update t_b_award
         set nickname = #{nickname,jdbcType=VARCHAR},
         remark = #{remark,jdbcType=VARCHAR},

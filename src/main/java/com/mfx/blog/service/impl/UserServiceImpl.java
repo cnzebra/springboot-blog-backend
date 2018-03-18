@@ -8,6 +8,7 @@ import com.mfx.blog.dao.UserDao;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.entity.UserDO;
 import com.mfx.blog.modal.entity.UserDOExample;
+import com.mfx.blog.param.ModifyPassParam;
 import com.mfx.blog.service.UserService;
 import com.mfx.blog.thread.UserThreadLocal;
 import com.mfx.blog.utils.AbstractUUID;
@@ -149,24 +150,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void logout(String token) {
-        if (StringUtils.isBlank(token)) {
-            throw new TipException("请求非法,无令牌");
-        }
-        UserDOExample example = new UserDOExample();
-        UserDOExample.CriteriaAbstract criteria = example.createCriteria();
-        criteria.andTokenEqualTo(token);
-        List<UserDO> userDOS = userDao.selectByExample(example);
-        if (userDOS.size() == 0) {
-            throw new TipException("请求非法");
-        }
-        UserDO userDO = userDOS.get(0);
+    public void logout() {
+        UserDO userDO = UserThreadLocal.get();
         userDO.setLoginStatus(0);
 
         int count = userDao.updateByPrimaryKeySelective(userDO);
         if (count != 1) {
             throw new TipException("退出失败");
         }
+        UserThreadLocal.remove();
     }
 
     @Override
@@ -184,5 +176,31 @@ public class UserServiceImpl implements UserService {
             throw new TipException("更新用户信息失败");
         }
         return userDO;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public void modifyPassword(ModifyPassParam modifyPassParam) {
+        if (!StringUtils.equals(modifyPassParam.getNewPassword(), modifyPassParam.getConfirmPassword())) {
+            throw new TipException("两次输入密码不相同,请重新输入");
+        }
+
+        UserDO userDO = UserThreadLocal.get();
+
+        // 用户密码加密
+        String encodePwd = TaleUtils.md5encode(userDO.getLoginName() + modifyPassParam.getPassword());
+
+        //验证原密码是否正确
+        if (!StringUtils.equals(encodePwd, userDO.getPassword())) {
+            throw new TipException("原始密码错误,请重新输入");
+        }
+
+        String encodeNewPwd = TaleUtils.md5encode(userDO.getLoginName() + modifyPassParam.getNewPassword());
+
+        int count = userDao.modifyPassword(UserThreadLocal.get().getId(), encodeNewPwd);
+        if (count != 1) {
+            throw new TipException("修改密码失败");
+        }
+
     }
 }

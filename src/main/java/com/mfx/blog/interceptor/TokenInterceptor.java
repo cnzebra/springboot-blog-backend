@@ -78,7 +78,9 @@ public class TokenInterceptor implements HandlerInterceptor {
             return false;
         }
         // 放入本地线程,便于service 和controller访问
-        UserThreadLocal.set(userDO);
+        if (UserThreadLocal.get() == null) {
+            UserThreadLocal.set(userDO);
+        }
         return true;
     }
 

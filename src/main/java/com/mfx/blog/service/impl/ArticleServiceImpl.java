@@ -110,6 +110,8 @@ public class ArticleServiceImpl implements ArticleService {
         contents.setGmtModified(now);
         contents.setHits(0);
         contents.setCommentsNum(0);
+        contents.setLikes(0);
+        contents.setDislikes(0);
 
         String tags = contents.getTags();
         String categories = contents.getCategories();

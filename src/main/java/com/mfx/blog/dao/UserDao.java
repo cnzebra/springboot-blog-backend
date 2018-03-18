@@ -73,4 +73,6 @@ public interface UserDao {
     int countByEmail(@Param("email") String email);
 
     int countByEmailExceptSelf(@Param("id") Long id, @Param("email") String email);
+
+    int modifyPassword(@Param("id") Long id, @Param("password") String password);
 }

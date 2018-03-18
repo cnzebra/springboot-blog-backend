@@ -1,6 +1,7 @@
 package com.mfx.blog.service;
 
 import com.mfx.blog.modal.entity.UserDO;
+import com.mfx.blog.param.ModifyPassParam;
 
 /**
  * @author mfx
@@ -42,7 +43,9 @@ public interface UserService {
 
     UserDO queryUserByToken(String token);
 
-    void logout(String token);
+    void logout();
 
     UserDO update(UserDO userDO);
+
+    void modifyPassword(ModifyPassParam modifyPassParam);
 }

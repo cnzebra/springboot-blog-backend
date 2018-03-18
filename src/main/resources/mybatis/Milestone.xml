@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfx.blog.dao.MilestoneDao">
+
+    <resultMap id="BaseResultMap" type="com.mfx.blog.modal.entity.MilestoneDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, name, description, status ,start_time,end_time, gmt_create,gmt_modified
+    </sql>
+    <insert id="insert" parameterType="com.mfx.blog.modal.entity.MilestoneDO"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into t_b_milestone (name,description,status,start_time,end_time,gmt_create,gmt_modified)
+        values(
+        #{name,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},#{startTime,jdbcType=TIMESTAMP},#{endTime,jdbcType=TIMESTAMP},#{gmtCreate,jdbcType=TIMESTAMP},#{gmtModified,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <update id="modify" parameterType="com.mfx.blog.modal.entity.MilestoneDO">
+        update t_b_milestone
+        <set>
+            <if test="name!=null">
+                name=#{name,jdbcType=VARCHAR},
+            </if>
+            <if test="description!=null">
+                description=#{description,jdbcType=VARCHAR},
+            </if>
+            <if test="status!=null">
+                status=#{status,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime!=null">
+                start_time=#{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime!=null">
+                end_time=#{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtModified!=null">
+                gmt_modified=#{gmtModified,jdbcType=TIMESTAMP}
+            </if>
+            where id=#{id}
+        </set>
+    </update>
+    <delete id="delete" parameterType="long">
+        delete from t_b_milestone where id=#{id}
+    </delete>
+    <select id="selectList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_b_milestone
+        order by start_time desc,end_time desc
+    </select>
+</mapper>

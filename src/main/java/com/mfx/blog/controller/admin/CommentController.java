@@ -2,11 +2,15 @@ package com.mfx.blog.controller.admin;
 
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.controller.BaseController;
+import com.mfx.blog.dto.LogActions;
 import com.mfx.blog.modal.bo.RestResponseBo;
 import com.mfx.blog.modal.entity.CommentDO;
 import com.mfx.blog.modal.entity.CommentDOExample;
+import com.mfx.blog.modal.entity.LogDO;
 import com.mfx.blog.modal.entity.UserDO;
 import com.mfx.blog.service.CommentService;
+import com.mfx.blog.service.LogService;
+import com.mfx.blog.thread.UserThreadLocal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,6 +33,8 @@ public class CommentController extends BaseController {
 
     @Resource
     private CommentService commentsService;
+    @Resource
+    private LogService logService;
 
 
     /**
@@ -39,13 +45,19 @@ public class CommentController extends BaseController {
      */
     @PostMapping(value = "delete.token")
     @ResponseBody
-    public ResponseEntity delete(@RequestParam Long commentId) {
+    public ResponseEntity delete(@RequestParam Long commentId,HttpServletRequest request) {
         try {
             CommentDO comments = commentsService.getCommentById(commentId);
             if (null == comments) {
                 return new ResponseEntity(RestResponseBo.fail("不存在该评论"), HttpStatus.OK);
             }
             commentsService.delete(commentId, comments.getArticleId());
+            LogDO logDO = new LogDO();
+            logDO.setAction(LogActions.DEL_ARTICLE_COMMENT.getAction());
+            logDO.setLevel(1);
+            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
+            logDO.setData("删除评论成功:" + commentId);
+            logService.insertLog(logDO, request);
         } catch (Exception e) {
             String msg = "评论删除失败";
             LOGGER.error(msg, e);

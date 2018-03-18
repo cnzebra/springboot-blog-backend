@@ -1,17 +1,15 @@
 package com.mfx.blog.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.component.constant.WebConst;
-import com.mfx.blog.dto.MetaDto;
-import com.mfx.blog.dto.Types;
+import com.mfx.blog.dto.*;
 import com.mfx.blog.modal.bo.ArchiveBo;
 import com.mfx.blog.modal.bo.RestResponseBo;
-import com.mfx.blog.modal.entity.ArticleDO;
-import com.mfx.blog.modal.entity.CommentDO;
-import com.mfx.blog.modal.entity.MetaDO;
-import com.mfx.blog.modal.entity.UserDO;
+import com.mfx.blog.modal.entity.*;
 import com.mfx.blog.param.ArticleStatistics;
 import com.mfx.blog.service.*;
+import com.mfx.blog.thread.UserThreadLocal;
 import com.mfx.blog.utils.IPKit;
 import com.mfx.blog.utils.PatternKit;
 import com.mfx.blog.utils.TaleUtils;
@@ -68,6 +66,9 @@ public class IndexController extends BaseController {
 
     @Resource
     private UserService usersService;
+
+    @Resource
+    private LogService logService;
 
     /**
      * 首页分页
@@ -131,6 +132,13 @@ public class IndexController extends BaseController {
         commentDO.setIp(request.getRemoteAddr());
         try {
             String result = commentService.insertComment(commentDO);
+            LogDO logDO = new LogDO();
+            logDO.setAction(LogActions.ADD_LINK.getAction());
+            logDO.setLevel(1);
+            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
+            logDO.setData("对文章:" + articleId + "|添加评论:" + commentDO.getContent());
+            logService.insertLog(logDO, request);
+
             // 设置对每个文章1分钟可以评论一次
             cache.hset(Types.COMMENTS_FREQUENCY.getType(), val, 1, 5);
             if (!WebConst.SUCCESS_RESULT.equals(result)) {
@@ -231,77 +239,17 @@ public class IndexController extends BaseController {
         return new ResponseEntity(RestResponseBo.ok(commentsPaginator), HttpStatus.OK);
     }
 
-
-
-    /**
-     * 更新文章的点击率
-     *
-     * @param articeId
-     * @param chits
-     */
-    private void updateArticleHit(Long articeId, Integer chits) {
-        Integer hits = cache.hget("article", "hits");
-        if (chits == null) {
-            chits = 0;
-        }
-        hits = null == hits ? 1 : hits + 1;
-        if (hits >= WebConst.HIT_EXCEED) {
-            ArticleDO temp = new ArticleDO();
-            temp.setId(articeId);
-            temp.setHits(chits + hits);
-            articleService.updateContentByCid(temp);
-            cache.hset("article", "hits", 1);
-        } else {
-            cache.hset("article", "hits", hits);
-        }
-    }
-
-    /**
-     * 标签页
-     *
-     * @param name
-     * @return
-     */
-    @GetMapping(value = "tag/{name}")
-    public String tags(HttpServletRequest request, @PathVariable String name, @RequestParam(value = "limit",
-            defaultValue = "12") int limit) {
-        return this.tags(request, name, 1, limit);
-    }
-
-    /**
-     * 标签分页
-     *
-     * @param request
-     * @param name
-     * @param page
-     * @param limit
-     * @return
-     */
-    @GetMapping(value = "tag/{name}/{page}")
-    public String tags(HttpServletRequest request, @PathVariable String name, @PathVariable int page, @RequestParam
-            (value = "limit", defaultValue = "12") int limit) {
-
-        page = page < 0 || page > WebConst.MAX_PAGE ? 1 : page;
-//        对于空格的特殊处理
-        name = name.replaceAll("\\+", " ");
-        MetaDto metaDto = metaService.getMeta(Types.TAG.getType(), name);
-        if (null == metaDto) {
-            return this.render404();
-        }
-
-        PageInfo<ArticleDO> contentsPaginator = articleService.getArticles(metaDto.getId(), page, limit);
-        request.setAttribute("articles", contentsPaginator);
-        request.setAttribute("meta", metaDto);
-        request.setAttribute("type", "标签");
-        request.setAttribute("keyword", name);
-
-        return this.render("page-category");
-    }
-
     @PutMapping("article/statistics")
     @ResponseBody
-    public ResponseEntity updateArticleStatistics(@RequestBody ArticleStatistics statistics) {
+    public ResponseEntity updateArticleStatistics(@RequestBody ArticleStatistics statistics,HttpServletRequest request) {
         int result = articleService.updateStatistics(statistics);
+
+        LogDO logDO = new LogDO();
+        logDO.setAction(LogActions.ARTICLE_LIKE_DISLIKE.getAction());
+        logDO.setLevel(1);
+        logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
+        logDO.setData("内容:" + JSONObject.toJSONString(statistics));
+        logService.insertLog(logDO, request);
 
         return new ResponseEntity(RestResponseBo.ok(result), HttpStatus.OK);
     }

@@ -3,8 +3,6 @@ package com.mfx.blog.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.component.constant.WebConst;
-import com.mfx.blog.exception.TipException;
-import com.mfx.blog.component.constant.WebConst;
 import com.mfx.blog.dao.LogDao;
 import com.mfx.blog.dao.UserDao;
 import com.mfx.blog.exception.TipException;
@@ -12,13 +10,13 @@ import com.mfx.blog.modal.entity.LogDO;
 import com.mfx.blog.modal.entity.LogDOExample;
 import com.mfx.blog.modal.entity.UserDO;
 import com.mfx.blog.service.LogService;
-import com.mfx.blog.service.UserService;
+import com.mfx.blog.utils.ClientUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -38,18 +36,38 @@ public class LogServiceImpl implements LogService {
     private UserDao userDao;
 
     @Override
-    public void insertLog(LogDO logDO) {
+    public void insertLog(LogDO logDO, HttpServletRequest request) {
+        logDO.setIp(ClientUtils.getIp(request));
+        logDO.setUrl(ClientUtils.getUri(request));
+        logDO.setBrowser(ClientUtils.getBrowser(request));
+        if (logDO.getAuthorId() != null) {
+            //说明是登录用户在操作
+            UserDO userDO = userDao.selectByPrimaryKey(logDO.getAuthorId());
+            if (userDO != null) {
+                //用户存在
+                logDO.setAuthor(userDO.getLoginName());
+            } else {
+                //用户ID无效
+                throw new TipException("用户无效");
+            }
+        } else {
+            logDO.setAuthor("游客");
+        }
+        logDO.setGmtCreate(new Date());
+        logDO.setGmtModified(new Date());
         logDao.insert(logDO);
     }
 
     @Override
-    public void insertLog(String action, String data, Integer level, String ip, Long authorId) {
+    public void insertLog(String action, String data, Integer level, Long authorId, HttpServletRequest request) {
         LogDO logs = new LogDO();
         logs.setAction(action);
         logs.setData(data);
         level = level == null ? 0 : level;
         logs.setLevel(level);
-        logs.setIp(ip);
+        logs.setIp(ClientUtils.getIp(request));
+        logs.setUrl(ClientUtils.getUri(request));
+        logs.setBrowser(ClientUtils.getBrowser(request));
         logs.setAuthorId(authorId);
         if (authorId != null) {
             //说明是登录用户在操作
@@ -61,6 +79,8 @@ public class LogServiceImpl implements LogService {
                 //用户ID无效
                 throw new TipException("用户无效");
             }
+        } else {
+            logs.setAuthor("游客");
         }
         logs.setGmtCreate(new Date());
         logs.setGmtModified(new Date());

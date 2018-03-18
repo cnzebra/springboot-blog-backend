@@ -49,62 +49,6 @@ public class IndexController extends BaseController {
     @Resource
     private UserService userService;
 
-    /**
-     * 页面跳转
-     *
-     * @return
-     */
-    @GetMapping(value = {"", "/index"})
-    public String index(HttpServletRequest request) {
-        LOGGER.info("Enter admin index method");
-        List<CommentDO> comments = siteService.recentComments(5);
-        List<ArticleDO> contents = siteService.recentContents(5);
-        StatisticsBo statistics = siteService.getStatistics();
-        // 取最新的20条日志
-        List<LogDO> logs = logService.getLogs(1, 5);
-
-        request.setAttribute("comments", comments);
-        request.setAttribute("articles", contents);
-        request.setAttribute("statistics", statistics);
-        request.setAttribute("logs", logs);
-        LOGGER.info("Exit admin index method");
-        return "admin/index";
-    }
-
-    /**
-     * 个人设置页面
-     */
-    @GetMapping(value = "profile")
-    public String profile() {
-        return "admin/profile";
-    }
-
-
-    /**
-     * 保存个人信息
-     */
-    @PostMapping(value = "/profile")
-    @ResponseBody
-    public RestResponseBo saveProfile(@RequestParam String nickname, @RequestParam String email, HttpServletRequest
-            request, HttpSession session) {
-        UserDO users = this.user(request);
-        if (StringUtils.isNotBlank(nickname) && StringUtils.isNotBlank(email)) {
-            UserDO temp = new UserDO();
-            temp.setId(users.getId());
-            temp.setNickname(nickname);
-            temp.setEmail(email);
-            userService.updateById(temp);
-            logService.insertLog(LogActions.UP_INFO.getAction(), GsonUtils.toJsonString(temp), null, request.getRemoteAddr
-                    (), this.getUid(request));
-
-            //更新session中的数据
-            UserDO original = (UserDO) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
-            original.setNickname(nickname);
-            original.setEmail(email);
-            session.setAttribute(WebConst.LOGIN_SESSION_KEY, original);
-        }
-        return RestResponseBo.ok();
-    }
 
     /**
      * 修改密码
@@ -131,7 +75,7 @@ public class IndexController extends BaseController {
             String pwd = TaleUtils.md5encode(users.getLoginName() + password);
             temp.setPassword(pwd);
             userService.updateById(temp);
-            logService.insertLog(LogActions.UP_PWD.getAction(), null, null, request.getRemoteAddr(), this.getUid(request));
+//            logService.insertLog(LogActions.UP_PWD.getAction(), null, null, request.getRemoteAddr(), this.getUid(request));
 
             //更新session中的数据
             UserDO original = (UserDO) session.getAttribute(WebConst.LOGIN_SESSION_KEY);

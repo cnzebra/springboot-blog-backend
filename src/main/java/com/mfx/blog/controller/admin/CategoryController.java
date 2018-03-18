@@ -1,14 +1,16 @@
 package com.mfx.blog.controller.admin;
 
-import com.mfx.blog.dto.MetaDto;
-import com.mfx.blog.dto.Types;
+import com.mfx.blog.dto.*;
 import com.mfx.blog.component.constant.WebConst;
 import com.mfx.blog.controller.BaseController;
 import com.mfx.blog.dto.MetaDto;
 import com.mfx.blog.dto.Types;
 import com.mfx.blog.modal.bo.RestResponseBo;
+import com.mfx.blog.modal.entity.LogDO;
 import com.mfx.blog.modal.entity.MetaDO;
+import com.mfx.blog.service.LogService;
 import com.mfx.blog.service.MetaService;
+import com.mfx.blog.thread.UserThreadLocal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -32,15 +34,9 @@ public class CategoryController extends BaseController {
 
     @Resource
     private MetaService metasService;
+    @Resource
+    private LogService logService;
 
-    @GetMapping(value = "")
-    public String index(HttpServletRequest request) {
-        List<MetaDto> categories = metasService.getMetaList(Types.CATEGORY.getType(), null, WebConst.MAX_POSTS);
-        List<MetaDto> tags = metasService.getMetaList(Types.TAG.getType(), null, WebConst.MAX_POSTS);
-        request.setAttribute("categories", categories);
-        request.setAttribute("tags", tags);
-        return "admin/category";
-    }
 
     @GetMapping(value = "list.token")
     @ResponseBody
@@ -51,9 +47,15 @@ public class CategoryController extends BaseController {
 
     @PostMapping(value = "save")
     @ResponseBody
-    public RestResponseBo saveCategory(@RequestBody MetaDO meta) {
+    public RestResponseBo saveCategory(@RequestBody MetaDO meta,HttpServletRequest request) {
         try {
             metasService.saveMeta(Types.CATEGORY.getType(), meta.getName(), meta.getId());
+            LogDO logDO = new LogDO();
+            logDO.setAction(LogActions.ADD_ARTICLE_CATEGORY.getAction());
+            logDO.setLevel(1);
+            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
+            logDO.setData("增加文章分类成功:" + meta.getName());
+            logService.insertLog(logDO, request);
         } catch (Exception e) {
             String msg = "分类保存失败";
             LOGGER.error(msg, e);

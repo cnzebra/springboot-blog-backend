@@ -9,6 +9,8 @@
         <result column="author_id" jdbcType="BIGINT" property="authorId"/>
         <result column="author" jdbcType="BIGINT" property="author"/>
         <result column="ip" jdbcType="VARCHAR" property="ip"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="browser" jdbcType="VARCHAR" property="browser"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
     </resultMap>
@@ -73,7 +75,7 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-        id, action, data, level ,author_id,author, ip, gmt_create,gmt_modified
+        id, action, data, level ,author_id,author, ip,url,browser, gmt_create,gmt_modified
     </sql>
     <select id="selectByExample" parameterType="com.mfx.blog.modal.entity.LogDOExample" resultMap="BaseResultMap">
         select
@@ -115,13 +117,14 @@
     </delete>
     <insert id="insert" parameterType="com.mfx.blog.modal.entity.LogDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_b_log (id, action, data,level,
-        author_id,author, ip, gmt_create,gmt_modified
+        author_id,author, ip,url,browser, gmt_create,gmt_modified
         )
         values (#{id,jdbcType=BIGINT}, #{action,jdbcType=VARCHAR}, #{data,jdbcType=VARCHAR},#{level,jdbcType=INTEGER},
-        #{authorId,jdbcType=BIGINT},#{author,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
+        #{authorId,jdbcType=BIGINT},#{author,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{browser,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
         )
     </insert>
-    <insert id="insertSelective" parameterType="com.mfx.blog.modal.entity.LogDO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSelective" parameterType="com.mfx.blog.modal.entity.LogDO" useGeneratedKeys="true"
+            keyProperty="id">
         insert into t_b_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -144,6 +147,12 @@
             </if>
             <if test="ip != null">
                 ip,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="browser != null">
+                browser,
             </if>
             <if test="gmtCreate != null">
                 gmt_create,
@@ -173,6 +182,12 @@
             </if>
             <if test="ip != null">
                 #{ip,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="browser != null">
+                #{browser,jdbcType=VARCHAR},
             </if>
             <if test="gmtCreate != null">
                 #{gmtCreate,jdbcType=TIMESTAMP},
@@ -212,6 +227,12 @@
             <if test="record.ip != null">
                 ip = #{record.ip,jdbcType=VARCHAR},
             </if>
+            <if test="record.url != null">
+                url = #{record.url,jdbcType=VARCHAR},
+            </if>
+            <if test="record.browser != null">
+                browser = #{record.browser,jdbcType=VARCHAR},
+            </if>
             <if test="record.gmtModified != null">
                 gmt_modified = #{record.gmModified,jdbcType=TIMESTAMP},
             </if>
@@ -229,6 +250,8 @@
         author_id = #{record.authorId,jdbcType=BIGINT},
         author = #{record.author,jdbcType=VARCHAR},
         ip = #{record.ip,jdbcType=VARCHAR},
+        url = #{record.url,jdbcType=VARCHAR},
+        browser = #{record.browser,jdbcType=VARCHAR},
         gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause"/>
@@ -255,6 +278,12 @@
             <if test="ip != null">
                 ip = #{ip,jdbcType=VARCHAR},
             </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="browser != null">
+                browser = #{browser,jdbcType=VARCHAR},
+            </if>
             <if test="gmtModified != null">
                 gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
             </if>
@@ -269,6 +298,8 @@
         author_id = #{authorId,jdbcType=BIGINT},
         author = #{author,jdbcType=VARCHAR},
         ip = #{ip,jdbcType=VARCHAR},
+        url = #{url,jdbcType=VARCHAR},
+        browser = #{browser,jdbcType=VARCHAR},
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=BIGINT}
     </update>

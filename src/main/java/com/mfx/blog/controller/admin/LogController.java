@@ -11,6 +11,8 @@ import com.mfx.blog.modal.entity.LogDOExample;
 import com.mfx.blog.service.LogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -32,43 +34,27 @@ public class LogController extends BaseController {
     @Resource
     private LogService logService;
 
-    @GetMapping(value = "")
-    public String index(@RequestParam(value = "action", defaultValue = "") String action,
-                        @RequestParam(value = "data", defaultValue = "") String data,
-                        @RequestParam(value = "page", defaultValue = "1") int page,
-                        @RequestParam(value = "limit", defaultValue = "15") int limit, HttpServletRequest request) {
-        LogDOExample logDOExample = new LogDOExample();
-        logDOExample.setOrderByClause("gmt_create desc");
-        logDOExample.createCriteria().andActionLike("%" + action + "%").andDataLike("%" + data + "%");
-        PageInfo<LogDO> logs = logService.getLogsForPage(page, limit, logDOExample);
-        request.setAttribute("logs", logs);
-        return "admin/log_list";
-    }
-
-    @GetMapping(value = "query")
-    public String index(@RequestParam Integer page,
-                        @RequestParam Integer pageSize,
-                        @RequestParam String action,
-                        @RequestParam String data,
-                        HttpServletRequest request) {
-        LogDOExample logDOExample = new LogDOExample();
-        logDOExample.setOrderByClause("gmt_create desc");
-        logDOExample.createCriteria().andActionLike("%" + action + "%").andDataLike("%" + data + "%");
-        PageInfo<LogDO> logs = logService.getLogsForPage(page, pageSize, logDOExample);
-        request.setAttribute("logs", logs);
-        return "admin/log_list";
-    }
-
-    @PostMapping(value = "delete")
+    @GetMapping(value = "list.token")
     @ResponseBody
-    public RestResponseBo delete(@RequestParam Long logId, HttpServletRequest request) {
+    public ResponseEntity list(@RequestParam(value = "action", defaultValue = "") String action,
+                               @RequestParam(value = "data", defaultValue = "") String data,
+                               @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                               @RequestParam(value = "pageSize", defaultValue = "15") int pageSize, HttpServletRequest request) {
+        LogDOExample logDOExample = new LogDOExample();
+        logDOExample.setOrderByClause("gmt_create desc");
+        logDOExample.createCriteria().andActionLike("%" + action + "%").andDataLike("%" + data + "%");
+        PageInfo<LogDO> logs = logService.getLogsForPage(pageNum, pageSize, logDOExample);
+        return new ResponseEntity(RestResponseBo.ok(logs), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "delete/{id}.token")
+    @ResponseBody
+    public ResponseEntity delete(@PathVariable("id") Long logId, HttpServletRequest request) {
         Integer result = logService.deleteById(logId);
-        logService.insertLog(LogActions.DELETE_LOG.getAction(), logId + ":" + (result == 1 ? "删除成功" : "删除失败"), 2, request.getRemoteAddr(), this.getUid
-                (request));
         if (result != 1) {
-            return RestResponseBo.fail(result);
+            return new ResponseEntity(RestResponseBo.fail(result), HttpStatus.OK);
         }
-        return RestResponseBo.ok();
+        return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
     }
 
 

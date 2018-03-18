@@ -190,8 +190,8 @@ public class AttachController extends BaseController {
             }
             attachService.deleteById(id);
             new File(CLASSPATH + attach.getFileKey()).delete();
-            logService.insertLog(LogActions.DEL_ARTICLE.getAction(), attach.getFileKey(), null, request.getRemoteAddr(), this
-                    .getUid(request));
+//            logService.insertLog(LogActions.DEL_ARTICLE.getAction(), attach.getFileKey(), null, request.getRemoteAddr(), this
+//                    .getUid(request));
         } catch (Exception e) {
             String msg = "附件删除失败";
             LOGGER.error(msg, e);

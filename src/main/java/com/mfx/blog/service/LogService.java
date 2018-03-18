@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.mfx.blog.modal.entity.LogDO;
 import com.mfx.blog.modal.entity.LogDOExample;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public interface LogService {
      *
      * @param logDO
      */
-    void insertLog(LogDO logDO);
+    void insertLog(LogDO logDO,HttpServletRequest request);
 
     /**
      * 保存
@@ -27,7 +28,7 @@ public interface LogService {
      * @param ip
      * @param authorId
      */
-    void insertLog(String action, String data, Integer level, String ip, Long authorId);
+    void insertLog(String action, String data, Integer level, Long authorId, HttpServletRequest request);
 
     /**
      * 获取日志分页
@@ -39,7 +40,9 @@ public interface LogService {
     List<LogDO> getLogs(int page, int limit);
 
 
-    /**分页读取日志信息
+    /**
+     * 分页读取日志信息
+     *
      * @param page
      * @param pageSize
      * @return

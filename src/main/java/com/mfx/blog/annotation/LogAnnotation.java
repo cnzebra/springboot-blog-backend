@@ -13,6 +13,6 @@ public @interface LogAnnotation {
 
     String data() default "";
 
-    LogLevelEnums level() default LogLevelEnums.LEVEL1;
+    LogLevelEnums level() default LogLevelEnums.LEVEL10;
 
 }

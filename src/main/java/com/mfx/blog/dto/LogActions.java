@@ -36,6 +36,13 @@ public enum LogActions {
     ADD_AWARD("添加赞赏记录"),
     ARTICLE_LIKE_DISLIKE("支持或反对文章"),
     DELETE_LOG("删除日志"),
+    ADD_TASK("添加任务"),
+    MOD_TASK("修改任务"),
+    DEL_TASK("删除任务"),
+    RUN_JOB("运行任务"),
+    STOP_JOB("停止任务"),
+    SWITCH_JOB("切换任务状态"),
+    MOD_JOB_CRON("修改任务cron"),
     ADD_FEEDBACK("添加反馈");
 
     private String action;

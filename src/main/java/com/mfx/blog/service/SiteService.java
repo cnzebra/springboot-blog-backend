@@ -43,17 +43,6 @@ public interface SiteService {
      */
     CommentDO getComment(Long commentId);
 
-    /**
-     * 系统备份
-     *
-     * @param bkType
-     * @param bkPath
-     * @param fmt
-     * @return
-     * @throws Exception
-     */
-    BackResponseBo backup(String bkType, String bkPath, String fmt) throws Exception;
-
 
     /**
      * 获取后台统计数据

@@ -85,36 +85,6 @@ public class SettingController extends BaseController {
         }
     }
 
-
-    /**
-     * 系统备份
-     *
-     * @return
-     */
-    @PostMapping(value = "backup")
-    @ResponseBody
-    public RestResponseBo backup(@RequestParam String bkType, @RequestParam String bkPath,
-                                 HttpServletRequest request) {
-        if (StringUtils.isBlank(bkType)) {
-            return RestResponseBo.fail("请确认信息输入完整");
-        }
-        try {
-            BackResponseBo backResponse = siteService.backup(bkType, bkPath, "yyyyMMddHHmm");
-//            logService.insertLog(LogActions.SYS_BACKUP.getAction(), null, null, request.getRemoteAddr(), this.getUid
-//                    (request));
-            return RestResponseBo.ok(backResponse);
-        } catch (Exception e) {
-            String msg = "备份失败";
-            if (e instanceof TipException) {
-                msg = e.getMessage();
-            } else {
-                LOGGER.error(msg, e);
-            }
-            return RestResponseBo.fail(msg);
-        }
-    }
-
-
     /**
      * 数组转字符串
      *

@@ -68,9 +68,9 @@ public class MfxcomponentController extends BaseController {
         }
     }
 
-    @GetMapping("admin/mfxcomponent/{beanName}/methods.token")
+    @GetMapping("admin/mfxcomponent/methods.token")
     @ResponseBody
-    public ResponseEntity<JSONObject> listClassMethods(@PathVariable("beanName") String beanName) {
+    public ResponseEntity<JSONObject> listClassMethods(@RequestParam("beanName") String beanName) {
         try {
             List<String> names = mfxcomponentService.methods(beanName);
             return new ResponseEntity(RestResponseBo.ok(names), HttpStatus.OK);

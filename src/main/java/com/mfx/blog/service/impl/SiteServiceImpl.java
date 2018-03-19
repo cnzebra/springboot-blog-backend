@@ -2,16 +2,6 @@ package com.mfx.blog.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.mfx.blog.component.constant.WebConst;
-import com.mfx.blog.exception.TipException;
-import com.mfx.blog.component.constant.WebConst;
-import com.mfx.blog.dao.ArticleDao;
-import com.mfx.blog.dao.AttachFileDao;
-import com.mfx.blog.dao.CommentDao;
-import com.mfx.blog.dao.MetaDao;
-import com.mfx.blog.dto.MetaDto;
-import com.mfx.blog.dto.Types;
-import com.mfx.blog.exception.TipException;
-import com.mfx.blog.component.constant.WebConst;
 import com.mfx.blog.controller.admin.AttachController;
 import com.mfx.blog.dao.ArticleDao;
 import com.mfx.blog.dao.AttachFileDao;
@@ -28,7 +18,6 @@ import com.mfx.blog.service.SiteService;
 import com.mfx.blog.utils.DateKit;
 import com.mfx.blog.utils.TaleUtils;
 import com.mfx.blog.utils.ZipUtils;
-import com.mfx.blog.utils.backup.Backup;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,70 +78,6 @@ public class SiteServiceImpl implements SiteService {
         List<ArticleDO> list = articleDao.selectByExample(example);
         LOGGER.debug("Exit recentContents method");
         return list;
-    }
-
-    @Override
-    public BackResponseBo backup(String bkType, String bkPath, String fmt) throws Exception {
-        BackResponseBo backResponse = new BackResponseBo();
-        if ("attach".equals(bkType)) {
-            if (StringUtils.isBlank(bkPath)) {
-                throw new TipException("请输入备份文件存储路径");
-            }
-            if (!(new File(bkPath)).isDirectory()) {
-                throw new TipException("请输入一个存在的目录");
-            }
-            String bkAttachDir = AttachController.CLASSPATH + "upload";
-            String bkThemesDir = AttachController.CLASSPATH + "templates/themes";
-
-            String fname = DateKit.dateFormat(new Date(), fmt) + "_" + TaleUtils.getRandomNumber(5) + ".zip";
-
-            String attachPath = bkPath + "/" + "attachs_" + fname;
-            String themesPath = bkPath + "/" + "themes_" + fname;
-
-            ZipUtils.zipFolder(bkAttachDir, attachPath);
-            ZipUtils.zipFolder(bkThemesDir, themesPath);
-
-            backResponse.setAttachPath(attachPath);
-            backResponse.setThemePath(themesPath);
-        }
-        if ("db".equals(bkType)) {
-
-            String bkAttachDir = AttachController.CLASSPATH + "upload/";
-            if (!(new File(bkAttachDir)).isDirectory()) {
-                File file = new File(bkAttachDir);
-                if (!file.exists()) {
-                    file.mkdirs();
-                }
-            }
-            String sqlFileName = "tale_" + DateKit.dateFormat(new Date(), fmt) + "_" + TaleUtils.getRandomNumber(5) +
-                    ".sql";
-            String zipFile = sqlFileName.replace(".sql", ".zip");
-
-            Backup backup = new Backup(TaleUtils.getNewDataSource().getConnection());
-            String sqlContent = backup.execute();
-
-            File sqlFile = new File(bkAttachDir + sqlFileName);
-            write(sqlContent, sqlFile, Charset.forName("UTF-8"));
-
-            String zip = bkAttachDir + zipFile;
-            ZipUtils.zipFile(sqlFile.getPath(), zip);
-
-            if (!sqlFile.exists()) {
-                throw new TipException("数据库备份失败");
-            }
-            sqlFile.delete();
-
-            backResponse.setSqlPath(zipFile);
-
-            // 10秒后删除备份文件
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    new File(zip).delete();
-                }
-            }, 10 * 1000);
-        }
-        return backResponse;
     }
 
     @Override

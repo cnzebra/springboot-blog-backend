@@ -23,7 +23,7 @@ public class MfxcomponentController extends BaseController {
     @Autowired
     private MfxcomponentService mfxcomponentService;
 
-    @GetMapping("mfxcomponent/list.token")
+    @GetMapping("admin/mfxcomponent/list.token")
     @ResponseBody
     public ResponseEntity listMfxcomponent(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -53,7 +53,7 @@ public class MfxcomponentController extends BaseController {
         }
     }
 
-    @GetMapping("mfxcomponent/fullname.token")
+    @GetMapping("admin/mfxcomponent/fullname.token")
     @ResponseBody
     public ResponseEntity<JSONObject> getClassFullName(@RequestParam("beanName") String beanName) {
         try {
@@ -68,7 +68,7 @@ public class MfxcomponentController extends BaseController {
         }
     }
 
-    @GetMapping("mfxcomponent/{beanName}/methods")
+    @GetMapping("admin/mfxcomponent/{beanName}/methods.token")
     @ResponseBody
     public ResponseEntity<JSONObject> listClassMethods(@PathVariable("beanName") String beanName) {
         try {

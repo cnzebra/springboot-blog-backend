@@ -10,6 +10,7 @@ import com.mfx.blog.service.TaskService;
 import com.mfx.blog.utils.SpringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,10 @@ import java.lang.reflect.Method;
 @RestController
 public class TaskController extends BaseController {
 
+    @Autowired
     private TaskService taskService;
 
-    @GetMapping("tasks")
+    @GetMapping("admin/tasks.token")
     @ResponseBody
     public ResponseEntity taskList(@RequestParam(value = "name") String name,
                                    @RequestParam(value = "pageNum") int pageNum,
@@ -47,7 +49,7 @@ public class TaskController extends BaseController {
 
 
     @LogAnnotation(action = LogActions.ADD_TASK, data = "#1")
-    @PostMapping("task")
+    @PostMapping("admin/task.token")
     @ResponseBody
     public ResponseEntity taskList(@RequestBody ScheduleJobDO scheduleJob) {
         Boolean verified = null;
@@ -91,7 +93,7 @@ public class TaskController extends BaseController {
     }
 
     @LogAnnotation(action = LogActions.MOD_TASK, data = "#1")
-    @PutMapping("task/edit")
+    @PutMapping("admin/task/edit")
     @ResponseBody
     public ResponseEntity taskEdit(@RequestBody ScheduleJobDO scheduleJob) {
         Boolean verified = null;
@@ -144,9 +146,9 @@ public class TaskController extends BaseController {
     }
 
     @LogAnnotation(action = LogActions.SWITCH_JOB, data = "#1:#2")
-    @PutMapping("task/{jobId}/status")
+    @PutMapping("admin/task/{id}/status.token")
     @ResponseBody
-    public ResponseEntity changeJobStatus(@PathVariable("jobId") Long jobId, @RequestParam("cmd") String cmd) throws TipException {
+    public ResponseEntity changeJobStatus(@PathVariable("id") Long jobId, @RequestParam("cmd") String cmd) throws TipException {
         if (!"start".equals(cmd) && !"stop".equals(cmd)) {
             return new ResponseEntity(RestResponseBo.fail("任务状态改变失败！"), HttpStatus.OK);
         } else {
@@ -156,9 +158,9 @@ public class TaskController extends BaseController {
     }
 
     @LogAnnotation(action = LogActions.DEL_TASK, data = "#1")
-    @DeleteMapping("task/delete/{jobId}.token")
+    @DeleteMapping("admin/task/delete/{id}.token")
     @ResponseBody
-    public ResponseEntity deleteJob(@PathVariable("jobId") Long jobId) throws TipException {
+    public ResponseEntity deleteJob(@PathVariable("id") Long jobId) throws TipException {
         ScheduleJobDO task = taskService.getTaskById(jobId);
         //如果任务处于运行状态，需要先停止任务
         if (task.getJobStatus() != null &&

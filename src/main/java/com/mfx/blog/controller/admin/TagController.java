@@ -1,9 +1,11 @@
 package com.mfx.blog.controller.admin;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mfx.blog.annotation.LogAnnotation;
 import com.mfx.blog.component.constant.WebConst;
 import com.mfx.blog.controller.BaseController;
 import com.mfx.blog.dto.LogActions;
+import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.dto.MetaDto;
 import com.mfx.blog.dto.Types;
 import com.mfx.blog.modal.bo.RestResponseBo;
@@ -52,17 +54,12 @@ public class TagController extends BaseController {
         return new ResponseEntity(RestResponseBo.ok(tags), HttpStatus.OK);
     }
 
+    @LogAnnotation(action = LogActions.ADD_ARTICLE_TAG, data = "标签:#1", level = LogLevelEnums.LEVEL10)
     @PostMapping(value = "save")
     @ResponseBody
-    public RestResponseBo saveTag(@RequestBody MetaDO meta,HttpServletRequest request) {
+    public RestResponseBo saveTag(@RequestBody MetaDO meta, HttpServletRequest request) {
         try {
             metasService.saveMeta(Types.TAG.getType(), meta.getName(), meta.getId());
-            LogDO logDO = new LogDO();
-            logDO.setAction(LogActions.ADD_ARTICLE_TAG.getAction());
-            logDO.setLevel(1);
-            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-            logDO.setData("友链:" + JSONObject.toJSONString(meta));
-            logService.insertLog(logDO, request);
         } catch (Exception e) {
             String msg = "标签保存失败";
             LOGGER.error(msg, e);

@@ -1,7 +1,9 @@
 package com.mfx.blog.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mfx.blog.annotation.LogAnnotation;
 import com.mfx.blog.dto.LogActions;
+import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.modal.entity.LogDO;
 import com.mfx.blog.service.AwardService;
 import com.mfx.blog.modal.bo.RestResponseBo;
@@ -31,16 +33,11 @@ public class AwardController extends BaseController {
     private LogService logService;
 
 
+    @LogAnnotation(action = LogActions.ADD_AWARD, data = "内容:#1", level = LogLevelEnums.LEVEL10)
     @PostMapping("award")
     @ResponseBody
     public ResponseEntity addAward(@RequestBody AwardDO awardDO, HttpServletRequest request) {
         awardService.insertAward(awardDO);
-        LogDO logDO = new LogDO();
-        logDO.setAction(LogActions.ADD_AWARD.getAction());
-        logDO.setLevel(1);
-        logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-        logDO.setData("赞赏记录:" + JSONObject.toJSONString(awardDO));
-        logService.insertLog(logDO, request);
         return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
     }
 }

@@ -17,6 +17,10 @@ public class ClientUtils {
         return null;
     }
 
+    public static String getUrl(HttpServletRequest request) {
+        return request.getRequestURL().toString();
+    }
+
     public static String getUri(HttpServletRequest request) {
         return request.getRequestURI();
     }

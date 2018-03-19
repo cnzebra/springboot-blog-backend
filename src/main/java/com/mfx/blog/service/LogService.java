@@ -18,7 +18,7 @@ public interface LogService {
      *
      * @param logDO
      */
-    void insertLog(LogDO logDO,HttpServletRequest request);
+    void insertLog(LogDO logDO);
 
     /**
      * 保存

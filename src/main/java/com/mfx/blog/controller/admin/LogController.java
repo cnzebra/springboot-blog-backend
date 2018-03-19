@@ -2,13 +2,16 @@ package com.mfx.blog.controller.admin;
 
 
 import com.github.pagehelper.PageInfo;
+import com.mfx.blog.annotation.LogAnnotation;
 import com.mfx.blog.controller.BaseController;
 import com.mfx.blog.dto.LogActions;
+import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.bo.RestResponseBo;
 import com.mfx.blog.modal.entity.LogDO;
 import com.mfx.blog.modal.entity.LogDOExample;
 import com.mfx.blog.service.LogService;
+import com.mfx.blog.thread.UserThreadLocal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -47,6 +50,7 @@ public class LogController extends BaseController {
         return new ResponseEntity(RestResponseBo.ok(logs), HttpStatus.OK);
     }
 
+    @LogAnnotation(action = LogActions.DELETE_LOG, data = "删除日志:#1", level = LogLevelEnums.LEVEL10)
     @DeleteMapping(value = "delete/{id}.token")
     @ResponseBody
     public ResponseEntity delete(@PathVariable("id") Long logId, HttpServletRequest request) {

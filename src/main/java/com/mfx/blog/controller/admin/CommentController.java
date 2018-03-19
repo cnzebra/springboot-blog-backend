@@ -52,12 +52,6 @@ public class CommentController extends BaseController {
                 return new ResponseEntity(RestResponseBo.fail("不存在该评论"), HttpStatus.OK);
             }
             commentsService.delete(commentId, comments.getArticleId());
-            LogDO logDO = new LogDO();
-            logDO.setAction(LogActions.DEL_ARTICLE_COMMENT.getAction());
-            logDO.setLevel(1);
-            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-            logDO.setData("删除评论成功:" + commentId);
-            logService.insertLog(logDO, request);
         } catch (Exception e) {
             String msg = "评论删除失败";
             LOGGER.error(msg, e);

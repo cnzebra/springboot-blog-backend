@@ -1,7 +1,9 @@
 package com.mfx.blog.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mfx.blog.annotation.LogAnnotation;
 import com.mfx.blog.dto.LogActions;
+import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.bo.RestResponseBo;
 import com.mfx.blog.modal.entity.LogDO;
@@ -30,17 +32,12 @@ public class UserController extends BaseController {
     @Autowired
     private LogService logService;
 
+    @LogAnnotation(action = LogActions.USER_REGISTER, data = "用户信息:#1", level = LogLevelEnums.LEVEL10)
     @PostMapping("user/register")
     @ResponseBody
     public ResponseEntity register(@RequestBody UserDO userDO, HttpServletRequest request) {
         try {
             UserDO user = userService.insertUser(userDO);
-            LogDO logDO = new LogDO();
-            logDO.setAction(LogActions.USER_REGISTER.getAction());
-            logDO.setLevel(1);
-            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-            logDO.setData("用户:" + JSONObject.toJSONString(user));
-            logService.insertLog(logDO, request);
             return new ResponseEntity(RestResponseBo.ok(user), HttpStatus.OK);
         } catch (TipException e) {
             return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);
@@ -51,18 +48,12 @@ public class UserController extends BaseController {
     }
 
 
+    @LogAnnotation(action = LogActions.BACK_LOGIN, data = "登录信息:#1", level = LogLevelEnums.LEVEL10)
     @PutMapping("user/login")
     @ResponseBody
     public ResponseEntity login(@RequestBody UserDO userDO, HttpServletRequest request) {
         try {
             UserDO user = userService.login(userDO);
-            LogDO logDO = new LogDO();
-            logDO.setAction(LogActions.BACK_LOGIN.getAction());
-            logDO.setLevel(1);
-            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-            logDO.setData("登录用户:" + JSONObject.toJSONString(user));
-            logService.insertLog(logDO, request);
-
             return new ResponseEntity(RestResponseBo.ok(user), HttpStatus.OK);
         } catch (TipException e) {
             return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);
@@ -72,17 +63,12 @@ public class UserController extends BaseController {
         }
     }
 
+    @LogAnnotation(action = LogActions.MOD_INFO, data = "#1", level = LogLevelEnums.LEVEL10)
     @PutMapping("user/modify.token")
     @ResponseBody
     public ResponseEntity modifyUser(@RequestBody UserDO userDO, HttpServletRequest request) {
         try {
             UserDO user = userService.update(userDO);
-            LogDO logDO = new LogDO();
-            logDO.setAction(LogActions.MOD_INFO.getAction());
-            logDO.setLevel(1);
-            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-            logDO.setData("用户信息:" + JSONObject.toJSONString(user));
-            logService.insertLog(logDO, request);
             return new ResponseEntity(RestResponseBo.ok(user), HttpStatus.OK);
         } catch (TipException e) {
             return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);
@@ -92,17 +78,12 @@ public class UserController extends BaseController {
         }
     }
 
+    @LogAnnotation(action = LogActions.MOD_PWD, data = "#1", level = LogLevelEnums.LEVEL10)
     @PutMapping("user/password/modify.token")
     @ResponseBody
     public ResponseEntity modifyPassword(@RequestBody ModifyPassParam modifyPassParam, HttpServletRequest request) {
         try {
             userService.modifyPassword(modifyPassParam);
-            LogDO logDO = new LogDO();
-            logDO.setAction(LogActions.MOD_PWD.getAction());
-            logDO.setLevel(1);
-            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-            logDO.setData("密码信息:" + JSONObject.toJSONString(modifyPassParam));
-            logService.insertLog(logDO, request);
             return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
         } catch (TipException e) {
             return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);
@@ -112,18 +93,12 @@ public class UserController extends BaseController {
         }
     }
 
+    @LogAnnotation(action = LogActions.LOGOUT, level = LogLevelEnums.LEVEL10)
     @PutMapping("user/logout.token")
     @ResponseBody
     public ResponseEntity logout(HttpServletRequest request) {
         try {
             userService.logout();
-            LogDO logDO = new LogDO();
-            logDO.setAction(LogActions.LOGOUT.getAction());
-            logDO.setLevel(1);
-            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-            logDO.setData("退出用户:" + UserThreadLocal.get().getLoginName());
-            logService.insertLog(logDO, request);
-
             return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
         } catch (TipException e) {
             return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);

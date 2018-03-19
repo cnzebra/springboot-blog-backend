@@ -50,12 +50,6 @@ public class CategoryController extends BaseController {
     public RestResponseBo saveCategory(@RequestBody MetaDO meta,HttpServletRequest request) {
         try {
             metasService.saveMeta(Types.CATEGORY.getType(), meta.getName(), meta.getId());
-            LogDO logDO = new LogDO();
-            logDO.setAction(LogActions.ADD_ARTICLE_CATEGORY.getAction());
-            logDO.setLevel(1);
-            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-            logDO.setData("增加文章分类成功:" + meta.getName());
-            logService.insertLog(logDO, request);
         } catch (Exception e) {
             String msg = "分类保存失败";
             LOGGER.error(msg, e);

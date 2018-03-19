@@ -2,7 +2,9 @@ package com.mfx.blog.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.mfx.blog.annotation.LogAnnotation;
 import com.mfx.blog.dto.LogActions;
+import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.bo.RestResponseBo;
 import com.mfx.blog.modal.entity.LogDO;
@@ -33,17 +35,12 @@ public class MilestoneController extends BaseController {
     @Resource
     private LogService logService;
 
+    @LogAnnotation(action = LogActions.ADD_MILESTONE, data = "历程:#1", level = LogLevelEnums.LEVEL10)
     @PostMapping("milestone/record.token")
     @ResponseBody
     public ResponseEntity record(@RequestBody MilestoneDO milestoneDO, HttpServletRequest request) {
         try {
             milestoneService.insertMilestone(milestoneDO);
-            LogDO logDO = new LogDO();
-            logDO.setAction(LogActions.ADD_MILESTONE.getAction());
-            logDO.setLevel(1);
-            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-            logDO.setData("历程:" + JSONObject.toJSONString(milestoneDO));
-            logService.insertLog(logDO, request);
             return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
         } catch (TipException e) {
             return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);
@@ -53,17 +50,12 @@ public class MilestoneController extends BaseController {
         }
     }
 
+    @LogAnnotation(action = LogActions.MOD_MILESTONE, data = "历程:#1", level = LogLevelEnums.LEVEL10)
     @PutMapping("milestone/modify.token")
     @ResponseBody
     public ResponseEntity modify(@RequestBody MilestoneDO milestoneDO, HttpServletRequest request) {
         try {
             milestoneService.modify(milestoneDO);
-            LogDO logDO = new LogDO();
-            logDO.setAction(LogActions.MOD_MILESTONE.getAction());
-            logDO.setLevel(1);
-            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-            logDO.setData("历程:" + JSONObject.toJSONString(milestoneDO));
-            logService.insertLog(logDO, request);
             return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
         } catch (TipException e) {
             return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);
@@ -73,17 +65,12 @@ public class MilestoneController extends BaseController {
         }
     }
 
+    @LogAnnotation(action = LogActions.DEL_MILESTONE, data = "历程:#1", level = LogLevelEnums.LEVEL10)
     @DeleteMapping("milestone/{id}.token")
     @ResponseBody
     public ResponseEntity delete(@PathVariable("id") Long id, HttpServletRequest request) {
         try {
             milestoneService.delete(id);
-            LogDO logDO = new LogDO();
-            logDO.setAction(LogActions.DEL_MILESTONE.getAction());
-            logDO.setLevel(1);
-            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-            logDO.setData("历程:" + id);
-            logService.insertLog(logDO, request);
             return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
         } catch (TipException e) {
             return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);

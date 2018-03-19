@@ -1,7 +1,9 @@
 package com.mfx.blog.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mfx.blog.annotation.LogAnnotation;
 import com.mfx.blog.dto.LogActions;
+import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.modal.bo.RestResponseBo;
 import com.mfx.blog.modal.entity.FeedbackDO;
 import com.mfx.blog.modal.entity.LogDO;
@@ -28,16 +30,11 @@ public class FeedbackController extends BaseController {
     private LogService logService;
 
 
+    @LogAnnotation(action = LogActions.ADD_FEEDBACK, data = "内容:#1", level = LogLevelEnums.LEVEL10)
     @PostMapping("feedback")
     @ResponseBody
     public ResponseEntity addFeedback(@RequestBody FeedbackDO feedbackDO, HttpServletRequest request) {
         feedbackService.insertFeedback(feedbackDO);
-        LogDO logDO = new LogDO();
-        logDO.setAction(LogActions.ADD_LINK.getAction());
-        logDO.setLevel(1);
-        logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-        logDO.setData("反馈内容:" + JSONObject.toJSONString(feedbackDO));
-        logService.insertLog(logDO, request);
         return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
     }
 }

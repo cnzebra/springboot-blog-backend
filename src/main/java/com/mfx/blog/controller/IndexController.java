@@ -2,6 +2,7 @@ package com.mfx.blog.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.mfx.blog.annotation.LogAnnotation;
 import com.mfx.blog.component.constant.WebConst;
 import com.mfx.blog.dto.*;
 import com.mfx.blog.modal.bo.ArchiveBo;
@@ -99,6 +100,7 @@ public class IndexController extends BaseController {
     /**
      * 评论操作
      */
+    @LogAnnotation(action = LogActions.ADD_ARTICLE_COMMENT, data = "文章:#3,评论内容:#4", level = LogLevelEnums.LEVEL10)
     @PostMapping(value = "article/{articleId}/comment")
     @ResponseBody
     public ResponseEntity comment(HttpServletRequest request, HttpServletResponse response,
@@ -132,12 +134,6 @@ public class IndexController extends BaseController {
         commentDO.setIp(request.getRemoteAddr());
         try {
             String result = commentService.insertComment(commentDO);
-            LogDO logDO = new LogDO();
-            logDO.setAction(LogActions.ADD_LINK.getAction());
-            logDO.setLevel(1);
-            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-            logDO.setData("对文章:" + articleId + "|添加评论:" + commentDO.getContent());
-            logService.insertLog(logDO, request);
 
             // 设置对每个文章1分钟可以评论一次
             cache.hset(Types.COMMENTS_FREQUENCY.getType(), val, 1, 5);
@@ -239,17 +235,11 @@ public class IndexController extends BaseController {
         return new ResponseEntity(RestResponseBo.ok(commentsPaginator), HttpStatus.OK);
     }
 
+    @LogAnnotation(action = LogActions.ARTICLE_LIKE_DISLIKE, data = "统计:#1", level = LogLevelEnums.LEVEL10)
     @PutMapping("article/statistics")
     @ResponseBody
-    public ResponseEntity updateArticleStatistics(@RequestBody ArticleStatistics statistics,HttpServletRequest request) {
+    public ResponseEntity updateArticleStatistics(@RequestBody ArticleStatistics statistics, HttpServletRequest request) {
         int result = articleService.updateStatistics(statistics);
-
-        LogDO logDO = new LogDO();
-        logDO.setAction(LogActions.ARTICLE_LIKE_DISLIKE.getAction());
-        logDO.setLevel(1);
-        logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-        logDO.setData("内容:" + JSONObject.toJSONString(statistics));
-        logService.insertLog(logDO, request);
 
         return new ResponseEntity(RestResponseBo.ok(result), HttpStatus.OK);
     }

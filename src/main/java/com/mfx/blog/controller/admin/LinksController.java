@@ -61,12 +61,6 @@ public class LinksController extends BaseController {
             } else {
                 metasService.saveMeta(metas);
             }
-            LogDO logDO = new LogDO();
-            logDO.setAction(LogActions.ADD_LINK.getAction());
-            logDO.setLevel(1);
-            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-            logDO.setData("友链:" + id + "^" + title + "^" + url + "^");
-            logService.insertLog(logDO, request);
         } catch (Exception e) {
             String msg = "友链保存失败";
             LOGGER.error(msg, e);
@@ -80,12 +74,6 @@ public class LinksController extends BaseController {
     public RestResponseBo delete(@RequestParam Long metaId,HttpServletRequest request) {
         try {
             metasService.delete(metaId);
-            LogDO logDO = new LogDO();
-            logDO.setAction(LogActions.DEL_LINK.getAction());
-            logDO.setLevel(1);
-            logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-            logDO.setData("友链:" + metaId);
-            logService.insertLog(logDO, request);
         } catch (Exception e) {
             String msg = "友链删除失败";
             LOGGER.error(msg, e);

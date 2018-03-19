@@ -36,25 +36,7 @@ public class LogServiceImpl implements LogService {
     private UserDao userDao;
 
     @Override
-    public void insertLog(LogDO logDO, HttpServletRequest request) {
-        logDO.setIp(ClientUtils.getIp(request));
-        logDO.setUrl(ClientUtils.getUri(request));
-        logDO.setBrowser(ClientUtils.getBrowser(request));
-        if (logDO.getAuthorId() != null) {
-            //说明是登录用户在操作
-            UserDO userDO = userDao.selectByPrimaryKey(logDO.getAuthorId());
-            if (userDO != null) {
-                //用户存在
-                logDO.setAuthor(userDO.getLoginName());
-            } else {
-                //用户ID无效
-                throw new TipException("用户无效");
-            }
-        } else {
-            logDO.setAuthor("游客");
-        }
-        logDO.setGmtCreate(new Date());
-        logDO.setGmtModified(new Date());
+    public void insertLog(LogDO logDO) {
         logDao.insert(logDO);
     }
 
@@ -66,7 +48,7 @@ public class LogServiceImpl implements LogService {
         level = level == null ? 0 : level;
         logs.setLevel(level);
         logs.setIp(ClientUtils.getIp(request));
-        logs.setUrl(ClientUtils.getUri(request));
+        logs.setUrl(ClientUtils.getUrl(request));
         logs.setBrowser(ClientUtils.getBrowser(request));
         logs.setAuthorId(authorId);
         if (authorId != null) {

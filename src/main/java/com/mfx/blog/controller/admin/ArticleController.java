@@ -113,17 +113,9 @@ public class ArticleController extends BaseController {
     public RestResponseBo auditArticle(@RequestParam(value = "articleId") Long articleId,
                                        @RequestParam(value = "status") String status, HttpServletRequest request) {
         int result = contentsService.audit(articleId, status);
-        LogDO logDO = new LogDO();
-        logDO.setAction(LogActions.AUDIT_ARTICLE.getAction());
-        logDO.setLevel(1);
-        logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
         if (result == 1) {
-            logDO.setData("文章:" + articleId + ",审核成功:" + status == "audit" ? "待审" : (status == "draft") ? "草稿" : "发布");
-            logService.insertLog(logDO, request);
             return RestResponseBo.ok();
         }
-        logDO.setData("文章:" + articleId + ",审核失败:" + status == "audit" ? "待审" : (status == "draft") ? "草稿" : "发布");
-        logService.insertLog(logDO, request);
         return RestResponseBo.fail();
     }
 
@@ -155,18 +147,9 @@ public class ArticleController extends BaseController {
         }
         String result = contentsService.publish(contents);
 
-        LogDO logDO = new LogDO();
-        logDO.setAction(LogActions.PUBLISH_ARTICLE.getAction());
-        logDO.setLevel(1);
-        logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
-
         if (WebConst.SUCCESS_RESULT.equals(result)) {
-            logDO.setData("发表文章成功:" + contents.getTitle() + "【" + contents.getStatus() + "】");
-            logService.insertLog(logDO, request);
             return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
         }
-        logDO.setData("发表文章失败:" + contents.getTitle() + "【" + contents.getStatus() + "】");
-        logService.insertLog(logDO, request);
         return new ResponseEntity(RestResponseBo.fail(result), HttpStatus.OK);
     }
 
@@ -176,18 +159,10 @@ public class ArticleController extends BaseController {
         contents.setType(Types.ARTICLE.getType());
         String result = contentsService.updateArticle(contents);
 
-        LogDO logDO = new LogDO();
-        logDO.setAction(LogActions.PUBLISH_ARTICLE.getAction());
-        logDO.setLevel(1);
-        logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
 
         if (WebConst.SUCCESS_RESULT.equals(result)) {
-            logDO.setData("修改文章成功:" + contents.getTitle() + "【" + contents.getStatus() + "】");
-            logService.insertLog(logDO, request);
             return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
         }
-        logDO.setData("修改文章失败:" + contents.getTitle() + "【" + contents.getStatus() + "】");
-        logService.insertLog(logDO, request);
         return new ResponseEntity(RestResponseBo.fail(result), HttpStatus.OK);
     }
 
@@ -195,18 +170,10 @@ public class ArticleController extends BaseController {
     @ResponseBody
     public ResponseEntity delete(@RequestParam Long id, HttpServletRequest request) {
         String result = contentsService.deleteByCid(id);
-        LogDO logDO = new LogDO();
-        logDO.setAction(LogActions.PUBLISH_ARTICLE.getAction());
-        logDO.setLevel(1);
-        logDO.setAuthorId(UserThreadLocal.get() == null ? null : UserThreadLocal.get().getId());
 
         if (WebConst.SUCCESS_RESULT.equals(result)) {
-            logDO.setData("删除文章成功:" + id);
-            logService.insertLog(logDO, request);
             return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
         }
-        logDO.setData("删除文章失败:" + id);
-        logService.insertLog(logDO, request);
         return new ResponseEntity(RestResponseBo.fail(result), HttpStatus.OK);
     }
 }

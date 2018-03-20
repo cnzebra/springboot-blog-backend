@@ -60,6 +60,6 @@ public class TaskUtils {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("任务名称 = [" + scheduleJob.getJobName() + "]----------启动成功");
+		System.out.println("任务名称 = [" + scheduleJob.getJobName() + "]----------正在执行...");
 	}
 }

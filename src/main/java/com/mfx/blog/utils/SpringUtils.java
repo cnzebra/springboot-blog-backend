@@ -29,7 +29,11 @@ public class SpringUtils implements ApplicationContextAware {
      */
     @SuppressWarnings("unchecked")
     public static <T> T getBean(String name) {
-        return (T) applicationContext.getBean(name);
+        try {
+            return (T) applicationContext.getBean(name);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**

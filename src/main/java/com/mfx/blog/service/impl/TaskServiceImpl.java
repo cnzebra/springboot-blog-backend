@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.mapper.BeanMapper;
 
 import javax.annotation.PostConstruct;
@@ -74,6 +75,7 @@ public class TaskServiceImpl implements TaskService {
      * 添加到数据库中 区别于addJob
      */
     @Override
+    @Transactional
     public void addTask(ScheduleJobDO jobDto) {
         // 检查job名称和分组是否重复
         int count = scheduleJobDao.selectByNameGroup(jobDto.getJobName(), jobDto.getJobGroup());
@@ -87,6 +89,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public void editTask(ScheduleJobDO jobDto) throws TipException {
         ScheduleJobDO job = scheduleJobDao.selectByPrimaryKey(jobDto.getId());
 
@@ -114,6 +117,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public void delTaskById(Long jobId) throws TipException {
         scheduleJobDao.deleteByPrimaryKey(jobId);
     }
@@ -123,6 +127,8 @@ public class TaskServiceImpl implements TaskService {
      *
      * @throws SchedulerException
      */
+    @Override
+    @Transactional
     public void changeStatus(Long jobId, String cmd) {
         ScheduleJobDO job = scheduleJobDao.selectByPrimaryKey(jobId);
         if (job == null) {

@@ -7,7 +7,6 @@ import com.mfx.blog.dao.RouteDao;
 import com.mfx.blog.dao.UserDao;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.entity.RouteDO;
-import com.mfx.blog.param.RouteTree;
 import com.mfx.blog.service.RouteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,9 +78,9 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public List listRoutesTree() {
-        List<RouteDO> parents = routeDao.selectForParent();
-        List<RouteDO> children = routeDao.selectAllExceptParent();
+    public List listRoutesTree(String type) {
+        List<RouteDO> parents = routeDao.selectForParent(type);
+        List<RouteDO> children = routeDao.selectAllExceptParent(type);
         //递归生成父子结构
         parents.forEach(parent -> {
             this.setChildren(parent, children);
@@ -90,9 +89,15 @@ public class RouteServiceImpl implements RouteService {
         return parents;
     }
 
+    @Override
+    public RouteDO getRouteById(Long id) {
+        RouteDO routeDO = routeDao.selectByPrimaryKey(id);
+        return routeDO;
+    }
+
     private void setChildren(RouteDO parent, List<RouteDO> children) {
         for (RouteDO c : children) {
-            if (c.getParent().getId() == parent.getId()) {
+            if (c.getParent().getId().equals(parent.getId())) {
                 //匹配到直接父子关系
                 if (parent.getChildren() == null) {
                     parent.setChildren(new ArrayList());

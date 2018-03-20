@@ -29,7 +29,7 @@ public interface RouteDao {
      * @param id
      * @return
      */
-    RouteDO selectByPrimaryKey(Integer id);
+    RouteDO selectByPrimaryKey(Long id);
 
     /**
      * @param record
@@ -41,8 +41,8 @@ public interface RouteDao {
 
     int countByParent(@Param("id") Long id);
 
-    List<RouteDO> selectForParent();
+    List<RouteDO> selectForParent(@Param("type") String type);
 
-    List<RouteDO> selectAllExceptParent();
+    List<RouteDO> selectAllExceptParent(@Param("type") String type);
 
 }

@@ -32,6 +32,7 @@ public interface RouteService {
 
     Integer deleteById(Long feedbackId);
 
-    List listRoutesTree();
+    List listRoutesTree(String type);
 
+    RouteDO getRouteById(Long id);
 }

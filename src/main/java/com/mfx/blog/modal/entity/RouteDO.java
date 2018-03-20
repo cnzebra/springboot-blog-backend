@@ -24,13 +24,13 @@ public class RouteDO extends AbstractEntity {
 
     private String icon;
 
-    private String type = RouteType.ROUTE.name();
+    private String type;
 
     private List<RouteDO> children;
 
 
     enum RouteType {
-        HEADER, ROUTE
+        frontheader,backheader,route
     }
 
 

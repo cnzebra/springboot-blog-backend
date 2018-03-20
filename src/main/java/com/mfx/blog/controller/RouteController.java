@@ -93,10 +93,25 @@ public class RouteController extends BaseController {
 
     @GetMapping("admin/route/tree.token")
     @ResponseBody
-    public ResponseEntity listRoutesTree(HttpServletRequest request) {
+    public ResponseEntity listRoutesTree(@RequestParam("type") String type, HttpServletRequest request) {
         try {
-            List list = routeService.listRoutesTree();
+            List list = routeService.listRoutesTree(type);
             return new ResponseEntity(RestResponseBo.ok(list), HttpStatus.OK);
+        } catch (TipException e) {
+            e.printStackTrace();
+            return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(RestResponseBo.fail("内部错误"), HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("admin/route/{id}.token")
+    @ResponseBody
+    public ResponseEntity listRoutesTree(@PathVariable("id") Long id, HttpServletRequest request) {
+        try {
+            RouteDO routeDO = routeService.getRouteById(id);
+            return new ResponseEntity(RestResponseBo.ok(routeDO), HttpStatus.OK);
         } catch (TipException e) {
             e.printStackTrace();
             return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);

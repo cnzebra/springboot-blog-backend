@@ -48,17 +48,17 @@
         from t_si_route
         where parent=#{id}
     </select>
-    <select id="selectForParent" resultMap="BaseResultMap">
+    <select id="selectForParent" resultMap="BaseResultMap" parameterType="string">
         select
         <include refid="Base_Column_List"/>
         from t_si_route a left join t_si_route b on a.parent=b.id
-        where a.parent is null
+        where a.type=#{type} and a.parent is null
     </select>
-    <select id="selectAllExceptParent" resultMap="BaseResultMap">
+    <select id="selectAllExceptParent" resultMap="BaseResultMap" parameterType="string">
         select
         <include refid="Base_Column_List"/>
         from t_si_route a left join t_si_route b on a.parent=b.id
-        where a.parent is not null
+        where a.type=#{type} and a.parent is not null
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from t_si_route

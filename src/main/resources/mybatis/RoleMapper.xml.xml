@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="com.mfx.blog.modal.entity.RoleDO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
     </resultMap>
     <sql id="Example_Where_Clause">
         <where>
@@ -191,5 +192,8 @@
         from t_si_user_role ur
         join t_si_role r on r.id=ur.role_id
         where ur.user_id=#{userId}
+    </select>
+    <select id="countHasPermission" resultType="java.lang.Integer">
+        select count(1) from t_si_permission where role_id=#{roleId};
     </select>
 </mapper>

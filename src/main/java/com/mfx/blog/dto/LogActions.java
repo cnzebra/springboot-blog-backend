@@ -46,6 +46,15 @@ public enum LogActions {
     ADD_ROUTE("新增路由"),
     MOD_ROUTE("修改路由"),
     DEL_ROUTE("删除路由"),
+    ADD_ROLE("新增角色"),
+    MOD_ROLE("修改角色"),
+    DEL_ROLE("删除角色"),
+    ADD_PAGE_ELEMENT("新增页面元素"),
+    MOD_PAGE_ELEMENT("修改页面元素"),
+    DEL_PAGE_ELEMENT("删除页面元素"),
+    ADD_ROLE_PERMISSION("新增角色权限"),
+    MOD_ROLE_PERMISSION("修改角色权限"),
+    DEL_ROLE_PERMISSION("删除角色权限"),
     ADD_FEEDBACK("添加反馈");
 
     private String action;

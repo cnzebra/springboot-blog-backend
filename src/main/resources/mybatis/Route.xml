@@ -64,7 +64,7 @@
         delete from t_si_route
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.mfx.blog.modal.entity.FeedbackDO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.mfx.blog.modal.entity.RouteDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_si_route (id, name,path,redirect,
         component,parent,hidden,icon,type,
         gmt_create,gmt_modified
@@ -74,7 +74,7 @@
         #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
         )
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.mfx.blog.modal.entity.FeedbackDO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.mfx.blog.modal.entity.RouteDO">
         update t_si_route
         <set>
             <if test="name != null">

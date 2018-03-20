@@ -32,7 +32,7 @@ public interface RoleDao {
      * @param uid
      * @return
      */
-    int deleteByPrimaryKey(Integer roleId);
+    int deleteByPrimaryKey(Long roleId);
 
     /**
      * @param record
@@ -86,4 +86,6 @@ public interface RoleDao {
 
 
     List<String> findRoleNamesByUserId(@Param("userId") Long userId);
+
+    int countHasPermission(@Param("roleId") Long roleId);
 }

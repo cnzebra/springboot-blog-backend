@@ -43,6 +43,9 @@ public enum LogActions {
     STOP_JOB("停止任务"),
     SWITCH_JOB("切换任务状态"),
     MOD_JOB_CRON("修改任务cron"),
+    ADD_ROUTE("新增路由"),
+    MOD_ROUTE("修改路由"),
+    DEL_ROUTE("删除路由"),
     ADD_FEEDBACK("添加反馈");
 
     private String action;

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfx.blog.dao.RouteDao">
+
+    <resultMap id="BaseResultMap" type="com.mfx.blog.modal.entity.RouteDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="path" jdbcType="VARCHAR" property="path"/>
+        <result column="redirect" jdbcType="VARCHAR" property="redirect"/>
+        <result column="component" jdbcType="VARCHAR" property="component"/>
+        <result column="hidden" jdbcType="INTEGER" property="hidden"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+
+        <association property="parent" javaType="com.mfx.blog.modal.entity.RouteDO">
+            <id property="id" column="b_id"/>
+            <result property="name" column="b_name"/>
+            <result property="component" column="b_component"/>
+        </association>
+
+    </resultMap>
+    <sql id="Base_Column_List">
+        a.id, a.name,a.path, a.redirect ,a.component,a.parent,a.hidden,a.icon,a.type ,a.gmt_create,a.gmt_modified,
+        b.id b_id,
+        b.name b_name,
+        b.component b_component
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_si_route a left join t_si_route b on a.parent=b.id
+        where a.id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectForPage" resultMap="BaseResultMap" parameterType="string">
+        select
+        <include refid="Base_Column_List"/>
+        from t_si_route a left join t_si_route b on a.parent=b.id
+        <where>
+            <if test="type!=null and type!=''">
+                a.type=#{type}
+            </if>
+        </where>
+    </select>
+    <select id="countByParent" resultType="java.lang.Integer">
+        select count(1)
+        from t_si_route
+        where parent=#{id}
+    </select>
+    <select id="selectForParent" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_si_route a left join t_si_route b on a.parent=b.id
+        where a.parent is null
+    </select>
+    <select id="selectAllExceptParent" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_si_route a left join t_si_route b on a.parent=b.id
+        where a.parent is not null
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from t_si_route
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.mfx.blog.modal.entity.FeedbackDO" useGeneratedKeys="true" keyProperty="id">
+        insert into t_si_route (id, name,path,redirect,
+        component,parent,hidden,icon,type,
+        gmt_create,gmt_modified
+        )
+        values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR},#{redirect,jdbcType=VARCHAR},
+        #{component,jdbcType=VARCHAR}, #{parent.id,jdbcType=BIGINT}, #{hidden,jdbcType=INTEGER},#{icon,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},
+        #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.mfx.blog.modal.entity.FeedbackDO">
+        update t_si_route
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="path != null">
+                path = #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="redirect != null">
+                redirect = #{redirect,jdbcType=VARCHAR},
+            </if>
+            <if test="component != null">
+                component = #{component,jdbcType=VARCHAR},
+            </if>
+            <if test="parent != null">
+                parent = #{parent.id,jdbcType=BIGINT},
+            </if>
+            <if test="hidden != null">
+                hidden = #{hidden,jdbcType=INTEGER},
+            </if>
+            <if test="icon != null">
+                icon = #{icon,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

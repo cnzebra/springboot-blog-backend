@@ -3,6 +3,7 @@ package com.mfx.blog.dao;
 
 import com.mfx.blog.modal.entity.ScheduleJobDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,4 +24,8 @@ public interface ScheduleJobDao {
     List<ScheduleJobDO> getAll();
 
     List<ScheduleJobDO> getTaskByContent(String content);
+
+    Integer selectByNameGroup(@Param("jobName") String jobName, @Param("jobGroup") String jobGroup);
+
+    Integer selectByNameGroupExceptThis(@Param("id") Long id, @Param("jobName") String jobName, @Param("jobGroup") String jobGroup);
 }

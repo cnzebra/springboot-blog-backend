@@ -75,6 +75,11 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public void addTask(ScheduleJobDO jobDto) {
+        // 检查job名称和分组是否重复
+        int count = scheduleJobDao.selectByNameGroup(jobDto.getJobName(), jobDto.getJobGroup());
+        if (count > 0) {
+            throw new TipException("Job已存在,请检查名称和分组是否有重复");
+        }
         ScheduleJobDO job = BeanMapper.map(jobDto, ScheduleJobDO.class);
         job.setGmtCreate(new Date());
         job.setJobStatus("0");
@@ -84,6 +89,12 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void editTask(ScheduleJobDO jobDto) throws TipException {
         ScheduleJobDO job = scheduleJobDao.selectByPrimaryKey(jobDto.getId());
+
+        int count = scheduleJobDao.selectByNameGroupExceptThis(jobDto.getId(), jobDto.getJobName(), jobDto.getJobGroup());
+        if (count > 0) {
+            throw new TipException("Job已存在,请检查名称和分组是否有重复");
+        }
+
         Date date = job.getGmtCreate();
         String jobStatus = job.getJobStatus();
 

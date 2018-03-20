@@ -188,4 +188,12 @@
         from t_b_schedule_job
         where job_name LIKE CONCAT('%',#{jobName,jdbcType=VARCHAR},'%')
     </select>
+    <select id="selectByNameGroup" resultType="java.lang.Integer">
+        select count(1) from t_b_schedule_job
+        where job_name=#{jobName} and job_group=#{jobGroup}
+    </select>
+    <select id="selectByNameGroupExceptThis" resultType="java.lang.Integer">
+        select count(1) from t_b_schedule_job
+        where job_name=#{jobName} and job_group=#{jobGroup} and id!=#{id}
+    </select>
 </mapper>

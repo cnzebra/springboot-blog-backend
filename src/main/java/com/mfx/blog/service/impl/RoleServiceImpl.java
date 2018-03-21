@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.component.constant.WebConst;
 import com.mfx.blog.dao.RoleDao;
+import com.mfx.blog.dao.RolePermissionDao;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.entity.RoleDO;
 import com.mfx.blog.modal.entity.RoleDOExample;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +26,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleDao roleDao;
+    @Autowired
+    private RolePermissionDao rolePermissionDao;
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
@@ -78,4 +82,6 @@ public class RoleServiceImpl implements RoleService {
     public void modifyRole(RoleDO roleDO) {
         roleDao.updateByPrimaryKey(roleDO);
     }
+
+
 }

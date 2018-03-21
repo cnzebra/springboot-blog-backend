@@ -14,7 +14,10 @@ public class ConvertUtils {
 
         Iterator iterator = trees.iterator();
         while (iterator.hasNext()) {
-            iviewTrees.add(generateTree((RouteDO) iterator.next()));
+            PermissionTreeVO vo = generateTree((RouteDO) iterator.next());
+            if (vo != null) {
+                iviewTrees.add(vo);
+            }
         }
         return iviewTrees;
     }
@@ -31,7 +34,10 @@ public class ConvertUtils {
                     if (vo.getChildren() == null) {
                         vo.setChildren(new ArrayList());
                     }
-                    vo.getChildren().add(new PermissionTreeVO(p.getPermissionName(), true, null));
+                    vo.setIdType(p.getRouteId() + "-route");
+                    vo.setTitle(p.getRouteName());
+                    vo.setExpand(true);
+                    vo.getChildren().add(new PermissionTreeVO(p.getPermissionId() + "-permission", p.getPermissionName(), true, null));
                 });
                 return vo;
             }
@@ -44,13 +50,19 @@ public class ConvertUtils {
 
             if (tree.getPermissions() == null || tree.getPermissions().size() == 0) {
                 //没有权限
-                return null;
+                vo.setIdType(tree.getId() + "-route");
+                vo.setTitle(tree.getName());
+                vo.setExpand(true);
+                return vo;
             } else {
                 tree.getPermissions().forEach(p -> {
                     if (vo.getChildren() == null) {
                         vo.setChildren(new ArrayList());
                     }
-                    vo.getChildren().add(new PermissionTreeVO(p.getPermissionName(), true, null));
+                    vo.setIdType(p.getRouteId() + "-route");
+                    vo.setTitle(p.getRouteName());
+                    vo.setExpand(true);
+                    vo.getChildren().add(new PermissionTreeVO(p.getPermissionId() + "-permission", p.getPermissionName(), true, null));
                 });
                 return vo;
             }

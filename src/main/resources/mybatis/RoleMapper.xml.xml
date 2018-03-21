@@ -5,6 +5,8 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
+
+        <collection property="permissions" column="id" javaType="ArrayList" select="selectForPermission"/>
     </resultMap>
     <sql id="Example_Where_Clause">
         <where>
@@ -69,6 +71,10 @@
     <sql id="Base_Column_List">
         id, name,description
     </sql>
+    <select id="selectForPermission" resultType="string">
+        select concat(permission_id,'-permission')
+        from t_si_role_permission where role_id=#{id}
+    </select>
     <select id="selectByExample" parameterType="com.mfx.blog.modal.entity.RoleDOExample" resultMap="BaseResultMap">
         select
         <if test="distinct">

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 public class RoleController extends BaseController {
@@ -74,8 +75,8 @@ public class RoleController extends BaseController {
     @GetMapping("admin/role/list.token")
     @ResponseBody
     public ResponseEntity listRoles(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                      @RequestParam(value = "pageSize", defaultValue = "1") Integer pageSize,
-                                      HttpServletRequest request) {
+                                    @RequestParam(value = "pageSize", defaultValue = "1") Integer pageSize,
+                                    HttpServletRequest request) {
         try {
             PageInfo pageInfo = roleService.getRoles(pageNum, pageSize);
             return new ResponseEntity(RestResponseBo.ok(pageInfo), HttpStatus.OK);

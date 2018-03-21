@@ -4,6 +4,8 @@ import com.mfx.blog.modal.entity.RolePermissionDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * @author zhuxiaolong
  */
@@ -27,4 +29,9 @@ public interface RolePermissionDao {
      * @return
      */
     RolePermissionDO selectByPrimaryKey(@Param("roleId") Long roleId, @Param("permissionId") Long permissionId);
+
+    void deleteAllByRoleId(@Param("roleId") Long roleId);
+
+    void insertMapInBatch(@Param("roleId") Long roleId, @Param("permissionIds") List<Long> permissionIds);
+
 }

@@ -55,7 +55,7 @@ public class RouteDO extends AbstractEntity implements Comparable<RouteDO> {
 
     public String getLabel() {
         if (StringUtils.isBlank(this.component)) {
-            return this.name;
+            return this.name + "[头部]";
         }
         return this.name + "[" + this.component + "]";
     }

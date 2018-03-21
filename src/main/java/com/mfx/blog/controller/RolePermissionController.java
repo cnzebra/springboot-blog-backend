@@ -5,7 +5,7 @@ import com.mfx.blog.dto.LogActions;
 import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.bo.RestResponseBo;
-import com.mfx.blog.modal.entity.RolePermissionDO;
+import com.mfx.blog.param.RolePermissionMap;
 import com.mfx.blog.service.RolePermissionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +22,13 @@ public class RolePermissionController extends BaseController {
     private RolePermissionService rolePermissionService;
 
 
-    @LogAnnotation(action = LogActions.ADD_ROLE_PERMISSION, data = "#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.ADD_ROLE_PERMISSION, data = "#1,#2", level = LogLevelEnums.LEVEL10)
     @PostMapping("admin/role/permission.token")
     @ResponseBody
-    public ResponseEntity addRolePermission(@RequestBody RolePermissionDO rolePermissionDO, HttpServletRequest request) {
+    public ResponseEntity settingRolePermission(@RequestBody RolePermissionMap permissionMap,
+                                                HttpServletRequest request) {
         try {
-            rolePermissionService.insertRolePermission(rolePermissionDO);
+            rolePermissionService.settingPermission(permissionMap.getRoleId(), permissionMap.getIdTypes());
             return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
         } catch (TipException e) {
             e.printStackTrace();

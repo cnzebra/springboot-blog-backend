@@ -4,8 +4,6 @@ import com.github.pagehelper.PageInfo;
 import com.mfx.blog.modal.entity.RoleDO;
 import com.mfx.blog.modal.entity.RoleDOExample;
 
-import java.util.List;
-
 /**
  * @author mfx
  * @date 2017/3/4
@@ -41,4 +39,5 @@ public interface RoleService {
     Integer deleteById(Long RoleId);
 
     void modifyRole(RoleDO roleDO);
+
 }

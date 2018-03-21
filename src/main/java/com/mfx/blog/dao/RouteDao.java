@@ -45,4 +45,6 @@ public interface RouteDao {
 
     List<RouteDO> selectAllExceptParent(@Param("type") String type);
 
+    List<RouteDO> selectForAll();
+
 }

@@ -1,9 +1,11 @@
 package com.mfx.blog.dao;
 
 import com.mfx.blog.modal.entity.PermissionDO;
+import com.mfx.blog.modal.vo.PermissionRouteMap;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhuxiaolong
@@ -37,4 +39,7 @@ public interface PermissionDao {
     int updateByPrimaryKeySelective(PermissionDO record);
 
     List<PermissionDO> selectForPage();
+
+    List<PermissionRouteMap> selectMapForPermissionRoute();
+
 }

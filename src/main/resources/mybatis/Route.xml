@@ -70,6 +70,11 @@
             a.parent is not null
         </where>
     </select>
+    <select id="selectForAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_si_route a left join t_si_route b on a.parent=b.id
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from t_si_route
         where id = #{id,jdbcType=BIGINT}

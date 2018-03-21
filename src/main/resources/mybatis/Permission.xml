@@ -32,6 +32,15 @@
         <include refid="Base_Column_List"/>
         from t_si_permission a left join t_si_page_element b on a.element_id=b.id
     </select>
+    <select id="selectMapForPermissionRoute" resultType="com.mfx.blog.modal.vo.PermissionRouteMap">
+        SELECT
+            p.id permissionId,p.name permissionName,
+            r.id routeId,r.name routeName,r.parent parentId
+        FROM
+            t_si_permission p
+            JOIN t_si_page_element e ON p.element_id = e.id
+            join t_si_route r on r.id=e.route_id
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from t_si_permission
         where id = #{id,jdbcType=BIGINT}

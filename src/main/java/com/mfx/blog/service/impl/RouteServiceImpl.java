@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TreeSet;
 
 /**
  * @author mfx
@@ -49,6 +50,13 @@ public class RouteServiceImpl implements RouteService {
         routeDao.updateByPrimaryKeySelective(routeDO);
     }
 
+
+    @Override
+    public List<RouteDO> getAllRoutes() {
+        List<RouteDO> routeDOS = routeDao.selectForAll();
+        return routeDOS;
+    }
+
     @Override
     public PageInfo<RouteDO> getRoutes(String type, int page, int limit) {
         LOGGER.debug("Enter getLogs method:page={},linit={}", page, limit);
@@ -78,7 +86,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public List listRoutesTree(String type) {
+    public List<RouteDO> listRoutesTree(String type) {
         List<RouteDO> parents = routeDao.selectForParent(type);
         List<RouteDO> children = routeDao.selectAllExceptParent(type);
         //递归生成父子结构
@@ -97,14 +105,14 @@ public class RouteServiceImpl implements RouteService {
 
     private void setChildren(RouteDO parent, List<RouteDO> children) {
         if (children == null || children.size() == 0) {
-            parent.setChildren(new ArrayList());
+            parent.setChildren(new TreeSet());
             return;
         }
         for (RouteDO c : children) {
             if (c.getParent().getId().equals(parent.getId())) {
                 //匹配到直接父子关系
                 if (parent.getChildren() == null) {
-                    parent.setChildren(new ArrayList());
+                    parent.setChildren(new TreeSet());
                 }
                 this.setChildren(c, children);
                 parent.getChildren().add(c);

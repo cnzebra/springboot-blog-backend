@@ -20,6 +20,8 @@ public interface RouteService {
 
     void modifyRoute(RouteDO routeDO);
 
+    List<RouteDO> getAllRoutes();
+
     /**
      * 获取日志分页
      *
@@ -27,12 +29,12 @@ public interface RouteService {
      * @param limit 每页条数
      * @return 日志
      */
-    PageInfo<RouteDO> getRoutes(String type,int page, int limit);
+    PageInfo<RouteDO> getRoutes(String type, int page, int limit);
 
 
     Integer deleteById(Long feedbackId);
 
-    List listRoutesTree(String type);
+    List<RouteDO> listRoutesTree(String type);
 
     RouteDO getRouteById(Long id);
 }

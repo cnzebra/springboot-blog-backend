@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.mfx.blog.modal.entity.PermissionDO;
 
 import java.util.List;
+import java.util.TreeSet;
 
 /**
  * @author mfx
@@ -31,4 +32,7 @@ public interface PermissionService {
     Integer deleteById(Long PermissionId);
 
     void modifyPermission(PermissionDO permissionDO);
+
+    TreeSet getPermissionTree() throws CloneNotSupportedException;
+
 }

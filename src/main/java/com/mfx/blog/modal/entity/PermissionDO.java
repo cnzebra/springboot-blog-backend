@@ -6,9 +6,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PermissionDO {
-    private Long roleId;
+    private Long id;
 
-    private Long elementId;
+    private String name;
+
+    private String code;
 
     private String description;
+
+    private PageElementDO element;
 }

@@ -3,23 +3,34 @@
 <mapper namespace="com.mfx.blog.dao.PermissionDao">
 
     <resultMap id="BaseResultMap" type="com.mfx.blog.modal.entity.PermissionDO">
-        <id column="role_id" jdbcType="BIGINT" property="roleId"/>
-        <result column="element_id" jdbcType="BIGINT" property="elementId"/>
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
+
+        <association property="element" javaType="com.mfx.blog.modal.entity.PageElementDO">
+            <id property="id" column="b_id"/>
+            <result property="name" column="b_name"/>
+            <result property="description" column="b_description"/>
+        </association>
+
     </resultMap>
     <sql id="Base_Column_List">
-        role_id,element_id,description
+        a.id,a.name,a.code,a.description,
+        b.id b_id,
+        b.name b_name,
+        b.description description
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from t_si_permission
-        where id = #{id,jdbcType=BIGINT}
+        from t_si_permission a left join t_si_page_element b on a.elment_id=b.id
+        where a.id = #{id,jdbcType=BIGINT}
     </select>
-    <select id="selectForPage" resultType="com.mfx.blog.modal.entity.PermissionDO">
-        select 
+    <select id="selectForPage" resultMap="BaseResultMap">
+        select
         <include refid="Base_Column_List"/>
-        from t_si_permission
+        from t_si_permission a left join t_si_page_element b on a.element_id=b.id
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from t_si_permission
@@ -27,22 +38,25 @@
     </delete>
     <insert id="insert" parameterType="com.mfx.blog.modal.entity.PermissionDO" useGeneratedKeys="true"
             keyProperty="id">
-        insert into t_si_permission (role_id,element_id,description
+        insert into t_si_permission (id,element_id,name,code,description
         )
-        values (#{roleId,jdbcType=BIGINT}, #{elementId,jdbcType=BIGINT}, #{description,jdbcType=VARCHAR}
+        values (#{id,jdbcType=BIGINT}, #{element.id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}
         )
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.mfx.blog.modal.entity.PermissionDO">
         update t_si_permission
         <set>
-            <if test="roleId != null">
-                role_id = #{roleId,jdbcType=BIGINT},
+            <if test="element != null">
+                element_id = #{element.id,jdbcType=BIGINT},
             </if>
-            <if test="elementId != null">
-                element_id = #{elementId,jdbcType=BIGINT},
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
             </if>
             <if test="description != null">
-                description = #{description,jdbcType=VARCHAR}
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR}
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}

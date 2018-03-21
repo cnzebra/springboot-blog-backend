@@ -59,4 +59,10 @@ public class PageElementServiceImpl implements PageElementService {
         pageElementDO.setGmtModified(new Date());
         pageElementDao.updateByPrimaryKeySelective(pageElementDO);
     }
+
+    @Override
+    public List listPageElementsByRoute(Long routeId) {
+        List<PageElementDO> elementDOS = pageElementDao.selectElementsByRoute(routeId);
+        return elementDOS;
+    }
 }

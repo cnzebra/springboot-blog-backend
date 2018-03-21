@@ -34,6 +34,11 @@
         <include refid="Base_Column_List"/>
         from t_si_page_element a left join t_si_route b on a.route_id=b.id
     </select>
+    <select id="selectElementsByRoute" resultType="com.mfx.blog.modal.entity.PageElementDO">
+        select a.id,a.name
+        from t_si_page_element a join t_si_route b on a.route_id=b.id
+        where a.route_id=#{routeId}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from t_si_page_element
         where id = #{id,jdbcType=BIGINT}

@@ -39,4 +39,5 @@ public interface PageElementDao {
 
     List<PageElementDO> selectForPage();
 
+    List<PageElementDO> selectElementsByRoute(@Param("routeId") Long routeId);
 }

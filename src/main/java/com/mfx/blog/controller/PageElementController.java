@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class PageElementController extends BaseController {
@@ -81,6 +82,23 @@ public class PageElementController extends BaseController {
         try {
             PageInfo pageInfo = pageElementService.getPageElements(pageNum, pageSize);
             return new ResponseEntity(RestResponseBo.ok(pageInfo), HttpStatus.OK);
+        } catch (TipException e) {
+            e.printStackTrace();
+            return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(RestResponseBo.fail("内部错误"), HttpStatus.OK);
+        }
+    }
+
+
+    @GetMapping("admin/pageElement/listByRoute.token")
+    @ResponseBody
+    public ResponseEntity listPageElementsByRoute(@RequestParam(value = "routeId") Long routeId,
+                                      HttpServletRequest request) {
+        try {
+            List list = pageElementService.listPageElementsByRoute(routeId);
+            return new ResponseEntity(RestResponseBo.ok(list), HttpStatus.OK);
         } catch (TipException e) {
             e.printStackTrace();
             return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);

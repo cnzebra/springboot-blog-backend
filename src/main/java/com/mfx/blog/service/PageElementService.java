@@ -31,4 +31,6 @@ public interface PageElementService {
     Integer deleteById(Long PageElementId);
 
     void modifyPageElement(PageElementDO pageElementDO);
+
+    List listPageElementsByRoute(Long routeId);
 }

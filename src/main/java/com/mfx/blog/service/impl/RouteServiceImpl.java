@@ -96,6 +96,10 @@ public class RouteServiceImpl implements RouteService {
     }
 
     private void setChildren(RouteDO parent, List<RouteDO> children) {
+        if (children == null || children.size() == 0) {
+            parent.setChildren(new ArrayList());
+            return;
+        }
         for (RouteDO c : children) {
             if (c.getParent().getId().equals(parent.getId())) {
                 //匹配到直接父子关系

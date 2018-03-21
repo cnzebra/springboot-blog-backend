@@ -93,7 +93,7 @@ public class RouteController extends BaseController {
 
     @GetMapping("admin/route/tree.token")
     @ResponseBody
-    public ResponseEntity listRoutesTree(@RequestParam("type") String type, HttpServletRequest request) {
+    public ResponseEntity listRoutesTree(@RequestParam(value = "type",defaultValue = "") String type, HttpServletRequest request) {
         try {
             List list = routeService.listRoutesTree(type);
             return new ResponseEntity(RestResponseBo.ok(list), HttpStatus.OK);

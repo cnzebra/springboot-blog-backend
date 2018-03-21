@@ -29,10 +29,10 @@
         from t_si_page_element a left join t_si_route b on a.route_id=b.id
         where a.id = #{id,jdbcType=BIGINT}
     </select>
-    <select id="selectForPage" resultType="com.mfx.blog.modal.entity.PageElementDO">
+    <select id="selectForPage" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from t_si_page_element
+        from t_si_page_element a left join t_si_route b on a.route_id=b.id
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from t_si_page_element
@@ -40,7 +40,7 @@
     </delete>
     <insert id="insert" parameterType="com.mfx.blog.modal.entity.PageElementDO" useGeneratedKeys="true"
             keyProperty="id">
-        insert into t_si_page_element (id, name,type,route_id,description
+        insert into t_si_page_element (id, name,type,route_id,description,
         gmt_create,gmt_modified
         )
         values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},#{route.id,jdbcType=BIGINT},#{description,jdbcType=VARCHAR},

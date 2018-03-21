@@ -3,6 +3,7 @@ package com.mfx.blog.modal.entity;
 import com.mfx.blog.modal.common.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class RouteDO extends AbstractEntity {
 
 
     enum RouteType {
-        frontheader,backheader,route
+        frontheader, backheader, route
     }
 
 
@@ -39,7 +40,10 @@ public class RouteDO extends AbstractEntity {
     private Long value;
 
     public String getLabel() {
-        return this.component;
+        if (StringUtils.isBlank(this.component)) {
+            return this.name;
+        }
+        return this.name + "[" + this.component + "]";
     }
 
     public Long getValue() {

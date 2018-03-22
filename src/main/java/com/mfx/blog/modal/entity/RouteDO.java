@@ -33,6 +33,7 @@ public class RouteDO extends AbstractEntity implements Comparable<RouteDO> {
 
     private TreeSet<RouteDO> children;
 
+    // 此处换成treeSet会存储重复元素   待研究查明原因
     private HashSet<PermissionRouteMap> permissions;
 
     @Override

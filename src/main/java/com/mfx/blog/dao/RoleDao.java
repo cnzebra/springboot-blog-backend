@@ -2,10 +2,7 @@ package com.mfx.blog.dao;
 
 import com.mfx.blog.modal.entity.RoleDO;
 import com.mfx.blog.modal.entity.RoleDOExample;
-import com.mfx.blog.modal.entity.RoleDO;
-import com.mfx.blog.modal.entity.RoleDOExample;
-import com.mfx.blog.modal.entity.UserDO;
-import com.mfx.blog.modal.entity.UserDOExample;
+import com.mfx.blog.modal.vo.RoleTreeVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -88,4 +85,11 @@ public interface RoleDao {
     List<String> findRoleNamesByUserId(@Param("userId") Long userId);
 
     int countHasPermission(@Param("roleId") Long roleId);
+
+    int countUserRoleByRoleId(@Param("roleId") Long roleId);
+
+    void deleteRolePermissionByRoleId(@Param("roleId") Long roleId);
+
+    List<RoleTreeVO> selectAll();
+
 }

@@ -1,13 +1,13 @@
 package com.mfx.blog.service.impl;
 
-import com.mfx.blog.exception.TipException;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mfx.blog.dao.RoleDao;
-import com.mfx.blog.dao.UserDao;
-import com.mfx.blog.exception.TipException;
 import com.mfx.blog.dao.UserDao;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.entity.UserDO;
 import com.mfx.blog.modal.entity.UserDOExample;
+import com.mfx.blog.modal.entity.UserRoleDO;
 import com.mfx.blog.param.ModifyPassParam;
 import com.mfx.blog.service.UserService;
 import com.mfx.blog.thread.UserThreadLocal;
@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -202,5 +203,51 @@ public class UserServiceImpl implements UserService {
             throw new TipException("修改密码失败");
         }
 
+    }
+
+    @Override
+    public PageInfo<UserDO> userList(Integer pageNum, Integer pageSize) {
+
+        PageHelper.startPage(pageNum, pageSize, true);
+        List<UserDO> users = userDao.selectForPage();
+        PageInfo<UserDO> pageInfo = new PageInfo(users);
+        //为每个用户设置关联的角色id集合
+        //取出所有的用户角色关联
+        List<UserRoleDO> maps = userDao.selectAllUserRoleMaps();
+        //设置集合
+        pageInfo.getList().stream().parallel().forEach(user -> {
+            for (UserRoleDO ur : maps) {
+                if (user.getId().equals(ur.getUserId())) {
+                    if (user.getRoleIds() == null) {
+                        user.setRoleIds(new HashSet());
+                    }
+                    user.getRoleIds().add(ur.getRoleId());
+                }
+            }
+            if (user.getRoleIds() == null) {
+                user.setRoleIds(new HashSet());
+            }
+        });
+        return pageInfo;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public void deleteUser(Long userId) {
+        //删除该用户和角色关联
+        userDao.deleteUserRoleByUserId(userId);
+        //删除用户
+        userDao.deleteByPrimaryKey(userId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public void setUserRole(Long userId, List<Long> roleIds) {
+        //先删除已存在的关系
+        userDao.deleteUserRoleByUserId(userId);
+        //再批量加入
+        if (roleIds.size() > 0) {
+            userDao.setUserRoleInBatch(userId, roleIds);
+        }
     }
 }

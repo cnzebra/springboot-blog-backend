@@ -1,7 +1,6 @@
 package com.mfx.blog.dao;
 
-import com.mfx.blog.modal.entity.UserDO;
-import com.mfx.blog.modal.entity.UserDOExample;
+import com.mfx.blog.modal.entity.*;
 import com.mfx.blog.modal.entity.UserDO;
 import com.mfx.blog.modal.entity.UserDOExample;
 import org.apache.ibatis.annotations.Mapper;
@@ -30,7 +29,7 @@ public interface UserDao {
      * @param uid
      * @return
      */
-    int deleteByPrimaryKey(Integer uid);
+    int deleteByPrimaryKey(Long uid);
 
     /**
      * @param record
@@ -75,4 +74,13 @@ public interface UserDao {
     int countByEmailExceptSelf(@Param("id") Long id, @Param("email") String email);
 
     int modifyPassword(@Param("id") Long id, @Param("password") String password);
+
+    List<UserDO> selectForPage();
+
+    void deleteUserRoleByUserId(@Param("userId") Long userId);
+
+    void setUserRoleInBatch(@Param("userId") Long userId, @Param("roleIds") List<Long> roleIds);
+
+    List<UserRoleDO> selectAllUserRoleMaps();
+
 }

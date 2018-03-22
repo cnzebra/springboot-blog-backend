@@ -3,6 +3,9 @@ package com.mfx.blog.service;
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.modal.entity.RoleDO;
 import com.mfx.blog.modal.entity.RoleDOExample;
+import com.mfx.blog.modal.vo.RoleTreeVO;
+
+import java.util.List;
 
 /**
  * @author mfx
@@ -40,4 +43,5 @@ public interface RoleService {
 
     void modifyRole(RoleDO roleDO);
 
+    List<RoleTreeVO> getRoleTree();
 }

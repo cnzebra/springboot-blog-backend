@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -66,5 +67,7 @@ public class UserDO extends AbstractEntity {
      * 用户所属角色
      */
     private List<String> roles;
+
+    private HashSet<Long> roleIds;
 
 }

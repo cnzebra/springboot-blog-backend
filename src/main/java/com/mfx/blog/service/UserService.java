@@ -1,7 +1,10 @@
 package com.mfx.blog.service;
 
+import com.github.pagehelper.PageInfo;
 import com.mfx.blog.modal.entity.UserDO;
 import com.mfx.blog.param.ModifyPassParam;
+
+import java.util.List;
 
 /**
  * @author mfx
@@ -48,4 +51,10 @@ public interface UserService {
     UserDO update(UserDO userDO);
 
     void modifyPassword(ModifyPassParam modifyPassParam);
+
+    PageInfo<UserDO> userList(Integer pageNum, Integer pageSize);
+
+    void deleteUser(Long userId);
+
+    void setUserRole(Long userId, List<Long> roleIds);
 }

@@ -113,6 +113,9 @@
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
+    <delete id="deleteRolePermissionByRoleId">
+        delete from t_si_role_permission where role_id=#{roleId}
+    </delete>
     <insert id="insert" parameterType="com.mfx.blog.modal.entity.RoleDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_si_role (id, name, description)
         values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR})
@@ -200,6 +203,15 @@
         where ur.user_id=#{userId}
     </select>
     <select id="countHasPermission" resultType="java.lang.Integer">
-        select count(1) from t_si_permission where role_id=#{roleId};
+        select count(1) from t_si_role_permission where role_id=#{roleId};
+    </select>
+    <select id="countUserRoleByRoleId" resultType="java.lang.Integer">
+        select count(1) from t_si_user_role where role_id=#{roleId}
+    </select>
+    <select id="selectAll" resultType="com.mfx.blog.modal.vo.RoleTreeVO">
+        select
+        id roleId,
+        name roleName
+        from t_si_role
     </select>
 </mapper>

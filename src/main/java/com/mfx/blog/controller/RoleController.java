@@ -89,4 +89,20 @@ public class RoleController extends BaseController {
         }
     }
 
+    @GetMapping("admin/role/tree.token")
+    @ResponseBody
+    public ResponseEntity roleTree() {
+        try {
+            List tree = roleService.getRoleTree();
+            return new ResponseEntity(RestResponseBo.ok(tree), HttpStatus.OK);
+        } catch (TipException e) {
+            e.printStackTrace();
+            return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(RestResponseBo.fail("内部错误"), HttpStatus.OK);
+        }
+    }
+
+
 }

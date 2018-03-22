@@ -8,12 +8,12 @@ import com.mfx.blog.dao.RolePermissionDao;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.entity.RoleDO;
 import com.mfx.blog.modal.entity.RoleDOExample;
+import com.mfx.blog.modal.vo.RoleTreeVO;
 import com.mfx.blog.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,11 +68,13 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public Integer deleteById(Long roleId) {
-        //若绑定有权限，需要提示取消权限再删除
-        int count = roleDao.countHasPermission(roleId);
-        if (count > 0) {
-            throw new TipException("该角色已绑定权限,请先解除权限再删除");
+        //若该角色关联有用户,则不允许删除
+        int count2 = roleDao.countUserRoleByRoleId(roleId);
+        if (count2 > 0) {
+            throw new TipException("该角色存在关联用户,请先解除关联");
         }
+        //若绑定有权限，需要提示取消权限再删除
+        roleDao.deleteRolePermissionByRoleId(roleId);
         Integer result = roleDao.deleteByPrimaryKey(roleId);
         return result;
     }
@@ -81,6 +83,12 @@ public class RoleServiceImpl implements RoleService {
     @Transactional(rollbackFor = {Exception.class})
     public void modifyRole(RoleDO roleDO) {
         roleDao.updateByPrimaryKey(roleDO);
+    }
+
+    @Override
+    public List<RoleTreeVO> getRoleTree() {
+        List<RoleTreeVO> trees = roleDao.selectAll();
+        return trees;
     }
 
 

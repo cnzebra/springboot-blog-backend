@@ -1,17 +1,16 @@
 package com.mfx.blog.controller;
 
-import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import com.mfx.blog.annotation.LogAnnotation;
 import com.mfx.blog.dto.LogActions;
 import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.bo.RestResponseBo;
-import com.mfx.blog.modal.entity.LogDO;
 import com.mfx.blog.modal.entity.UserDO;
 import com.mfx.blog.param.ModifyPassParam;
+import com.mfx.blog.param.UserRoleMap;
 import com.mfx.blog.service.LogService;
 import com.mfx.blog.service.UserService;
-import com.mfx.blog.thread.UserThreadLocal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 public class UserController extends BaseController {
@@ -107,4 +107,48 @@ public class UserController extends BaseController {
             return new ResponseEntity(RestResponseBo.fail("内部错误"), HttpStatus.OK);
         }
     }
+
+    @DeleteMapping("admin/delete/user/{userId}.token")
+    @ResponseBody
+    public ResponseEntity userList(@PathVariable(value = "userId") Long userId) {
+        try {
+            userService.deleteUser(userId);
+            return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
+        } catch (TipException e) {
+            return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("异常:{}", e.getMessage(), e);
+            return new ResponseEntity(RestResponseBo.fail("内部错误"), HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("admin/user/list.token")
+    @ResponseBody
+    public ResponseEntity userList(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                   @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+        try {
+            PageInfo<UserDO> users = userService.userList(pageNum, pageSize);
+            return new ResponseEntity(RestResponseBo.ok(users), HttpStatus.OK);
+        } catch (TipException e) {
+            return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("异常:{}", e.getMessage(), e);
+            return new ResponseEntity(RestResponseBo.fail("内部错误"), HttpStatus.OK);
+        }
+    }
+
+    @PutMapping("/admin/user/role.token")
+    @ResponseBody
+    public ResponseEntity setUserRole(@RequestBody UserRoleMap userRoleMap) {
+        try {
+            userService.setUserRole(userRoleMap.getUserId(), userRoleMap.getRoleIds());
+            return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
+        } catch (TipException e) {
+            return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("异常:{}", e.getMessage(), e);
+            return new ResponseEntity(RestResponseBo.fail("内部错误"), HttpStatus.OK);
+        }
+    }
+
 }

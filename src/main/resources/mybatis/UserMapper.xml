@@ -117,6 +117,9 @@
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
+    <delete id="deleteUserRoleByUserId">
+        delete from t_si_user_role where user_id=#{userId}
+    </delete>
     <insert id="insert" parameterType="com.mfx.blog.modal.entity.UserDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_si_user (id, login_name, password,
         email, home_url, nickname,login_status
@@ -227,6 +230,15 @@
     <select id="countByEmailExceptSelf" resultType="java.lang.Integer">
         select count(1) from t_si_user where email=#{email} and id!=#{id}
     </select>
+    <select id="selectForPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_si_user
+    </select>
+    <select id="selectAllUserRoleMaps" resultType="com.mfx.blog.modal.entity.UserRoleDO">
+        select user_id userId,role_id roleId
+        from t_si_user_role
+    </select>
     <update id="updateByExampleSelective" parameterType="map">
         update t_si_user
         <set>
@@ -306,4 +318,14 @@
         set password=#{password}
         where id=#{id}
     </update>
+
+    <insert id="setUserRoleInBatch">
+        insert into t_si_user_role(user_id,role_id)
+        values
+        <foreach collection="roleIds" item="roleId" index="index" separator=",">
+            (
+            #{userId},#{roleId}
+            )
+        </foreach>
+    </insert>
 </mapper>

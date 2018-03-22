@@ -2,10 +2,16 @@ package com.mfx.blog.modal.vo;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @Setter
 @Getter
 public class PermissionRouteMap implements Comparable<PermissionRouteMap>, Cloneable {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PermissionRouteMap.class);
+
     private Long permissionId;
 
     private String permissionName;
@@ -24,9 +30,14 @@ public class PermissionRouteMap implements Comparable<PermissionRouteMap>, Clone
 
     @Override
     public synchronized int compareTo(PermissionRouteMap o) {
+        LOGGER.info(this.permissionName + "比较" + o.permissionName);
+
         if (this.equals(o)) {
+            LOGGER.info(this.permissionName + "==" + o.permissionName);
             return 0;
         }
+        LOGGER.info(this.permissionName + "!=" + o.permissionName);
+
         return 1;
     }
 

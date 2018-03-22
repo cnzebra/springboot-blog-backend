@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Stack;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * @author mfx
@@ -115,13 +112,16 @@ public class PermissionServiceImpl implements PermissionService {
 
     private void setChildren(RouteDO parent, List<RouteDO> children, List<PermissionRouteMap> permissionRouteMapList) {
         for (RouteDO c : children) {
+            // 多线程并行
             permissionRouteMapList.stream().parallel().forEach(p -> {
                 if (c.getId().equals(p.getRouteId())) {
                     //该节点上有权限
                     if (c.getPermissions() == null) {
-                        c.setPermissions(new TreeSet());
+                        c.setPermissions(new HashSet());
                     }
-                    c.getPermissions().add(p);
+                    synchronized (p) {
+                        c.getPermissions().add(p);
+                    }
                 }
             });
             if (c.getParent() != null && parent.getId().equals(c.getParent().getId())) {

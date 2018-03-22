@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -32,7 +33,7 @@ public class RouteDO extends AbstractEntity implements Comparable<RouteDO> {
 
     private TreeSet<RouteDO> children;
 
-    private TreeSet<PermissionRouteMap> permissions;
+    private HashSet<PermissionRouteMap> permissions;
 
     @Override
     public int compareTo(RouteDO o) {

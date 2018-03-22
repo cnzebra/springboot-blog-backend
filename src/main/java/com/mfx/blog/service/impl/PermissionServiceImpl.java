@@ -13,8 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 import java.util.TreeSet;
 
 /**
@@ -46,8 +47,33 @@ public class PermissionServiceImpl implements PermissionService {
         }
         PageHelper.startPage(page, limit);
         List<PermissionDO> permissionDOS = permissionDao.selectForPage();
-        PageInfo pageInfo = new PageInfo(permissionDOS);
+        PageInfo<PermissionDO> pageInfo = new PageInfo(permissionDOS);
+
+        //循环遍历设置每个权限挂载的路由树，方便前端编辑时设置默认值
+        //首先查询全部路由
+        List<RouteDO> allRoutes = routeService.getAllRoutes();
+        pageInfo.getList().forEach(p -> {
+            this.setRouteTree(p, p.getElement().getRoute(), allRoutes);
+            Collections.reverse(p.getRouteTree());
+        });
         return pageInfo;
+    }
+
+    private void setRouteTree(PermissionDO p, RouteDO upper, List<RouteDO> allRoutes) {
+        if (p.getRouteTree() == null) {
+            p.setRouteTree(new Stack());
+        }
+        p.getRouteTree().push(upper.getId());
+        for (RouteDO route : allRoutes) {
+            if (upper.getParent().getId().equals(route.getId())) {
+                //匹配到次上级
+                p.getRouteTree().push(route.getId());
+                if (route.getParent() == null) {
+                    return;
+                }
+                setRouteTree(p, route.getParent(), allRoutes);
+            }
+        }
     }
 
 
@@ -65,7 +91,7 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public TreeSet getPermissionTree() throws CloneNotSupportedException{
+    public TreeSet getPermissionTree() throws CloneNotSupportedException {
         // permissionId permissionName routeId routeName parentId
         List<PermissionRouteMap> permissionRouteMapList = permissionDao.selectMapForPermissionRoute();
         // 查出所有路由

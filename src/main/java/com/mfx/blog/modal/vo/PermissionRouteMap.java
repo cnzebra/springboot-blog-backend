@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class PermissionRouteMap implements Comparable<PermissionRouteMap>,Cloneable {
+public class PermissionRouteMap implements Comparable<PermissionRouteMap>, Cloneable {
     private Long permissionId;
 
     private String permissionName;
@@ -23,7 +23,7 @@ public class PermissionRouteMap implements Comparable<PermissionRouteMap>,Clonea
     }
 
     @Override
-    public int compareTo(PermissionRouteMap o) {
+    public synchronized int compareTo(PermissionRouteMap o) {
         if (this.equals(o)) {
             return 0;
         }
@@ -31,7 +31,7 @@ public class PermissionRouteMap implements Comparable<PermissionRouteMap>,Clonea
     }
 
     @Override
-    public boolean equals(Object o) {
+    public synchronized boolean equals(Object o) {
         if (this == o) {
             return true;
         }

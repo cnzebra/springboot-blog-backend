@@ -3,6 +3,8 @@ package com.mfx.blog.modal.entity;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Stack;
+
 @Getter
 @Setter
 public class PermissionDO {
@@ -15,4 +17,8 @@ public class PermissionDO {
     private String description;
 
     private PageElementDO element;
+
+    private Stack routeTree;
 }
+
+

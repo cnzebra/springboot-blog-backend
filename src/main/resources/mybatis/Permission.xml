@@ -12,6 +12,14 @@
             <id property="id" column="b_id"/>
             <result property="name" column="b_name"/>
             <result property="description" column="b_description"/>
+            <association property="route" javaType="com.mfx.blog.modal.entity.RouteDO">
+                <id property="id" column="c_id"/>
+                <result property="name" column="c_name"/>
+                <association property="parent" javaType="com.mfx.blog.modal.entity.RouteDO">
+                    <id property="id" column="d_id"/>
+                    <result property="name" column="d_name"/>
+                </association>
+            </association>
         </association>
 
     </resultMap>
@@ -29,8 +37,18 @@
     </select>
     <select id="selectForPage" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
-        from t_si_permission a left join t_si_page_element b on a.element_id=b.id
+        a.id,a.name,a.code,a.description,
+        b.id b_id,
+        b.name b_name,
+        b.description description,
+        c.id c_id,
+        c.name c_name,
+        d.id d_id,
+        d.name d_name
+        from t_si_permission a join t_si_page_element b on a.element_id=b.id
+        join t_si_route c on b.route_id=c.id
+        join t_si_route d on c.parent=d.id
+
     </select>
     <select id="selectMapForPermissionRoute" resultType="com.mfx.blog.modal.vo.PermissionRouteMap">
         SELECT

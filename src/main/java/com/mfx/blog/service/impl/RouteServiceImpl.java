@@ -8,6 +8,7 @@ import com.mfx.blog.dao.UserDao;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.entity.RouteDO;
 import com.mfx.blog.service.RouteService;
+import com.sun.javafx.scene.control.skin.TitledPaneSkin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,11 @@ public class RouteServiceImpl implements RouteService {
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public void insertRoute(RouteDO routeDO) {
+        //类型相同&路径相同的路由或头不能重复
+        int count=routeDao.countByTypePath(routeDO.getType(),routeDO.getPath());
+        if(count>0){
+            throw new TipException("相同类型的路由该路径已存在");
+        }
         Date date = new Date();
         routeDO.setGmtCreate(date);
         routeDao.insert(routeDO);
@@ -45,6 +51,11 @@ public class RouteServiceImpl implements RouteService {
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public void modifyRoute(RouteDO routeDO) {
+        //类型相同&路径相同的路由或头不能重复
+        int count=routeDao.countByTypePathExceptThis(routeDO.getId(),routeDO.getType(),routeDO.getPath());
+        if(count>0){
+            throw new TipException("相同类型的路由该路径已存在");
+        }
         Date date = new Date();
         routeDO.setGmtModified(date);
         routeDao.updateByPrimaryKeySelective(routeDO);

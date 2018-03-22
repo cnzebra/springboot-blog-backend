@@ -47,4 +47,7 @@ public interface RouteDao {
 
     List<RouteDO> selectForAll();
 
+    int countByTypePath(@Param("type") String type, @Param("path") String path);
+
+    int countByTypePathExceptThis(@Param("id") Long id, @Param("type") String type, @Param("path") String path);
 }

@@ -46,7 +46,12 @@ public class ConvertUtils {
             if (vo.getChildren() == null) {
                 vo.setChildren(new ArrayList());
             }
-            tree.getChildren().forEach(t -> vo.getChildren().add(generateTree(t)));
+            tree.getChildren().forEach(t -> {
+                PermissionTreeVO v = generateTree(t);
+                if (v != null) {
+                    vo.getChildren().add(v);
+                }
+            });
 
             if (tree.getPermissions() == null || tree.getPermissions().size() == 0) {
                 //没有权限

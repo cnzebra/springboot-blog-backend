@@ -75,6 +75,14 @@
         <include refid="Base_Column_List"/>
         from t_si_route a left join t_si_route b on a.parent=b.id
     </select>
+    <select id="countByTypePath" resultType="java.lang.Integer">
+        select count(1) from t_si_route where type=#{type} and path=#{path}
+    </select>
+    <select id="countByTypePathExceptThis" resultType="java.lang.Integer">
+        select count(1) from t_si_route
+        where type=#{type} and path=#{path}
+        and id!=#{id}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from t_si_route
         where id = #{id,jdbcType=BIGINT}

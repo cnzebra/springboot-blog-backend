@@ -3,6 +3,7 @@ package com.mfx.blog.dao;
 import com.mfx.blog.modal.entity.PermissionDO;
 import com.mfx.blog.modal.vo.PermissionRouteMap;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;

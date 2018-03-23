@@ -1,10 +1,12 @@
 package com.mfx.blog.service;
 
 import com.github.pagehelper.PageInfo;
+import com.mfx.blog.modal.entity.RouteDO;
 import com.mfx.blog.modal.entity.UserDO;
 import com.mfx.blog.param.ModifyPassParam;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author mfx
@@ -57,4 +59,7 @@ public interface UserService {
     void deleteUser(Long userId);
 
     void setUserRole(Long userId, List<Long> roleIds);
+
+    Set<RouteDO> getUserRouteTree();
+
 }

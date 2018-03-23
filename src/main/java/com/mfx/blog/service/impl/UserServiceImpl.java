@@ -2,13 +2,13 @@ package com.mfx.blog.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.mfx.blog.dao.PageElementDao;
 import com.mfx.blog.dao.RoleDao;
 import com.mfx.blog.dao.UserDao;
 import com.mfx.blog.exception.TipException;
-import com.mfx.blog.modal.entity.UserDO;
-import com.mfx.blog.modal.entity.UserDOExample;
-import com.mfx.blog.modal.entity.UserRoleDO;
+import com.mfx.blog.modal.entity.*;
 import com.mfx.blog.param.ModifyPassParam;
+import com.mfx.blog.service.RouteService;
 import com.mfx.blog.service.UserService;
 import com.mfx.blog.thread.UserThreadLocal;
 import com.mfx.blog.utils.AbstractUUID;
@@ -20,9 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author mfx
@@ -36,6 +34,11 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
     @Resource
     private RoleDao roleDao;
+    @Resource
+    private PageElementDao pageElementDao;
+
+    @Resource
+    private RouteService routeService;
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
@@ -248,6 +251,81 @@ public class UserServiceImpl implements UserService {
         //再批量加入
         if (roleIds.size() > 0) {
             userDao.setUserRoleInBatch(userId, roleIds);
+        }
+    }
+
+    @Override
+    public Set<RouteDO> getUserRouteTree() {
+        UserDO user = UserThreadLocal.get();
+
+        //查询出该用户所有具有权限的页面元素
+        List<PageElementDO> elements = pageElementDao.filterForElements(user.getId());
+
+        //查询所有的路由
+        List<RouteDO> allRoutes = routeService.getAllRoutes();
+        //筛选出具有权限的路由集合
+        Set<RouteDO> filteredRoutes = new HashSet();
+        elements.stream().parallel().forEach(el -> {
+            filterRoute(filteredRoutes, el.getRoute(), allRoutes);
+        });
+        //至此已经筛选出所有具有权限的路由集合
+
+        Set<RouteDO> roots = new HashSet();
+        //循环遍历设置路由树跟节点
+        elements.stream().parallel().forEach(el -> {
+            setRoot(roots, el.getRoute(), filteredRoutes);
+        });
+
+        //至此已找到根节点
+
+        roots.stream().parallel().forEach(root -> {
+            setChildren(root, filteredRoutes);
+        });
+
+        return roots;
+
+    }
+
+    private void setChildren(RouteDO root, Set<RouteDO> filteredRoutes) {
+        for (RouteDO route : filteredRoutes) {
+            //若直接匹配
+            if (root.getId().equals(route.getId())) {
+                //匹配到的父子关系
+                if (root.getChildren() == null) {
+                    root.setChildren(new TreeSet());
+                }
+            } else if (route.getParent() != null && root.getId().equals(route.getParent().getId())) {
+                //匹配到的父子关系
+                if (root.getChildren() == null) {
+                    root.setChildren(new TreeSet());
+                }
+                this.setChildren(route, filteredRoutes);
+                root.getChildren().add(route);
+            }
+        }
+    }
+
+    private void filterRoute(Set<RouteDO> filteredRoutes, RouteDO leaf, List<RouteDO> allRoutes) {
+        for (RouteDO route : allRoutes) {
+            if (leaf != null && leaf.getId().equals(route.getId())) {
+                filteredRoutes.add(route);
+                this.filterRoute(filteredRoutes, route.getParent(), allRoutes);
+            }
+        }
+    }
+
+
+    private void setRoot(Set<RouteDO> roots, RouteDO leaf, Set<RouteDO> allRoutes) {
+        for (RouteDO route : allRoutes) {
+            if (leaf.getId().equals(route.getId())) {
+                //叶子节点匹配
+                if (route.getParent() == null) {
+                    //无父节点即为根节点
+                    roots.add(route);
+                } else {
+                    setRoot(roots, route.getParent(), allRoutes);
+                }
+            }
         }
     }
 }

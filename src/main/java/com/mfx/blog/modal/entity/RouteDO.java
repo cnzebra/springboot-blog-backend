@@ -7,8 +7,6 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.TreeSet;
 
 @Setter
@@ -77,31 +75,31 @@ public class RouteDO extends AbstractEntity implements Comparable<RouteDO> {
 
         RouteDO routeDO = (RouteDO) o;
 
-        if (!name.equals(routeDO.name)) {
+        if (name != null && !name.equals(routeDO.name)) {
             return false;
         }
-        if (!path.equals(routeDO.path)) {
+        if (path != null && !path.equals(routeDO.path)) {
             return false;
         }
-        if (!redirect.equals(routeDO.redirect)) {
+        if (redirect != null && !redirect.equals(routeDO.redirect)) {
             return false;
         }
-        if (!component.equals(routeDO.component)) {
+        if (component != null && !component.equals(routeDO.component)) {
             return false;
         }
-        if (!parent.equals(routeDO.parent)) {
+        if (parent != null && !parent.equals(routeDO.parent)) {
             return false;
         }
-        if (!hidden.equals(routeDO.hidden)) {
+        if (hidden != null && !hidden.equals(routeDO.hidden)) {
             return false;
         }
-        if (!icon.equals(routeDO.icon)) {
+        if (icon != null && !icon.equals(routeDO.icon)) {
             return false;
         }
-        if (!type.equals(routeDO.type)) {
+        if (type != null && !type.equals(routeDO.type)) {
             return false;
         }
-        if (!children.equals(routeDO.children)) {
+        if (children != null && !children.equals(routeDO.children)) {
             return false;
         }
         if (label != null ? !label.equals(routeDO.label) : routeDO.label != null) {
@@ -113,14 +111,28 @@ public class RouteDO extends AbstractEntity implements Comparable<RouteDO> {
     @Override
     public int hashCode() {
         int result = name.hashCode();
-        result = 31 * result + path.hashCode();
-        result = 31 * result + redirect.hashCode();
+        if (path != null) {
+            result = 31 * result + path.hashCode();
+        }
+        if (redirect != null) {
+            result = 31 * result + redirect.hashCode();
+        }
         result = 31 * result + component.hashCode();
-        result = 31 * result + parent.hashCode();
-        result = 31 * result + hidden.hashCode();
-        result = 31 * result + icon.hashCode();
-        result = 31 * result + type.hashCode();
-        result = 31 * result + children.hashCode();
+        if (parent != null) {
+            result = 31 * result + parent.hashCode();
+        }
+        if (hidden != null) {
+            result = 31 * result + hidden.hashCode();
+        }
+        if (icon != null) {
+            result = 31 * result + icon.hashCode();
+        }
+        if (type != null) {
+            result = 31 * result + type.hashCode();
+        }
+        if (children != null) {
+            result = 31 * result + children.hashCode();
+        }
         result = 31 * result + (label != null ? label.hashCode() : 0);
         result = 31 * result + (value != null ? value.hashCode() : 0);
         return result;

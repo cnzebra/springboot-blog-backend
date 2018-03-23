@@ -6,6 +6,7 @@ import com.mfx.blog.dto.LogActions;
 import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.bo.RestResponseBo;
+import com.mfx.blog.modal.entity.RouteDO;
 import com.mfx.blog.modal.entity.UserDO;
 import com.mfx.blog.param.ModifyPassParam;
 import com.mfx.blog.param.UserRoleMap;
@@ -19,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.Set;
 
 @RestController
 public class UserController extends BaseController {
@@ -107,6 +108,22 @@ public class UserController extends BaseController {
             return new ResponseEntity(RestResponseBo.fail("内部错误"), HttpStatus.OK);
         }
     }
+
+
+    @GetMapping("user/route/tree.token")
+    @ResponseBody
+    public ResponseEntity userRouteTree() {
+        try {
+            Set<RouteDO> routes = userService.getUserRouteTree();
+            return new ResponseEntity(RestResponseBo.ok(routes), HttpStatus.OK);
+        } catch (TipException e) {
+            return new ResponseEntity(RestResponseBo.fail(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("异常:{}", e.getMessage(), e);
+            return new ResponseEntity(RestResponseBo.fail("内部错误"), HttpStatus.OK);
+        }
+    }
+
 
     @DeleteMapping("admin/delete/user/{userId}.token")
     @ResponseBody

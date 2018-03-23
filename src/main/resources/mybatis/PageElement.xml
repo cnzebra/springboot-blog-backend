@@ -39,6 +39,22 @@
         from t_si_page_element a join t_si_route b on a.route_id=b.id
         where a.route_id=#{routeId}
     </select>
+    <select id="filterForElements" resultMap="BaseResultMap">
+        SELECT
+            e.id, e.name,e.type,e.route_id,e.description ,e.gmt_create,e.gmt_modified,
+            route.id b_id,
+            route.name b_name,
+            route.component b_component
+        FROM
+            t_si_page_element e
+            JOIN t_si_permission p ON e.id = p.element_id
+            JOIN t_si_role_permission rp ON rp.permission_id = p.id
+            JOIN t_si_user_role ur ON ur.role_id = rp.role_id
+            JOIN t_si_user u ON u.id = ur.user_id
+            JOIN t_si_route route on e.route_id=route.id
+        WHERE
+            u.id = #{userId};
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from t_si_page_element
         where id = #{id,jdbcType=BIGINT}

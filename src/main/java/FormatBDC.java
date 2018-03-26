@@ -5,9 +5,9 @@ import java.io.*;
 
 @SuppressWarnings("ALL")
 public class FormatBDC {
-    private static final String prefix = "if^(logger.isDebugEnabled())^{";
-    private static final String prefix$ = "if^(logger.isDebugEnabled())^{^";
-    private static final String prefix_ = "if^(logger.isDebugEnabled())^{`";
+    private static final String prefix = "if~(logger.isDebugEnabled())~{";
+    private static final String prefix$ = "if~(logger.isDebugEnabled())~{~";
+    private static final String prefix_ = "if~(logger.isDebugEnabled())~{`";
 
     public static void polish(File[] dir) throws IOException {
         for (File file : dir) {
@@ -24,36 +24,37 @@ public class FormatBDC {
                     }
 //                    System.out.println(content.toString());
                     //到此已读取到文件所有内容
-                    result = result.replaceAll(" ", "~");
-                    result = result.replaceAll("\n", "`");
-                    result = result.replaceAll("[~]{1,}", "^");
+                    result = result.replaceAll(" |\t|\r", "~");
+                    result = result.replaceAll("[\n]{1,}", "`");
+                    result = result.replaceAll("[~]{1,}", "~");
+                    result = result.replaceAll("~`", "`");
+                    result = result.replaceAll("`~", "`");
                     //将logger.debug替换成#2018#
                     result = result.replaceAll("logger.debug", "#2018#");
 
-
+                    System.out.println(result);
                     while (result.indexOf("#2018#") != -1) {
                         int startIndex = result.indexOf("#2018#");
                         //如果日志打印前后空格
-                        if ("^".equals(FormatBDC.getBeforeChar(result, startIndex))) {
+                        if ("~".equals(FormatBDC.getBeforeChar(result, startIndex))) {
                             String localPrefix = result.substring(startIndex - prefix$.length(), startIndex);
                             if (localPrefix.equals(prefix$)) {
                                 //已经写了if判断  还原原来配置
                                 result = result.toString().replaceFirst("#2018#", "logger.debug");
                             } else {
                                 String all = prefix$ + "logger.debug";
-                                int endIndex = result.indexOf(");", startIndex);
+                                int endIndex = result.indexOf(");`", startIndex);
                                 result = result.substring(0, endIndex + 2) + "}" + result.substring(endIndex + 2, result.length());
                                 result = result.toString().replaceFirst("#2018#", all);
                             }
-                        }
-                        if ("`".equals(FormatBDC.getBeforeChar(result, startIndex))) {
+                        } else if ("`".equals(FormatBDC.getBeforeChar(result, startIndex))) {
                             String localPrefix = result.substring(startIndex - prefix_.length(), startIndex);
-                            if (localPrefix.equals(prefix$)) {
+                            if (localPrefix.equals(prefix_)) {
                                 //已经写了if判断  还原原来配置
                                 result = result.toString().replaceFirst("#2018#", "logger.debug");
                             } else {
                                 String all = prefix_ + "logger.debug";
-                                int endIndex = result.indexOf(");", startIndex);
+                                int endIndex = result.indexOf(");`", startIndex);
                                 result = result.substring(0, endIndex + 2) + "}" + result.substring(endIndex + 2, result.length());
                                 result = result.toString().replaceFirst("#2018#", all);
                             }
@@ -64,13 +65,13 @@ public class FormatBDC {
                                 result = result.toString().replaceFirst("#2018#", "logger.debug");
                             } else {
                                 String all = prefix + "logger.debug";
-                                int endIndex = result.indexOf(");", startIndex);
+                                int endIndex = result.indexOf(");`", startIndex);
                                 result = result.substring(0, endIndex + 2) + "}" + result.substring(endIndex + 2, result.length());
                                 result = result.toString().replaceFirst("#2018#", all);
                             }
                         }
                     }
-                    result = result.replaceAll("\\^", " ");
+                    result = result.replaceAll("~", " ");
                     System.out.println(result.split("`").length);
                     PrintWriter writer = new PrintWriter(file, "GBK");
 

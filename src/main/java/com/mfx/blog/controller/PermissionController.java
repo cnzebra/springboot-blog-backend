@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -97,7 +98,7 @@ public class PermissionController extends BaseController {
     @ResponseBody
     public ResponseEntity listPermissionTree(HttpServletRequest request) {
         try {
-            TreeSet tree = permissionService.getPermissionTree();
+            HashSet tree = permissionService.getPermissionTree();
             List<PermissionTreeVO> vos = ConvertUtils.mapToIviewTree(tree);
 
             return new ResponseEntity(RestResponseBo.ok(vos), HttpStatus.OK);

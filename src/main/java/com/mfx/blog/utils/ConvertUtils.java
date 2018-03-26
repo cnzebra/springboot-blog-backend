@@ -3,13 +3,10 @@ package com.mfx.blog.utils;
 import com.mfx.blog.modal.entity.RouteDO;
 import com.mfx.blog.modal.vo.PermissionTreeVO;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 public class ConvertUtils {
-    public static List<PermissionTreeVO> mapToIviewTree(TreeSet<RouteDO> trees) {
+    public static List<PermissionTreeVO> mapToIviewTree(HashSet<RouteDO> trees) {
         List<PermissionTreeVO> iviewTrees = new ArrayList(trees.size());
 
         Iterator iterator = trees.iterator();

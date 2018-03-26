@@ -3,6 +3,7 @@ package com.mfx.blog.service;
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.modal.entity.PermissionDO;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -33,6 +34,6 @@ public interface PermissionService {
 
     void modifyPermission(PermissionDO permissionDO);
 
-    TreeSet getPermissionTree() throws CloneNotSupportedException;
+    HashSet getPermissionTree() throws CloneNotSupportedException;
 
 }

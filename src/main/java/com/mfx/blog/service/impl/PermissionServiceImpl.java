@@ -1,5 +1,6 @@
 package com.mfx.blog.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.component.constant.WebConst;
@@ -9,6 +10,8 @@ import com.mfx.blog.modal.entity.RouteDO;
 import com.mfx.blog.modal.vo.PermissionRouteMap;
 import com.mfx.blog.service.PermissionService;
 import com.mfx.blog.service.RouteService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +25,7 @@ import java.util.*;
 @SuppressWarnings("ALL")
 @Service
 public class PermissionServiceImpl implements PermissionService {
+    private static final Logger LOGGER= LoggerFactory.getLogger(PermissionServiceImpl.class);
 
     @Autowired
     private PermissionDao permissionDao;
@@ -88,13 +92,13 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public TreeSet getPermissionTree() throws CloneNotSupportedException {
+    public HashSet getPermissionTree() throws CloneNotSupportedException {
         // permissionId permissionName routeId routeName parentId
         List<PermissionRouteMap> permissionRouteMapList = permissionDao.selectMapForPermissionRoute();
         // 查出所有路由
         List<RouteDO> allRoutes = routeService.getAllRoutes();
         //从所有路由中找出顶级节点
-        TreeSet<RouteDO> parents = new TreeSet();
+        HashSet<RouteDO> parents = new HashSet();
         permissionRouteMapList.forEach(permissionRouteMap -> {
             try {
                 findParent(parents, permissionRouteMap, allRoutes);
@@ -135,7 +139,7 @@ public class PermissionServiceImpl implements PermissionService {
         }
     }
 
-    private void findParent(TreeSet<RouteDO> parents, PermissionRouteMap map, List<RouteDO> allRoutes) throws CloneNotSupportedException {
+    private void findParent(HashSet<RouteDO> parents, PermissionRouteMap map, List<RouteDO> allRoutes) throws CloneNotSupportedException {
         PermissionRouteMap temp = map.clone();
         for (RouteDO route : allRoutes) {
             Long parentId = (Long) temp.getParentId();
@@ -147,7 +151,8 @@ public class PermissionServiceImpl implements PermissionService {
                 parents.add(route);
                 return;
             } else if (route.getId().equals(parentId)) {
-                temp.setParentId(route.getId());
+                temp.setParentId(route.getParent().getId());
+                LOGGER.info(JSONObject.toJSONString(temp));
                 findParent(parents, temp, allRoutes);
             }
 

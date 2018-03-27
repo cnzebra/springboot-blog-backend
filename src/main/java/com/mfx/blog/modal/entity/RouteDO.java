@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashSet;
+import java.util.Stack;
 import java.util.TreeSet;
 
 @Setter
@@ -23,13 +24,15 @@ public class RouteDO extends AbstractEntity implements Comparable<RouteDO> {
 
     private RouteDO parent;
 
-    private Boolean hidden;
+    private Integer hidden;
 
     private String icon;
 
     private String type;
 
     private TreeSet<RouteDO> children;
+
+    private Stack routeTree;
 
     // 此处换成treeSet会存储重复元素   待研究查明原因
     private HashSet<PermissionRouteMap> permissions;

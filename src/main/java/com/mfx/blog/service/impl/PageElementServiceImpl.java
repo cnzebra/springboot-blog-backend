@@ -5,13 +5,16 @@ import com.github.pagehelper.PageInfo;
 import com.mfx.blog.component.constant.WebConst;
 import com.mfx.blog.dao.PageElementDao;
 import com.mfx.blog.modal.entity.PageElementDO;
+import com.mfx.blog.modal.entity.RouteDO;
 import com.mfx.blog.service.PageElementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * @author mfx
@@ -23,6 +26,8 @@ public class PageElementServiceImpl implements PageElementService {
 
     @Autowired
     private PageElementDao pageElementDao;
+    @Autowired
+    private RouteServiceImpl routeService;
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
@@ -41,8 +46,37 @@ public class PageElementServiceImpl implements PageElementService {
         }
         PageHelper.startPage(page, limit);
         List<PageElementDO> pageElementDOS = pageElementDao.selectForPage();
-        PageInfo pageInfo = new PageInfo(pageElementDOS);
+        PageInfo<PageElementDO> pageInfo = new PageInfo(pageElementDOS);
+
+        //循环遍历设置每个元素挂载的路由树，方便前端编辑时设置默认值
+        //首先查询全部路由
+        List<RouteDO> allRoutes = routeService.getAllRoutes();
+        pageInfo.getList().forEach(pe -> {
+            this.setRouteTree(pe, pe.getRoute(), allRoutes);
+            Collections.reverse(pe.getRouteTree());
+        });
+
+
         return pageInfo;
+    }
+
+    private void setRouteTree(PageElementDO p, RouteDO upper, List<RouteDO> allRoutes) {
+        if (p.getRouteTree() == null) {
+            p.setRouteTree(new Stack());
+        }
+        if (upper != null) {
+            p.getRouteTree().push(upper.getId());
+        }
+        for (RouteDO route : allRoutes) {
+            if (upper != null && upper.getParent() != null && upper.getParent().getId() != null && upper.getParent().getId().equals(route.getId())) {
+                //匹配到次上级
+                p.getRouteTree().push(route.getId());
+                if (route.getParent() == null) {
+                    return;
+                }
+                setRouteTree(p, route.getParent(), allRoutes);
+            }
+        }
     }
 
 

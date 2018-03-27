@@ -8,17 +8,13 @@ import com.mfx.blog.dao.UserDao;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.entity.RouteDO;
 import com.mfx.blog.service.RouteService;
-import com.sun.javafx.scene.control.skin.TitledPaneSkin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * @author mfx
@@ -34,13 +30,15 @@ public class RouteServiceImpl implements RouteService {
     private UserDao userDao;
     @Autowired
     private RouteDao routeDao;
+    @Autowired
+    private RouteServiceImpl routeService;
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public void insertRoute(RouteDO routeDO) {
         //类型相同&路径相同的路由或头不能重复
-        int count=routeDao.countByTypePath(routeDO.getType(),routeDO.getPath());
-        if(count>0){
+        int count = routeDao.countByTypePath(routeDO.getType(), routeDO.getPath());
+        if (count > 0) {
             throw new TipException("相同类型的路由该路径已存在");
         }
         Date date = new Date();
@@ -52,8 +50,8 @@ public class RouteServiceImpl implements RouteService {
     @Transactional(rollbackFor = {Exception.class})
     public void modifyRoute(RouteDO routeDO) {
         //类型相同&路径相同的路由或头不能重复
-        int count=routeDao.countByTypePathExceptThis(routeDO.getId(),routeDO.getType(),routeDO.getPath());
-        if(count>0){
+        int count = routeDao.countByTypePathExceptThis(routeDO.getId(), routeDO.getType(), routeDO.getPath());
+        if (count > 0) {
             throw new TipException("相同类型的路由该路径已存在");
         }
         Date date = new Date();
@@ -80,8 +78,35 @@ public class RouteServiceImpl implements RouteService {
         PageHelper.startPage(page, limit, true);
         List<RouteDO> routeDOS = routeDao.selectForPage(type);
         PageInfo<RouteDO> pageInfo = new PageInfo(routeDOS);
-        LOGGER.debug("Exit getLogs method");
+
+
+        List<RouteDO> allRoutes = routeService.getAllRoutes();
+        pageInfo.getList().forEach(route -> {
+            this.setRouteTree(route, allRoutes);
+            Collections.reverse(route.getRouteTree());
+        });
+
+
         return pageInfo;
+    }
+
+    private void setRouteTree(RouteDO self, List<RouteDO> allRoutes) {
+        if (self.getRouteTree() == null) {
+            self.setRouteTree(new Stack());
+        }
+        for (RouteDO r : allRoutes) {
+            if (self.getParent() == null) {
+                return;
+            } else if (self.getParent().getId().equals(r.getId())) {
+                //匹配到次上级
+                self.getRouteTree().push(r.getId());
+
+                if (r.getParent() == null) {
+                    return;
+                }
+                setRouteTree(r.getParent(), allRoutes);
+            }
+        }
     }
 
     @Override

@@ -25,7 +25,7 @@ import java.util.*;
 @SuppressWarnings("ALL")
 @Service
 public class PermissionServiceImpl implements PermissionService {
-    private static final Logger LOGGER= LoggerFactory.getLogger(PermissionServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PermissionServiceImpl.class);
 
     @Autowired
     private PermissionDao permissionDao;
@@ -66,7 +66,7 @@ public class PermissionServiceImpl implements PermissionService {
         }
         p.getRouteTree().push(upper.getId());
         for (RouteDO route : allRoutes) {
-            if (upper.getParent().getId().equals(route.getId())) {
+            if (upper.getParent() != null && upper.getParent().getId() != null && upper.getParent().getId().equals(route.getId())) {
                 //匹配到次上级
                 p.getRouteTree().push(route.getId());
                 if (route.getParent() == null) {

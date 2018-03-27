@@ -14,6 +14,10 @@
             <id property="id" column="b_id"/>
             <result property="name" column="b_name"/>
             <result property="component" column="b_component"/>
+            <association property="parent" javaType="com.mfx.blog.modal.entity.RouteDO">
+                <id property="id" column="c_id"/>
+                <result property="name" column="c_name"/>
+            </association>
         </association>
 
     </resultMap>
@@ -31,8 +35,14 @@
     </select>
     <select id="selectForPage" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
+            a.id, a.name,a.type,a.route_id,a.description ,a.gmt_create,a.gmt_modified,
+            b.id b_id,
+            b.name b_name,
+            b.component b_component,
+            c.id c_id,
+            c.name c_name
         from t_si_page_element a left join t_si_route b on a.route_id=b.id
+        left join t_si_route c on c.id=b.parent
     </select>
     <select id="selectElementsByRoute" resultType="com.mfx.blog.modal.entity.PageElementDO">
         select a.id,a.name

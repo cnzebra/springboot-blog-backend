@@ -2,6 +2,7 @@ import com.mfx.blog.exception.TipException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
+import java.util.Arrays;
 
 @SuppressWarnings("ALL")
 public class FormatBDC {
@@ -20,19 +21,20 @@ public class FormatBDC {
                     String line;
                     String result = "";
                     while ((line = reader.readLine()) != null) {
-                        result += line + "\n";
+                        result += line + "`";
                     }
+                    reader.close();
+
 //                    System.out.println(content.toString());
                     //到此已读取到文件所有内容
                     result = result.replaceAll(" |\t|\r", "~");
-                    result = result.replaceAll("[\n]{1,}", "`");
+                    result = result.replaceAll("[`]{1,}", "`");
                     result = result.replaceAll("[~]{1,}", "~");
                     result = result.replaceAll("~`", "`");
                     result = result.replaceAll("`~", "`");
                     //将logger.debug替换成#2018#
                     result = result.replaceAll("logger.debug", "#2018#");
 
-                    System.out.println(result);
                     while (result.indexOf("#2018#") != -1) {
                         int startIndex = result.indexOf("#2018#");
                         //如果日志打印前后空格
@@ -42,10 +44,18 @@ public class FormatBDC {
                                 //已经写了if判断  还原原来配置
                                 result = result.toString().replaceFirst("#2018#", "logger.debug");
                             } else {
-                                String all = prefix$ + "logger.debug";
-                                int endIndex = result.indexOf(");`", startIndex);
-                                result = result.substring(0, endIndex + 2) + "}" + result.substring(endIndex + 2, result.length());
+                                String all = prefix$ + "logger.debug";// 需要替换的全部
                                 result = result.toString().replaceFirst("#2018#", all);
+
+                                startIndex = result.lastIndexOf(all);
+
+                                int endIndex = result.indexOf(");`", startIndex);// 需要加反大括号的地方
+                                int endIndex2 = result.indexOf(");~", startIndex);// 需要加反大括号的地方
+                                if (endIndex2 > 0) {
+                                    endIndex = endIndex < endIndex2 ? endIndex : endIndex2;
+                                }
+                                result = result.substring(0, endIndex + 2) + "}" + result.substring(endIndex + 2, result.length());
+
                             }
                         } else if ("`".equals(FormatBDC.getBeforeChar(result, startIndex))) {
                             String localPrefix = result.substring(startIndex - prefix_.length(), startIndex);
@@ -54,9 +64,16 @@ public class FormatBDC {
                                 result = result.toString().replaceFirst("#2018#", "logger.debug");
                             } else {
                                 String all = prefix_ + "logger.debug";
-                                int endIndex = result.indexOf(");`", startIndex);
-                                result = result.substring(0, endIndex + 2) + "}" + result.substring(endIndex + 2, result.length());
                                 result = result.toString().replaceFirst("#2018#", all);
+
+                                startIndex = result.lastIndexOf(all);
+                                int endIndex = result.indexOf(");`", startIndex);// 需要加反大括号的地方
+                                int endIndex2 = result.indexOf(");~", startIndex);// 需要加反大括号的地方
+                                if (endIndex2 > 0) {
+                                    endIndex = endIndex < endIndex2 ? endIndex : endIndex2;
+                                }
+                                System.out.println(result.substring(startIndex, endIndex + 2));
+                                result = result.substring(0, endIndex + 2) + "}" + result.substring(endIndex + 2, result.length());
                             }
                         } else {
                             String localPrefix = result.substring(startIndex - prefix.length(), startIndex);
@@ -65,14 +82,25 @@ public class FormatBDC {
                                 result = result.toString().replaceFirst("#2018#", "logger.debug");
                             } else {
                                 String all = prefix + "logger.debug";
-                                int endIndex = result.indexOf(");`", startIndex);
-                                result = result.substring(0, endIndex + 2) + "}" + result.substring(endIndex + 2, result.length());
                                 result = result.toString().replaceFirst("#2018#", all);
+
+                                startIndex = result.lastIndexOf(all);
+
+
+                                int endIndex = result.indexOf(");`", startIndex);// 需要加反大括号的地方
+                                int endIndex2 = result.indexOf(");~", startIndex);// 需要加反大括号的地方
+                                if (endIndex2 > 0) {
+                                    endIndex = endIndex < endIndex2 ? endIndex : endIndex2;
+                                }
+                                result = result.substring(0, endIndex + 2) + "}" + result.substring(endIndex + 2, result.length());
                             }
                         }
                     }
                     result = result.replaceAll("~", " ");
-                    System.out.println(result.split("`").length);
+//                    System.out.println(result);
+
+                    //去掉最后一个大括号后面的内容
+                    result = result.substring(0, result.lastIndexOf("}") + 1);
                     PrintWriter writer = new PrintWriter(file, "GBK");
 
                     for (String s : result.split("`")) {
@@ -85,11 +113,15 @@ public class FormatBDC {
     }
 
     public static void main(String[] args) throws IOException {
-//        String projectPath = "D:\\workspace\\BDC_CODE";
-        String projectPath = "D:\\test";
+        String projectPath = "D:\\workspace\\BDC\\BDC_CODE_LOCAL";
+//        String projectPath = "D:\\workspace\\test";
         File dir = new File(projectPath);
 
+        long start = System.currentTimeMillis();
         FormatBDC.polish(dir.listFiles());
+        long end = System.currentTimeMillis();
+
+        System.out.println("耗时:" + (end - start) + "(ms)");
 
 
     }

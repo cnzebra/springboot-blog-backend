@@ -110,7 +110,7 @@ public class UserController extends BaseController {
     }
 
 
-    @GetMapping("user/route/tree.token")
+    @GetMapping({"user/route/tree.token", "user/route/tree.open"})
     @ResponseBody
     public ResponseEntity userRouteTree() {
         try {

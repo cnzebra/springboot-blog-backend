@@ -4,8 +4,8 @@ import com.mfx.blog.annotation.LogAnnotation;
 import com.mfx.blog.modal.entity.LogDO;
 import com.mfx.blog.modal.entity.UserDO;
 import com.mfx.blog.service.LogService;
-import com.mfx.blog.thread.UserThreadLocal;
 import com.mfx.blog.utils.ClientUtils;
+import com.mfx.blog.utils.MfxCache;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -19,9 +19,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.sql.DataSource;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -76,7 +74,7 @@ public class LogAspect {
                         int level = logAnnotation.level().getLevel();
                         logDO.setLevel(level);
                         // 获取作者
-                        UserDO userDO = UserThreadLocal.get();
+                        UserDO userDO = MfxCache.get();
                         if (userDO != null) {
                             Long authorId = userDO.getId();
                             String authorName = userDO.getLoginName();

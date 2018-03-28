@@ -9,7 +9,7 @@ import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.entity.MilestoneDO;
 import com.mfx.blog.modal.entity.UserDO;
 import com.mfx.blog.service.MilestoneService;
-import com.mfx.blog.thread.UserThreadLocal;
+import com.mfx.blog.utils.MfxCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class MilestoneServiceImpl implements MilestoneService {
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public void delete(Long id) {
-        UserDO userDO = UserThreadLocal.get();
+        UserDO userDO = MfxCache.get();
         if (userDO.getRoles().contains("admin")) {
             milestoneDao.delete(id);
         } else {
@@ -74,7 +74,7 @@ public class MilestoneServiceImpl implements MilestoneService {
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public void modify(MilestoneDO milestoneDO) {
-        UserDO userDO = UserThreadLocal.get();
+        UserDO userDO = MfxCache.get();
         if (userDO.getRoles().contains("admin")) {
             milestoneDO.setGmtModified(new Date());
             milestoneDao.modify(milestoneDO);

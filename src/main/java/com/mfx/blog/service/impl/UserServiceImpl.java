@@ -10,8 +10,8 @@ import com.mfx.blog.modal.entity.*;
 import com.mfx.blog.param.ModifyPassParam;
 import com.mfx.blog.service.RouteService;
 import com.mfx.blog.service.UserService;
-import com.mfx.blog.thread.UserThreadLocal;
 import com.mfx.blog.utils.AbstractUUID;
+import com.mfx.blog.utils.MfxCache;
 import com.mfx.blog.utils.TaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -155,20 +155,20 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public void logout() {
-        UserDO userDO = UserThreadLocal.get();
+        UserDO userDO = MfxCache.get();
         userDO.setLoginStatus(0);
 
         int count = userDao.updateByPrimaryKeySelective(userDO);
         if (count != 1) {
             throw new TipException("退出失败");
         }
-        UserThreadLocal.remove();
+        MfxCache.remove();
     }
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public UserDO update(UserDO userDO) {
-        userDO.setId(UserThreadLocal.get().getId());
+        userDO.setId(MfxCache.get().getId());
         userDO.setGmtModified(new Date());
         // 判断邮箱是否重复
         int emailCount = userDao.countByEmailExceptSelf(userDO.getId(), userDO.getEmail());
@@ -189,7 +189,7 @@ public class UserServiceImpl implements UserService {
             throw new TipException("两次输入密码不相同,请重新输入");
         }
 
-        UserDO userDO = UserThreadLocal.get();
+        UserDO userDO = MfxCache.get();
 
         // 用户密码加密
         String encodePwd = TaleUtils.md5encode(userDO.getLoginName() + modifyPassParam.getPassword());
@@ -201,7 +201,7 @@ public class UserServiceImpl implements UserService {
 
         String encodeNewPwd = TaleUtils.md5encode(userDO.getLoginName() + modifyPassParam.getNewPassword());
 
-        int count = userDao.modifyPassword(UserThreadLocal.get().getId(), encodeNewPwd);
+        int count = userDao.modifyPassword(MfxCache.get().getId(), encodeNewPwd);
         if (count != 1) {
             throw new TipException("修改密码失败");
         }
@@ -256,8 +256,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<RouteDO> getUserRouteTree() {
-        UserDO user = UserThreadLocal.get();
-
+        UserDO user = MfxCache.get();
+        if (user == null) {
+            user = new UserDO();
+            user.setId(0L);
+        }
         //查询出该用户所有具有权限的页面元素
         List<PageElementDO> elements = pageElementDao.filterForElements(user.getId());
 

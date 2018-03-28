@@ -1,6 +1,5 @@
 package com.mfx.blog.controller.admin;
 
-import com.alibaba.fastjson.JSONObject;
 import com.mfx.blog.annotation.LogAnnotation;
 import com.mfx.blog.component.constant.WebConst;
 import com.mfx.blog.controller.BaseController;
@@ -9,11 +8,9 @@ import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.dto.MetaDto;
 import com.mfx.blog.dto.Types;
 import com.mfx.blog.modal.bo.RestResponseBo;
-import com.mfx.blog.modal.entity.LogDO;
 import com.mfx.blog.modal.entity.MetaDO;
 import com.mfx.blog.service.LogService;
 import com.mfx.blog.service.MetaService;
-import com.mfx.blog.thread.UserThreadLocal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

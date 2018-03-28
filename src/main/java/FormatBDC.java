@@ -6,9 +6,15 @@ import java.util.Arrays;
 
 @SuppressWarnings("ALL")
 public class FormatBDC {
-    private static final String prefix = "if~(logger.isDebugEnabled())~{";
-    private static final String prefix$ = "if~(logger.isDebugEnabled())~{~";
-    private static final String prefix_ = "if~(logger.isDebugEnabled())~{`";
+//    private static final String prefix = "if~(logger.isDebugEnabled())~{";
+//    private static final String prefix$ = "if~(logger.isDebugEnabled())~{~";
+//    private static final String prefix_ = "if~(logger.isDebugEnabled())~{`";
+    private static final String prefix = "if~(logger.isInfoEnabled())~{";
+    private static final String prefix$ = "if~(logger.isInfoEnabled())~{~";
+    private static final String prefix_ = "if~(logger.isInfoEnabled())~{`";
+
+//    private static final String logger_debug="logger.debug";
+    private static final String logger_debug="logger.info";
 
     public static void polish(File[] dir) throws IOException {
         for (File file : dir) {
@@ -33,7 +39,7 @@ public class FormatBDC {
                     result = result.replaceAll("~`", "`");
                     result = result.replaceAll("`~", "`");
                     //将logger.debug替换成#2018#
-                    result = result.replaceAll("logger.debug", "#2018#");
+                    result = result.replaceAll(logger_debug, "#2018#");
 
                     while (result.indexOf("#2018#") != -1) {
                         int startIndex = result.indexOf("#2018#");
@@ -42,9 +48,9 @@ public class FormatBDC {
                             String localPrefix = result.substring(startIndex - prefix$.length(), startIndex);
                             if (localPrefix.equals(prefix$)) {
                                 //已经写了if判断  还原原来配置
-                                result = result.toString().replaceFirst("#2018#", "logger.debug");
+                                result = result.toString().replaceFirst("#2018#", logger_debug);
                             } else {
-                                String all = prefix$ + "logger.debug";// 需要替换的全部
+                                String all = prefix$ + logger_debug;// 需要替换的全部
                                 result = result.toString().replaceFirst("#2018#", all);
 
                                 startIndex = result.lastIndexOf(all);
@@ -61,9 +67,9 @@ public class FormatBDC {
                             String localPrefix = result.substring(startIndex - prefix_.length(), startIndex);
                             if (localPrefix.equals(prefix_)) {
                                 //已经写了if判断  还原原来配置
-                                result = result.toString().replaceFirst("#2018#", "logger.debug");
+                                result = result.toString().replaceFirst("#2018#", logger_debug);
                             } else {
-                                String all = prefix_ + "logger.debug";
+                                String all = prefix_ + logger_debug;
                                 result = result.toString().replaceFirst("#2018#", all);
 
                                 startIndex = result.lastIndexOf(all);
@@ -79,9 +85,9 @@ public class FormatBDC {
                             String localPrefix = result.substring(startIndex - prefix.length(), startIndex);
                             if (localPrefix.equals(prefix)) {
                                 //已经写了if判断  还原原来配置
-                                result = result.toString().replaceFirst("#2018#", "logger.debug");
+                                result = result.toString().replaceFirst("#2018#", logger_debug);
                             } else {
-                                String all = prefix + "logger.debug";
+                                String all = prefix + logger_debug;
                                 result = result.toString().replaceFirst("#2018#", all);
 
                                 startIndex = result.lastIndexOf(all);
@@ -113,7 +119,7 @@ public class FormatBDC {
     }
 
     public static void main(String[] args) throws IOException {
-        String projectPath = "D:\\workspace\\BDC\\BDC_CODE_LOCAL";
+        String projectPath = "D:\\workspace\\BDC\\BDC_CODE_NEW";
 //        String projectPath = "D:\\workspace\\test";
         File dir = new File(projectPath);
 

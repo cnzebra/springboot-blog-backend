@@ -4,32 +4,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.mfx.blog.component.common.AdminCommons;
 import com.mfx.blog.component.common.Commons;
 import com.mfx.blog.modal.bo.RestResponseBo;
-import com.mfx.blog.modal.entity.OptionDO;
 import com.mfx.blog.modal.entity.UserDO;
 import com.mfx.blog.service.LogService;
 import com.mfx.blog.service.OptionService;
 import com.mfx.blog.service.UserService;
-import com.mfx.blog.thread.UserThreadLocal;
 import com.mfx.blog.utils.MapCache;
-import com.mfx.blog.component.common.AdminCommons;
-import com.mfx.blog.component.common.Commons;
-import com.mfx.blog.dto.Types;
-import com.mfx.blog.modal.bo.RestResponseBo;
-import com.mfx.blog.modal.entity.OptionDO;
-import com.mfx.blog.modal.entity.UserDO;
-import com.mfx.blog.service.LogService;
-import com.mfx.blog.service.OptionService;
-import com.mfx.blog.service.UserService;
-import com.mfx.blog.thread.UserThreadLocal;
-import com.mfx.blog.utils.AbstractUUID;
-import com.mfx.blog.utils.IPKit;
-import com.mfx.blog.utils.MapCache;
-import com.mfx.blog.utils.TaleUtils;
-import eu.bitwalker.useragentutils.UserAgent;
+import com.mfx.blog.utils.MfxCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -39,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 /**
  * 自定义拦截器
@@ -77,9 +59,9 @@ public class TokenInterceptor implements HandlerInterceptor {
             this.responseData(response, RestResponseBo.fail(403, "禁止访问"));
             return false;
         }
-        // 放入本地线程,便于service 和controller访问
-        if (UserThreadLocal.get() == null) {
-            UserThreadLocal.set(userDO);
+        // 放入本地缓存,便于service 和controller访问
+        if (MfxCache.get() == null) {
+            MfxCache.set(userDO);
         }
         return true;
     }

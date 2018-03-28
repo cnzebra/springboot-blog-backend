@@ -4,29 +4,21 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.component.constant.WebConst;
 import com.mfx.blog.exception.TipException;
-import com.mfx.blog.component.constant.WebConst;
-import com.mfx.blog.dao.*;
 import com.mfx.blog.dto.Types;
-import com.mfx.blog.exception.TipException;
-import com.mfx.blog.modal.entity.UserDO;
 import com.mfx.blog.modal.entity.UserDOExample;
 import com.mfx.blog.param.ArticleStatistics;
 import com.mfx.blog.service.UserService;
-import com.mfx.blog.thread.UserThreadLocal;
 import com.mfx.blog.utils.AbstractUUID;
+import com.mfx.blog.utils.MfxCache;
 import com.vdurmont.emoji.EmojiParser;
-import com.mfx.blog.component.constant.WebConst;
 import com.mfx.blog.dao.ArticleDao;
 import com.mfx.blog.dao.MetaDao;
-import com.mfx.blog.dto.Types;
-import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.entity.ArticleDO;
 import com.mfx.blog.modal.entity.ArticleDOExample;
 import com.mfx.blog.service.ArticleMetaService;
 import com.mfx.blog.service.ArticleService;
 import com.mfx.blog.service.MetaService;
 import com.mfx.blog.utils.TaleUtils;
-import com.mfx.blog.utils.Tools;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,7 +110,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 
         //设置用户
-        contents.setAuthor(UserThreadLocal.get());
+        contents.setAuthor(MfxCache.get());
 
         articleDao.insert(contents);
         Long articleId = contents.getId();

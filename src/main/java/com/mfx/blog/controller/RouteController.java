@@ -73,7 +73,7 @@ public class RouteController extends BaseController {
     }
 
 
-    @GetMapping("admin/route/list.token")
+    @GetMapping({"admin/route/list.token","route/list.open"})
     @ResponseBody
     public ResponseEntity modifyRoute(@RequestParam(value = "type", defaultValue = "") String type,
                                       @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,

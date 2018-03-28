@@ -82,7 +82,7 @@ public class RouteServiceImpl implements RouteService {
 
         List<RouteDO> allRoutes = routeService.getAllRoutes();
         pageInfo.getList().forEach(route -> {
-            this.setRouteTree(route, allRoutes);
+            this.setRouteTree(route, route.getParent(), allRoutes);
             Collections.reverse(route.getRouteTree());
         });
 
@@ -90,21 +90,21 @@ public class RouteServiceImpl implements RouteService {
         return pageInfo;
     }
 
-    private void setRouteTree(RouteDO self, List<RouteDO> allRoutes) {
+    private void setRouteTree(RouteDO self, RouteDO upper, List<RouteDO> allRoutes) {
         if (self.getRouteTree() == null) {
             self.setRouteTree(new Stack());
         }
+        if (upper == null) {
+            return;
+        }
         for (RouteDO r : allRoutes) {
-            if (self.getParent() == null) {
-                return;
-            } else if (self.getParent().getId().equals(r.getId())) {
-                //匹配到次上级
+            if (upper.getId().equals(r.getId())) {
+                //匹配到上级
                 self.getRouteTree().push(r.getId());
 
-                if (r.getParent() == null) {
-                    return;
+                if (r.getParent() != null) {
+                    setRouteTree(self, r.getParent(), allRoutes);
                 }
-                setRouteTree(r.getParent(), allRoutes);
             }
         }
     }

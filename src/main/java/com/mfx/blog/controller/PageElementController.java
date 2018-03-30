@@ -2,12 +2,12 @@ package com.mfx.blog.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.annotation.LogAnnotation;
+import com.mfx.blog.constant.LogConstant;
 import com.mfx.blog.dto.LogActions;
 import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.bo.RestResponseBo;
 import com.mfx.blog.modal.entity.PageElementDO;
-import com.mfx.blog.service.PageElementService;
 import com.mfx.blog.service.PageElementService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ public class PageElementController extends BaseController {
     private PageElementService pageElementService;
 
 
-    @LogAnnotation(action = LogActions.ADD_PAGE_ELEMENT, data = "#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.ADD_PAGE_ELEMENT, data = LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @PostMapping("admin/pageElement.token")
     @ResponseBody
     public ResponseEntity addPageElement(@RequestBody PageElementDO pageElementDO, HttpServletRequest request) {
@@ -41,7 +41,7 @@ public class PageElementController extends BaseController {
         }
     }
 
-    @LogAnnotation(action = LogActions.MOD_PAGE_ELEMENT, data = "#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.MOD_PAGE_ELEMENT, data = LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @PutMapping("admin/pageElement.token")
     @ResponseBody
     public ResponseEntity modifyPageElement(@RequestBody PageElementDO pageElementDO, HttpServletRequest request) {
@@ -57,7 +57,7 @@ public class PageElementController extends BaseController {
         }
     }
 
-    @LogAnnotation(action = LogActions.DEL_PAGE_ELEMENT, data = "#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.DEL_PAGE_ELEMENT, data = LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @DeleteMapping("admin/pageElement/{id}.token")
     @ResponseBody
     public ResponseEntity deletePageElement(@PathVariable("id") Long id, HttpServletRequest request) {
@@ -77,8 +77,8 @@ public class PageElementController extends BaseController {
     @GetMapping("admin/pageElement/list.token")
     @ResponseBody
     public ResponseEntity listPageElements(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                      @RequestParam(value = "pageSize", defaultValue = "1") Integer pageSize,
-                                      HttpServletRequest request) {
+                                           @RequestParam(value = "pageSize", defaultValue = "1") Integer pageSize,
+                                           HttpServletRequest request) {
         try {
             PageInfo pageInfo = pageElementService.getPageElements(pageNum, pageSize);
             return new ResponseEntity(RestResponseBo.ok(pageInfo), HttpStatus.OK);
@@ -95,7 +95,7 @@ public class PageElementController extends BaseController {
     @GetMapping("admin/pageElement/listByRoute.token")
     @ResponseBody
     public ResponseEntity listPageElementsByRoute(@RequestParam(value = "routeId") Long routeId,
-                                      HttpServletRequest request) {
+                                                  HttpServletRequest request) {
         try {
             List list = pageElementService.listPageElementsByRoute(routeId);
             return new ResponseEntity(RestResponseBo.ok(list), HttpStatus.OK);

@@ -3,6 +3,7 @@ package com.mfx.blog.controller;
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.annotation.LogAnnotation;
 import com.mfx.blog.component.constant.WebConst;
+import com.mfx.blog.constant.LogConstant;
 import com.mfx.blog.dto.*;
 import com.mfx.blog.modal.bo.ArchiveBo;
 import com.mfx.blog.modal.bo.RestResponseBo;
@@ -88,7 +89,7 @@ public class IndexController extends BaseController {
     /**
      * 评论操作
      */
-    @LogAnnotation(action = LogActions.ADD_ARTICLE_COMMENT, data = "文章:#3,评论内容:#4", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.ADD_ARTICLE_COMMENT, data = "文章:" + LogConstant.PREFIX + "3,评论内容:" + LogConstant.PREFIX + "4", level = LogLevelEnums.LEVEL10)
     @PostMapping(value = "article/{articleId}/comment")
     @ResponseBody
     public ResponseEntity comment(HttpServletRequest request, HttpServletResponse response,
@@ -223,7 +224,7 @@ public class IndexController extends BaseController {
         return new ResponseEntity(RestResponseBo.ok(commentsPaginator), HttpStatus.OK);
     }
 
-    @LogAnnotation(action = LogActions.ARTICLE_LIKE_DISLIKE, data = "统计:#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.ARTICLE_LIKE_DISLIKE, data = "统计:" + LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @PutMapping("article/statistics")
     @ResponseBody
     public ResponseEntity updateArticleStatistics(@RequestBody ArticleStatistics statistics, HttpServletRequest request) {

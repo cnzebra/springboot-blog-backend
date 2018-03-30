@@ -2,6 +2,7 @@ package com.mfx.blog.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.annotation.LogAnnotation;
+import com.mfx.blog.constant.LogConstant;
 import com.mfx.blog.dto.LogActions;
 import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.exception.TipException;
@@ -33,7 +34,7 @@ public class UserController extends BaseController {
     @Autowired
     private LogService logService;
 
-    @LogAnnotation(action = LogActions.USER_REGISTER, data = "用户信息:#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.USER_REGISTER, data = "用户信息:" + LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @PostMapping("user/register")
     @ResponseBody
     public ResponseEntity register(@RequestBody UserDO userDO, HttpServletRequest request) {
@@ -49,7 +50,7 @@ public class UserController extends BaseController {
     }
 
 
-    @LogAnnotation(action = LogActions.BACK_LOGIN, data = "登录信息:#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.BACK_LOGIN, data = "登录信息:" + LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @PutMapping("user/login")
     @ResponseBody
     public ResponseEntity login(@RequestBody UserDO userDO, HttpServletRequest request) {
@@ -64,7 +65,7 @@ public class UserController extends BaseController {
         }
     }
 
-    @LogAnnotation(action = LogActions.MOD_INFO, data = "#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.MOD_INFO, data = LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @PutMapping("user/modify.token")
     @ResponseBody
     public ResponseEntity modifyUser(@RequestBody UserDO userDO, HttpServletRequest request) {
@@ -79,7 +80,7 @@ public class UserController extends BaseController {
         }
     }
 
-    @LogAnnotation(action = LogActions.MOD_PWD, data = "#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.MOD_PWD, data = LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @PutMapping("user/password/modify.token")
     @ResponseBody
     public ResponseEntity modifyPassword(@RequestBody ModifyPassParam modifyPassParam, HttpServletRequest request) {

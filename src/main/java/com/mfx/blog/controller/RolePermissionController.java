@@ -1,6 +1,7 @@
 package com.mfx.blog.controller;
 
 import com.mfx.blog.annotation.LogAnnotation;
+import com.mfx.blog.constant.LogConstant;
 import com.mfx.blog.dto.LogActions;
 import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.exception.TipException;
@@ -22,7 +23,7 @@ public class RolePermissionController extends BaseController {
     private RolePermissionService rolePermissionService;
 
 
-    @LogAnnotation(action = LogActions.ADD_ROLE_PERMISSION, data = "#1,#2", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.ADD_ROLE_PERMISSION, data = LogConstant.PREFIX + "1," + LogConstant.PREFIX + "2", level = LogLevelEnums.LEVEL10)
     @PostMapping("admin/role/permission.token")
     @ResponseBody
     public ResponseEntity settingRolePermission(@RequestBody RolePermissionMap permissionMap,
@@ -40,7 +41,7 @@ public class RolePermissionController extends BaseController {
     }
 
 
-    @LogAnnotation(action = LogActions.DEL_ROLE_PERMISSION, data = "#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.DEL_ROLE_PERMISSION, data = LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @DeleteMapping("admin/role/{roleId}/permission/{permissionId}.token")
     @ResponseBody
     public ResponseEntity deleteRolePermission(@PathVariable("roleId") Long roleId,

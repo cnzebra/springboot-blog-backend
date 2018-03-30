@@ -2,6 +2,7 @@ package com.mfx.blog.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.annotation.LogAnnotation;
+import com.mfx.blog.constant.LogConstant;
 import com.mfx.blog.dto.LogActions;
 import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.exception.TipException;
@@ -28,7 +29,7 @@ public class PermissionController extends BaseController {
     private PermissionService permissionService;
 
 
-    @LogAnnotation(action = LogActions.ADD_PERMISSION, data = "#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.ADD_PERMISSION, data = LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @PostMapping("admin/permission.token")
     @ResponseBody
     public ResponseEntity addPermission(@RequestBody PermissionDO permissionDO, HttpServletRequest request) {
@@ -44,7 +45,7 @@ public class PermissionController extends BaseController {
         }
     }
 
-    @LogAnnotation(action = LogActions.MOD_PERMISSION, data = "#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.MOD_PERMISSION, data = LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @PutMapping("admin/permission.token")
     @ResponseBody
     public ResponseEntity modifyPermission(@RequestBody PermissionDO permissionDO, HttpServletRequest request) {
@@ -60,7 +61,7 @@ public class PermissionController extends BaseController {
         }
     }
 
-    @LogAnnotation(action = LogActions.DEL_PERMISSION, data = "#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.DEL_PERMISSION, data = LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @DeleteMapping("admin/permission/{id}.token")
     @ResponseBody
     public ResponseEntity deletePermission(@PathVariable("id") Long id, HttpServletRequest request) {

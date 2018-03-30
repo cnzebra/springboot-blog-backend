@@ -2,6 +2,7 @@ package com.mfx.blog.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.annotation.LogAnnotation;
+import com.mfx.blog.constant.LogConstant;
 import com.mfx.blog.dto.LogActions;
 import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.exception.TipException;
@@ -29,7 +30,7 @@ public class MilestoneController extends BaseController {
     @Resource
     private LogService logService;
 
-    @LogAnnotation(action = LogActions.ADD_MILESTONE, data = "历程:#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.ADD_MILESTONE, data = "历程:" + LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @PostMapping("milestone/record.token")
     @ResponseBody
     public ResponseEntity record(@RequestBody MilestoneDO milestoneDO, HttpServletRequest request) {
@@ -44,7 +45,7 @@ public class MilestoneController extends BaseController {
         }
     }
 
-    @LogAnnotation(action = LogActions.MOD_MILESTONE, data = "历程:#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.MOD_MILESTONE, data = "历程:" + LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @PutMapping("milestone/modify.token")
     @ResponseBody
     public ResponseEntity modify(@RequestBody MilestoneDO milestoneDO, HttpServletRequest request) {
@@ -59,7 +60,7 @@ public class MilestoneController extends BaseController {
         }
     }
 
-    @LogAnnotation(action = LogActions.DEL_MILESTONE, data = "历程:#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.DEL_MILESTONE, data = "历程:" + LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @DeleteMapping("milestone/{id}.token")
     @ResponseBody
     public ResponseEntity delete(@PathVariable("id") Long id, HttpServletRequest request) {

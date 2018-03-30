@@ -1,6 +1,7 @@
 package com.mfx.blog.controller;
 
 import com.mfx.blog.annotation.LogAnnotation;
+import com.mfx.blog.constant.LogConstant;
 import com.mfx.blog.dto.LogActions;
 import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.modal.bo.RestResponseBo;
@@ -27,7 +28,7 @@ public class FeedbackController extends BaseController {
     private LogService logService;
 
 
-    @LogAnnotation(action = LogActions.ADD_FEEDBACK, data = "内容:#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.ADD_FEEDBACK, data = "内容:" + LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @PostMapping("feedback")
     @ResponseBody
     public ResponseEntity addFeedback(@RequestBody FeedbackDO feedbackDO, HttpServletRequest request) {

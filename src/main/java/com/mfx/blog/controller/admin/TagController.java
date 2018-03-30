@@ -2,6 +2,7 @@ package com.mfx.blog.controller.admin;
 
 import com.mfx.blog.annotation.LogAnnotation;
 import com.mfx.blog.component.constant.WebConst;
+import com.mfx.blog.constant.LogConstant;
 import com.mfx.blog.controller.BaseController;
 import com.mfx.blog.dto.LogActions;
 import com.mfx.blog.dto.LogLevelEnums;
@@ -51,7 +52,7 @@ public class TagController extends BaseController {
         return new ResponseEntity(RestResponseBo.ok(tags), HttpStatus.OK);
     }
 
-    @LogAnnotation(action = LogActions.ADD_ARTICLE_TAG, data = "标签:#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.ADD_ARTICLE_TAG, data = "标签:" + LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @PostMapping(value = "save")
     @ResponseBody
     public RestResponseBo saveTag(@RequestBody MetaDO meta, HttpServletRequest request) {

@@ -3,6 +3,7 @@ package com.mfx.blog.controller.admin;
 
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.annotation.LogAnnotation;
+import com.mfx.blog.constant.LogConstant;
 import com.mfx.blog.controller.BaseController;
 import com.mfx.blog.dto.LogActions;
 import com.mfx.blog.dto.LogLevelEnums;
@@ -49,7 +50,7 @@ public class LogController extends BaseController {
         return new ResponseEntity(RestResponseBo.ok(logs), HttpStatus.OK);
     }
 
-    @LogAnnotation(action = LogActions.DELETE_LOG, data = "删除日志:#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.DELETE_LOG, data = "删除日志:" + LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @DeleteMapping(value = "delete/{id}.token")
     @ResponseBody
     public ResponseEntity delete(@PathVariable("id") Long logId, HttpServletRequest request) {

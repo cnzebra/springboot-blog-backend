@@ -2,6 +2,7 @@ package com.mfx.blog.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.annotation.LogAnnotation;
+import com.mfx.blog.constant.LogConstant;
 import com.mfx.blog.dto.LogActions;
 import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.exception.TipException;
@@ -24,7 +25,7 @@ public class RouteController extends BaseController {
     private RouteService routeService;
 
 
-    @LogAnnotation(action = LogActions.ADD_ROUTE, data = "#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.ADD_ROUTE, data = LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @PostMapping("admin/route.token")
     @ResponseBody
     public ResponseEntity addRoute(@RequestBody RouteDO routeDO, HttpServletRequest request) {
@@ -40,7 +41,7 @@ public class RouteController extends BaseController {
         }
     }
 
-    @LogAnnotation(action = LogActions.MOD_ROUTE, data = "#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.MOD_ROUTE, data = LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @PutMapping("admin/route.token")
     @ResponseBody
     public ResponseEntity modifyRoute(@RequestBody RouteDO routeDO, HttpServletRequest request) {
@@ -56,7 +57,7 @@ public class RouteController extends BaseController {
         }
     }
 
-    @LogAnnotation(action = LogActions.DEL_ROUTE, data = "#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.DEL_ROUTE, data = LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @DeleteMapping("admin/route/{id}.token")
     @ResponseBody
     public ResponseEntity modifyRoute(@PathVariable("id") Long id, HttpServletRequest request) {
@@ -73,7 +74,7 @@ public class RouteController extends BaseController {
     }
 
 
-    @GetMapping({"admin/route/list.token","route/list.open"})
+    @GetMapping({"admin/route/list.token", "route/list.open"})
     @ResponseBody
     public ResponseEntity modifyRoute(@RequestParam(value = "type", defaultValue = "") String type,
                                       @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
@@ -93,7 +94,7 @@ public class RouteController extends BaseController {
 
     @GetMapping("admin/route/tree.token")
     @ResponseBody
-    public ResponseEntity listRoutesTree(@RequestParam(value = "type",defaultValue = "") String type, HttpServletRequest request) {
+    public ResponseEntity listRoutesTree(@RequestParam(value = "type", defaultValue = "") String type, HttpServletRequest request) {
         try {
             List list = routeService.listRoutesTree(type);
             return new ResponseEntity(RestResponseBo.ok(list), HttpStatus.OK);

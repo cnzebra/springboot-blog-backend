@@ -1,6 +1,7 @@
 package com.mfx.blog.controller;
 
 import com.mfx.blog.annotation.LogAnnotation;
+import com.mfx.blog.constant.LogConstant;
 import com.mfx.blog.dto.LogActions;
 import com.mfx.blog.dto.LogLevelEnums;
 import com.mfx.blog.service.AwardService;
@@ -27,7 +28,7 @@ public class AwardController extends BaseController {
     private LogService logService;
 
 
-    @LogAnnotation(action = LogActions.ADD_AWARD, data = "内容:#1", level = LogLevelEnums.LEVEL10)
+    @LogAnnotation(action = LogActions.ADD_AWARD, data = "内容:" + LogConstant.PREFIX + "1", level = LogLevelEnums.LEVEL10)
     @PostMapping("award")
     @ResponseBody
     public ResponseEntity addAward(@RequestBody AwardDO awardDO, HttpServletRequest request) {

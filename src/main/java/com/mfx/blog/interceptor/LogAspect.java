@@ -1,6 +1,7 @@
 package com.mfx.blog.interceptor;
 
 import com.mfx.blog.annotation.LogAnnotation;
+import com.mfx.blog.constant.LogConstant;
 import com.mfx.blog.modal.entity.LogDO;
 import com.mfx.blog.modal.entity.UserDO;
 import com.mfx.blog.service.LogService;
@@ -65,9 +66,9 @@ public class LogAspect {
                         // 获取操作数据
                         String data = logAnnotation.data();
                         // 填充变量数据
-                        while (data.indexOf("#") != -1) {
-                            Integer index = Integer.parseInt(data.substring(data.indexOf("#") + 1, data.indexOf("#") + 2));
-                            data = data.replaceFirst("#" + index, "" + params[index - 1]);
+                        while (data.indexOf(LogConstant.PREFIX) != -1) {
+                            Integer index = Integer.parseInt(data.substring(data.indexOf(LogConstant.PREFIX) + LogConstant.PREFIX.length(), data.indexOf(LogConstant.PREFIX) + +LogConstant.PREFIX.length() + 1));
+                            data = data.replaceFirst(LogConstant.PREFIX + index, "" + params[index - 1]);
                         }
                         logDO.setData(data);
                         // 获取日志级别

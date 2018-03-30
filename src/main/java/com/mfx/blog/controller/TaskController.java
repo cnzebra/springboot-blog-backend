@@ -2,6 +2,7 @@ package com.mfx.blog.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.annotation.LogAnnotation;
+import com.mfx.blog.constant.LogConstant;
 import com.mfx.blog.dto.LogActions;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.bo.RestResponseBo;
@@ -48,7 +49,7 @@ public class TaskController extends BaseController {
     }
 
 
-    @LogAnnotation(action = LogActions.ADD_TASK, data = "#1")
+    @LogAnnotation(action = LogActions.ADD_TASK, data = LogConstant.PREFIX + "1")
     @PostMapping("admin/task.token")
     @ResponseBody
     public ResponseEntity taskList(@RequestBody ScheduleJobDO scheduleJob) {
@@ -92,7 +93,7 @@ public class TaskController extends BaseController {
         return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
     }
 
-    @LogAnnotation(action = LogActions.MOD_TASK, data = "#1")
+    @LogAnnotation(action = LogActions.MOD_TASK, data = LogConstant.PREFIX + "1")
     @PutMapping("admin/task/edit")
     @ResponseBody
     public ResponseEntity taskEdit(@RequestBody ScheduleJobDO scheduleJob) {
@@ -145,7 +146,7 @@ public class TaskController extends BaseController {
         return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
     }
 
-    @LogAnnotation(action = LogActions.SWITCH_JOB, data = "#1:#2")
+    @LogAnnotation(action = LogActions.SWITCH_JOB, data = LogConstant.PREFIX + "1:" + LogConstant.PREFIX + "2")
     @PutMapping("admin/task/{id}/status.token")
     @ResponseBody
     public ResponseEntity changeJobStatus(@PathVariable("id") Long jobId, @RequestParam("cmd") String cmd) throws TipException {
@@ -157,7 +158,7 @@ public class TaskController extends BaseController {
         return new ResponseEntity(RestResponseBo.ok(), HttpStatus.OK);
     }
 
-    @LogAnnotation(action = LogActions.DEL_TASK, data = "#1")
+    @LogAnnotation(action = LogActions.DEL_TASK, data = LogConstant.PREFIX + "1")
     @DeleteMapping("admin/task/delete/{id}.token")
     @ResponseBody
     public ResponseEntity deleteJob(@PathVariable("id") Long jobId) throws TipException {

@@ -5,13 +5,13 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="article_id" jdbcType="BIGINT" property="articleId"/>
         <result column="owner_id" jdbcType="BIGINT" property="ownerId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="site_url" jdbcType="VARCHAR" property="siteUrl"/>
         <result column="ip" jdbcType="VARCHAR" property="ip"/>
         <result column="agent" jdbcType="VARCHAR" property="agent"/>
         <result column="type" jdbcType="VARCHAR" property="type"/>
         <result column="status" jdbcType="VARCHAR" property="status"/>
-        <result column="parent" jdbcType="BIGINT" property="parent"/>
         <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
         <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
 
@@ -21,6 +21,10 @@
             <result property="email" column="b_email"/>
             <result property="nickname" column="b_nickname"/>
             <result property="lastLoginTime" column="b_last_login_time"/>
+        </association>
+        <association property="parent" javaType="com.mfx.blog.modal.entity.CommentDO">
+            <id property="id" column="c_id"/>
+            <result property="name" column="c_name"/>
         </association>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.mfx.blog.modal.entity.CommentDO">
@@ -87,13 +91,15 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-        a.id, a.article_id, a.owner_id, a.email, a.site_url, a.ip, a.agent, a.type, a.status,
+        a.id, a.article_id, a.owner_id,a.name, a.email, a.site_url, a.ip, a.agent, a.type, a.status,
         a.parent,a.gmt_create,a.gmt_modified,
         b.id b_author_id,
         b.login_name b_login_name,
         b.email b_email,
         b.nickname b_nickname,
-        b.last_login_time b_last_login_time
+        b.last_login_time b_last_login_time,
+        c.id c_id,
+        c.name c_name
     </sql>
     <sql id="Blob_Column_List">
         a.content
@@ -108,6 +114,7 @@
         ,
         <include refid="Blob_Column_List"/>
         from t_b_comment a join t_si_user b on a.author_id=b.id
+        left join t_b_comment c on c.id=a.parent
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -157,14 +164,14 @@
     </delete>
     <insert id="insert" parameterType="com.mfx.blog.modal.entity.CommentDO" useGeneratedKeys="true" keyProperty="id">
         insert into t_b_comment (id, article_id,
-        author_id, owner_id,
+        author_id, owner_id,name,
         email, site_url, ip, agent,
         type, status, parent,
         content,gmt_create,gmt_modified)
-        values (#{id,jdbcType=BIGINT}, #{articleId,jdbcType=BIGINT},
+        values (#{id,jdbcType=BIGINT}, #{articleId,jdbcType=BIGINT},#{name,jdbcType=VARCHAR},
         #{author.id,jdbcType=BIGINT}, #{ownerId,jdbcType=BIGINT},
         #{email,jdbcType=VARCHAR}, #{siteUrl,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{agent,jdbcType=VARCHAR},
-        #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{parent,jdbcType=BIGINT},
+        #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{parent.id,jdbcType=BIGINT},
         #{content,jdbcType=LONGVARCHAR},#{gmtCreate,jdbcType=TIMESTAMP},#{gmtModified,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" parameterType="com.mfx.blog.modal.entity.CommentDO" useGeneratedKeys="true"
@@ -182,6 +189,9 @@
             </if>
             <if test="ownerId != null">
                 owner_id,
+            </if>
+            <if test="name != null">
+                name,
             </if>
             <if test="email != null">
                 email,
@@ -227,6 +237,9 @@
             <if test="ownerId != null">
                 #{ownerId,jdbcType=BIGINT},
             </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
             <if test="email != null">
                 #{email,jdbcType=VARCHAR},
             </if>
@@ -246,7 +259,7 @@
                 #{status,jdbcType=VARCHAR},
             </if>
             <if test="parent != null">
-                #{parent,jdbcType=BIGINT},
+                #{parent.id,jdbcType=BIGINT},
             </if>
             <if test="content != null">
                 #{content,jdbcType=LONGVARCHAR},
@@ -281,6 +294,9 @@
             <if test="record.ownerId != null">
                 owner_id = #{record.ownerId,jdbcType=BIGINT},
             </if>
+            <if test="record.name != null">
+                name = #{record.name,jdbcType=VARCHAR},
+            </if>
             <if test="record.email != null">
                 email = #{record.email,jdbcType=VARCHAR},
             </if>
@@ -300,7 +316,7 @@
                 status = #{record.status,jdbcType=VARCHAR},
             </if>
             <if test="record.parent != null">
-                parent = #{record.parent,jdbcType=BIGINT},
+                parent = #{record.parent.id,jdbcType=BIGINT},
             </if>
             <if test="record.content != null">
                 content = #{record.content,jdbcType=LONGVARCHAR},
@@ -313,38 +329,20 @@
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByExampleWithBLOBs" parameterType="map">
-        update t_b_comment
-        set id = #{record.id,jdbcType=BIGINT},
-        article_id = #{record.articleId,jdbcType=BIGINT},
-        author_id = #{record.author.id,jdbcType=BIGINT},
-        owner_id = #{record.ownerId,jdbcType=BIGINT},
-        email = #{record.email,jdbcType=VARCHAR},
-        site_url = #{record.siteUrl,jdbcType=VARCHAR},
-        ip = #{record.ip,jdbcType=VARCHAR},
-        agent = #{record.agent,jdbcType=VARCHAR},
-        type = #{record.type,jdbcType=VARCHAR},
-        status = #{record.status,jdbcType=VARCHAR},
-        parent = #{record.parent,jdbcType=BIGINT},
-        content = #{record.content,jdbcType=LONGVARCHAR},
-        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
-        <if test="_parameter != null">
-            <include refid="Update_By_Example_Where_Clause"/>
-        </if>
-    </update>
     <update id="updateByExample" parameterType="map">
         update t_b_comment
         set id = #{record.id,jdbcType=BIGINT},
         article_id = #{record.articleId,jdbcType=BIGINT},
         author_id = #{record.author.id,jdbcType=BIGINT},
         owner_id = #{record.ownerId,jdbcType=BIGINT},
+        name = #{record.name,jdbcType=VARCHAR},
         email = #{record.email,jdbcType=VARCHAR},
         site_url = #{record.siteUrl,jdbcType=VARCHAR},
         ip = #{record.ip,jdbcType=VARCHAR},
         agent = #{record.agent,jdbcType=VARCHAR},
         type = #{record.type,jdbcType=VARCHAR},
         status = #{record.status,jdbcType=VARCHAR},
-        parent = #{record.parent,jdbcType=BIGINT},
+        parent = #{record.parent.id,jdbcType=BIGINT},
         gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause"/>
@@ -361,6 +359,9 @@
             </if>
             <if test="ownerId != null">
                 owner_id = #{ownerId,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
             </if>
             <if test="mail != null">
                 email = #{email,jdbcType=VARCHAR},
@@ -381,7 +382,7 @@
                 status = #{status,jdbcType=VARCHAR},
             </if>
             <if test="parent != null">
-                parent = #{parent,jdbcType=BIGINT},
+                parent = #{parent.id,jdbcType=BIGINT},
             </if>
             <if test="content != null">
                 content = #{content,jdbcType=LONGVARCHAR},
@@ -397,13 +398,14 @@
         set article_id = #{articleId,jdbcType=BIGINT},
         author_id = #{author.id,jdbcType=BIGINT},
         owner_id = #{ownerId,jdbcType=BIGINT},
+        name = #{name,jdbcType=VARCHAR},
         email = #{email,jdbcType=VARCHAR},
         site_url = #{siteUrl,jdbcType=VARCHAR},
         ip = #{ip,jdbcType=VARCHAR},
         agent = #{agent,jdbcType=VARCHAR},
         type = #{type,jdbcType=VARCHAR},
         status = #{status,jdbcType=VARCHAR},
-        parent = #{parent,jdbcType=BIGINT},
+        parent = #{parent.id,jdbcType=BIGINT},
         content = #{content,jdbcType=LONGVARCHAR},
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=BIGINT}
@@ -413,13 +415,14 @@
         set article_id = #{articleId,jdbcType=BIGINT},
         author_id = #{author.id,jdbcType=BIGINT},
         owner_id = #{ownerId,jdbcType=BIGINT},
+        name = #{name,jdbcType=VARCHAR},
         email = #{email,jdbcType=VARCHAR},
         site_url = #{siteUrl,jdbcType=VARCHAR},
         ip = #{ip,jdbcType=VARCHAR},
         agent = #{agent,jdbcType=VARCHAR},
         type = #{type,jdbcType=VARCHAR},
         status = #{status,jdbcType=VARCHAR},
-        parent = #{parent,jdbcType=BIGINT},
+        parent = #{parent.id,jdbcType=BIGINT},
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=BIGINT}
     </update>

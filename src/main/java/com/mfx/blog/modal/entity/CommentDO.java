@@ -4,7 +4,6 @@ import com.mfx.blog.modal.common.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +25,8 @@ public class CommentDO extends AbstractEntity {
      * 评论所属内容作者id
      */
     private Long ownerId;
+
+    private String name;
     /**
      * 评论者邮件
      */
@@ -51,9 +52,11 @@ public class CommentDO extends AbstractEntity {
      */
     private String status;
     /**
-     * 父级评论
+     * 父级评论ID
      */
-    private Long parent;
+    private Long parentId;
+
+    private CommentDO parent;
     /**
      * 评论内容
      */

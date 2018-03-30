@@ -13,29 +13,13 @@ import com.mfx.blog.modal.entity.UserDO;
 import com.mfx.blog.param.ArticleStatistics;
 import com.mfx.blog.service.ArticleService;
 import com.mfx.blog.service.CommentService;
-import com.mfx.blog.utils.TaleUtils;
-import com.mfx.blog.component.constant.WebConst;
-import com.mfx.blog.dao.ArticleDao;
-import com.mfx.blog.dao.CommentDao;
-import com.mfx.blog.exception.TipException;
-import com.mfx.blog.component.constant.WebConst;
-import com.mfx.blog.dao.CommentDao;
-import com.mfx.blog.exception.TipException;
-import com.mfx.blog.modal.bo.CommentBo;
-import com.mfx.blog.modal.entity.ArticleDO;
-import com.mfx.blog.modal.entity.CommentDO;
-import com.mfx.blog.modal.entity.CommentDOExample;
-import com.mfx.blog.modal.entity.UserDO;
-import com.mfx.blog.param.ArticleStatistics;
-import com.mfx.blog.service.ArticleService;
-import com.mfx.blog.service.CommentService;
+import com.mfx.blog.utils.MfxCache;
 import com.mfx.blog.utils.TaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -65,10 +49,22 @@ public class CommentServiceImpl implements CommentService {
         if (null == comments) {
             return "评论对象为空";
         }
-        if (comments.getAuthor() == null) {
+        //用户已登录，则评论的人为登录用户
+        UserDO author = MfxCache.get();
+        if (author != null) {
+            //用户登录
+            comments.setAuthor(author);
+            comments.setName(author.getNickname());
+            comments.setEmail(author.getEmail());
+            comments.setSiteUrl(author.getHomeUrl());
+        } else {
+            //用户未登录，用户名称也未输入，则使用热心网友用户
             UserDO userDO = new UserDO();
             userDO.setId(0L);
-            userDO.setNickname("热心网友");
+
+            if (StringUtils.isBlank(comments.getName())) {
+                comments.setName("热心网友");
+            }
             comments.setAuthor(userDO);
         }
         if (StringUtils.isNotBlank(comments.getEmail()) && !TaleUtils.isEmail(comments.getEmail())) {
@@ -136,7 +132,7 @@ public class CommentServiceImpl implements CommentService {
 
     private void setChildren(CommentDO parent, List<CommentDO> children) {
         for (CommentDO c : children) {
-            if (c.getParent() == parent.getId()) {
+            if (c.getParent() != null && c.getParent().getId() == parent.getId()) {
                 //匹配到直接父子关系
                 if (parent.getChildren() == null) {
                     parent.setChildren(new ArrayList());

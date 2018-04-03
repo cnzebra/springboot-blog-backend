@@ -2,8 +2,8 @@ package com.mfx.blog.controller;
 
 import com.mfx.blog.annotation.LogAnnotation;
 import com.mfx.blog.constant.LogConstant;
-import com.mfx.blog.dto.LogActions;
-import com.mfx.blog.dto.LogLevelEnums;
+import com.mfx.blog.enums.LogActions;
+import com.mfx.blog.enums.LogLevelEnums;
 import com.mfx.blog.service.AwardService;
 import com.mfx.blog.modal.bo.RestResponseBo;
 import com.mfx.blog.modal.entity.AwardDO;

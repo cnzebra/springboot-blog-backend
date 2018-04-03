@@ -3,8 +3,8 @@ package com.mfx.blog.controller;
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.annotation.LogAnnotation;
 import com.mfx.blog.constant.LogConstant;
-import com.mfx.blog.dto.LogActions;
-import com.mfx.blog.dto.LogLevelEnums;
+import com.mfx.blog.enums.LogActions;
+import com.mfx.blog.enums.LogLevelEnums;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.bo.RestResponseBo;
 import com.mfx.blog.modal.entity.PermissionDO;
@@ -20,7 +20,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.List;
-import java.util.TreeSet;
 
 @Controller
 public class PermissionController extends BaseController {

@@ -1,7 +1,7 @@
 package com.mfx.blog.annotation;
 
-import com.mfx.blog.dto.LogActions;
-import com.mfx.blog.dto.LogLevelEnums;
+import com.mfx.blog.enums.LogActions;
+import com.mfx.blog.enums.LogLevelEnums;
 
 import java.lang.annotation.*;
 

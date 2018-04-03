@@ -1,21 +1,13 @@
 package com.mfx.blog.interceptor;
 
-import com.alibaba.fastjson.JSONObject;
 import com.mfx.blog.component.common.AdminCommons;
 import com.mfx.blog.component.common.Commons;
-import com.mfx.blog.component.constant.WebConst;
-import com.mfx.blog.dto.LogActions;
-import com.mfx.blog.dto.Types;
-import com.mfx.blog.modal.entity.OptionDO;
-import com.mfx.blog.modal.entity.UserDO;
+import com.mfx.blog.enums.Types;
 import com.mfx.blog.service.LogService;
 import com.mfx.blog.service.OptionService;
 import com.mfx.blog.service.UserService;
 import com.mfx.blog.utils.AbstractUUID;
-import com.mfx.blog.utils.IPKit;
 import com.mfx.blog.utils.MapCache;
-import com.mfx.blog.utils.TaleUtils;
-import eu.bitwalker.useragentutils.UserAgent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
 
 /**
  * 自定义拦截器

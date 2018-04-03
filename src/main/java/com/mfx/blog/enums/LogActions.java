@@ -1,4 +1,4 @@
-package com.mfx.blog.dto;
+package com.mfx.blog.enums;
 
 /**
  * 日志表的action字段

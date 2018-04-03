@@ -3,10 +3,9 @@ package com.mfx.blog.component.common;
 
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.component.constant.WebConst;
-import com.mfx.blog.component.constant.WebConst;
-import com.mfx.blog.dto.LogActions;
+import com.mfx.blog.enums.LogActions;
 import com.mfx.blog.dto.MetaDto;
-import com.mfx.blog.dto.Types;
+import com.mfx.blog.enums.Types;
 import com.mfx.blog.modal.bo.ArchiveBo;
 import com.mfx.blog.modal.entity.ArticleDO;
 import com.mfx.blog.service.MetaService;

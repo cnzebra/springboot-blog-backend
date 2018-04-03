@@ -3,7 +3,7 @@ package com.mfx.blog.controller;
 import com.github.pagehelper.PageInfo;
 import com.mfx.blog.annotation.LogAnnotation;
 import com.mfx.blog.constant.LogConstant;
-import com.mfx.blog.dto.LogActions;
+import com.mfx.blog.enums.LogActions;
 import com.mfx.blog.exception.TipException;
 import com.mfx.blog.modal.bo.RestResponseBo;
 import com.mfx.blog.modal.entity.ScheduleJobDO;
@@ -14,7 +14,6 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Method;

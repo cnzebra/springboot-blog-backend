@@ -3,6 +3,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("ALL")
 public class FormatBDC {
@@ -119,7 +121,7 @@ public class FormatBDC {
     }
 
     public static void main(String[] args) throws IOException {
-        String projectPath = "D:\\workspace\\BDC\\BDC_CODE_NEW";
+        /*String projectPath = "D:\\workspace\\BDC\\BDC_CODE_NEW";
 //        String projectPath = "D:\\workspace\\test";
         File dir = new File(projectPath);
 
@@ -127,7 +129,16 @@ public class FormatBDC {
         FormatBDC.polish(dir.listFiles());
         long end = System.currentTimeMillis();
 
-        System.out.println("耗时:" + (end - start) + "(ms)");
+        System.out.println("鑰楁椂:" + (end - start) + "(ms)");*/
+
+
+        String regex = "^(0)|([1-9][0-9]{0,11})$";
+        String amount = "89L";
+
+        Pattern pattern = Pattern.compile(regex);
+
+        Matcher matcher = pattern.matcher(amount);
+        System.out.println(matcher.matches());
 
 
     }

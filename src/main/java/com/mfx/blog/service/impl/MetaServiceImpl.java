@@ -2,16 +2,9 @@ package com.mfx.blog.service.impl;
 
 import com.mfx.blog.component.constant.WebConst;
 import com.mfx.blog.exception.TipException;
-import com.mfx.blog.component.constant.WebConst;
 import com.mfx.blog.dao.MetaDao;
 import com.mfx.blog.dto.MetaDto;
-import com.mfx.blog.dto.Types;
-import com.mfx.blog.exception.TipException;
-import com.mfx.blog.component.constant.WebConst;
-import com.mfx.blog.dao.MetaDao;
-import com.mfx.blog.dto.MetaDto;
-import com.mfx.blog.dto.Types;
-import com.mfx.blog.exception.TipException;
+import com.mfx.blog.enums.Types;
 import com.mfx.blog.modal.entity.ArticleDO;
 import com.mfx.blog.modal.entity.MetaDO;
 import com.mfx.blog.modal.entity.MetaDOExample;

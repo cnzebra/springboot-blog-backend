@@ -571,7 +571,7 @@
         from
         t_b_article
         where
-        type = 'post' and status = 'publish'
+        status = 'publish'
         <if test="arg0!=null and arg1!=null">
             and DATE_FORMAT(gmt_create,'%Y')=#{arg0} and DATE_FORMAT(gmt_create,'%m')=#{arg1}
         </if>
@@ -585,7 +585,7 @@
     <select id="findByCatalog" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select a.*
         from t_b_article a left join t_b_article_meta b on a.id = b.article_id
-        where b.meta_id = #{metaId} and a.status = 'publish' and a.type = 'post'
+        where b.meta_id = #{metaId} and a.status = 'publish'
         order by a.gmt_create desc
     </select>
 

@@ -1,7 +1,7 @@
 package com.mfx.blog.modal.entity;
 
 import com.alibaba.fastjson.JSONObject;
-import com.mfx.blog.dto.LogActions;
+import com.mfx.blog.enums.LogActions;
 import com.mfx.blog.modal.common.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;

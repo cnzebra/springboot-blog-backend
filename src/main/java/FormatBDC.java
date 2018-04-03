@@ -132,8 +132,8 @@ public class FormatBDC {
         System.out.println("鑰楁椂:" + (end - start) + "(ms)");*/
 
 
-        String regex = "^(0)|([1-9][0-9]{0,11})$";
-        String amount = "89L";
+        String regex = "^[1-9]|1[0-2]$";
+        String amount = "10";
 
         Pattern pattern = Pattern.compile(regex);
 

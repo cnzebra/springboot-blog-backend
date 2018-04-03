@@ -4,6 +4,8 @@ import com.mfx.blog.modal.common.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 /**
@@ -16,6 +18,7 @@ public class CommentDO extends AbstractEntity {
     /**
      * post表主键,关联字段
      */
+    @NotNull(message = "评论对象不能为空")
     private Long articleId;
     /**
      * 评论作者
@@ -26,14 +29,17 @@ public class CommentDO extends AbstractEntity {
      */
     private Long ownerId;
 
+    @NotNull(message = "评论或回复人名称不能为空")
     private String name;
     /**
      * 评论者邮件
      */
+    @Pattern(regexp = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$", message = "邮箱格式不正确")
     private String email;
     /**
      * 评论者网址
      */
+    @Pattern(regexp = "http(s)?://([\\w-]+\\\\.)+[\\w-]+(/[\\w- ./?%&=]*)?", message = "网址格式不正确")
     private String siteUrl;
     /**
      * 评论者ip地址

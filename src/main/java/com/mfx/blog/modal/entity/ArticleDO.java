@@ -4,6 +4,10 @@ import com.mfx.blog.modal.common.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 /**
  * @author
  */
@@ -14,6 +18,7 @@ public class ArticleDO extends AbstractEntity {
     /**
      * 内容标题
      */
+    @NotNull(message = "文章标题不能为空")
     private String title;
 
     /**
@@ -33,8 +38,9 @@ public class ArticleDO extends AbstractEntity {
      */
     private UserDO author;
     /**
-     * 内容类别
+     * 文章类型
      */
+    @Pattern(regexp = "^original|reshipment|translation$", message = "请选择文章类型")
     private String type;
     /**
      * 内容状态
@@ -43,10 +49,12 @@ public class ArticleDO extends AbstractEntity {
     /**
      * 标签列表
      */
+    @NotNull(message = "请至少指定一个标签")
     private String tags;
     /**
      * 分类列表
      */
+    @NotNull(message = "请至少指定一个分类")
     private String categories;
     /**
      * 点击次数
@@ -81,6 +89,7 @@ public class ArticleDO extends AbstractEntity {
     /**
      * 内容文字
      */
+    @Size(min = 20, message = "文章不能少于20字符")
     private String content;
 
 }

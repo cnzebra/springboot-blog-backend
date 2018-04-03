@@ -4,6 +4,7 @@ import com.mfx.blog.modal.common.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -18,10 +19,15 @@ public class UserDO extends AbstractEntity {
     /**
      * 用户名称
      */
+    @Pattern(regexp = "^[a-zA-Z0-9_]{6,20}$", message = "账号格式不正确")
     private String loginName;
+
+    @Pattern(regexp = "^((17[0-9])|(14[0-9])|(13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$", message = "手机号格式不正确")
+    private String phone;
     /**
      * 用户密码
      */
+    @Pattern(regexp = "^[a-zA-Z0-9_]{6,20}$", message = "密码只能为6~20位大小写字母、数字、下划线")
     private String password;
 
     /**
